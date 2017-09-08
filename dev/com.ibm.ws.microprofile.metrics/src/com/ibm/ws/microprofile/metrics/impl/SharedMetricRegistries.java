@@ -11,8 +11,7 @@ import org.eclipse.microprofile.metrics.MetricRegistry;
  * A map of shared, named metric registries.
  */
 public class SharedMetricRegistries {
-    private static final ConcurrentMap<String, MetricRegistry> REGISTRIES =
-            new ConcurrentHashMap<String, MetricRegistry>();
+    private static final ConcurrentMap<String, MetricRegistry> REGISTRIES = new ConcurrentHashMap<String, MetricRegistry>();
 
     private static AtomicReference<String> defaultRegistryName = new AtomicReference<String>();
 
@@ -42,7 +41,6 @@ public class SharedMetricRegistries {
     public static MetricRegistry getOrCreate(String name) {
         final MetricRegistry existing = REGISTRIES.get(name);
         if (existing == null) {
-        	// MP_EDIT
             final MetricRegistry created = new MetricRegistryImpl();
             final MetricRegistry raced = add(name, created);
             if (raced == null) {
@@ -68,7 +66,7 @@ public class SharedMetricRegistries {
     /**
      * Sets the provided registry as the default one under the provided name
      *
-     * @param name           the default registry name
+     * @param name the default registry name
      * @param metricRegistry the default registry
      * @throws IllegalStateException if the default registry has already been set
      */

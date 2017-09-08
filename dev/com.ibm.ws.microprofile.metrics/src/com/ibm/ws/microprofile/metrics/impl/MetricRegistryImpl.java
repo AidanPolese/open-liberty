@@ -1,6 +1,11 @@
 package com.ibm.ws.microprofile.metrics.impl;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -17,8 +22,6 @@ import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.eclipse.microprofile.metrics.MetricType;
 import org.eclipse.microprofile.metrics.Timer;
 
-import com.ibm.ws.microprofile.metrics.impl.ExponentiallyDecayingReservoir;
-
 /**
  * A registry of metric instances.
  */
@@ -27,8 +30,8 @@ public class MetricRegistryImpl extends MetricRegistry {
     /**
      * Concatenates elements to form a dotted name, eliding any null values or empty strings.
      *
-     * @param name     the first element of the name
-     * @param names    the remaining elements of the name
+     * @param name the first element of the name
+     * @param names the remaining elements of the name
      * @return {@code name} and {@code names} concatenated by periods
      */
     public static String name(String name, String... names) {
@@ -46,8 +49,8 @@ public class MetricRegistryImpl extends MetricRegistry {
      * Concatenates a class name and elements to form a dotted name, eliding any null values or
      * empty strings.
      *
-     * @param klass    the first element of the name
-     * @param names    the remaining elements of the name
+     * @param klass the first element of the name
+     * @param names the remaining elements of the name
      * @return {@code klass} and {@code names} concatenated by periods
      */
     public static String name(Class<?> klass, String... names) {
@@ -71,8 +74,8 @@ public class MetricRegistryImpl extends MetricRegistry {
      */
     public MetricRegistryImpl() {
         this.metrics = buildMap();
-        
-        //MP_Metrics, initializing metadata in a separate list
+
+        //initializing metadata in a separate list
         this.metadata = new ConcurrentHashMap<String, Metadata>();
     }
 
@@ -90,24 +93,26 @@ public class MetricRegistryImpl extends MetricRegistry {
     /**
      * Given a {@link Metric}, registers it under the given name.
      *
-     * @param name   the name of the metric
+     * @param name the name of the metric
      * @param metric the metric
-     * @param <T>    the type of the metric
+     * @param <T> the type of the metric
      * @return {@code metric}
      * @throws IllegalArgumentException if the name is already registered
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T extends Metric> T register(String name, T metric) throws IllegalArgumentException {
 
-            final Metric existing = metrics.putIfAbsent(name, metric);
-            this.metadata.putIfAbsent(name, new Metadata(name, MetricType.from(metric.getClass())));
-            if (existing == null) {
-            } else {
-                throw new IllegalArgumentException("A metric named " + name + " already exists");
-            }
+        final Metric existing = metrics.putIfAbsent(name, metric);
+        this.metadata.putIfAbsent(name, new Metadata(name, MetricType.from(metric.getClass())));
+        if (existing == null) {
+        } else {
+            throw new IllegalArgumentException("A metric named " + name + " already exists");
+        }
         return metric;
     }
-    
+
+    @Override
     public <T extends Metric> T register(String name, T metric, Metadata metadata) throws IllegalArgumentException {
 
         final Metric existing = metrics.putIfAbsent(name, metric);
@@ -116,25 +121,25 @@ public class MetricRegistryImpl extends MetricRegistry {
         } else {
             throw new IllegalArgumentException("A metric named " + name + " already exists");
         }
-    return metric;
-}
-
+        return metric;
+    }
 
     /**
-     * Return the {@link Counter} registered under this name; or create and register 
+     * Return the {@link Counter} registered under this name; or create and register
      * a new {@link Counter} if none is registered.
      *
      * @param name the name of the metric
      * @return a new or pre-existing {@link Counter}
      */
+    @Override
     public Counter counter(String name) {
-    	//MP_Metrics, call overloaded method with default metadata
-    	return this.counter(new Metadata(name, MetricType.COUNTER));
+        return this.counter(new Metadata(name, MetricType.COUNTER));
     }
-    
+
+    @Override
     public Counter counter(Metadata metadata) {
-    	Counter counter = getOrAdd(metadata.getName(), MetricBuilder.COUNTERS);
-    	this.metadata.put(metadata.getName(), metadata);
+        Counter counter = getOrAdd(metadata.getName(), MetricBuilder.COUNTERS);
+        this.metadata.put(metadata.getName(), metadata);
         return counter;
     }
 
@@ -146,12 +151,13 @@ public class MetricRegistryImpl extends MetricRegistry {
      * @param supplier a MetricSupplier that can be used to manufacture a counter.
      * @return a new or pre-existing {@link Counter}
      */
-     Counter counter(String name, final MetricSupplier<Counter> supplier) {
+    Counter counter(String name, final MetricSupplier<Counter> supplier) {
         return getOrAdd(name, new MetricBuilder<Counter>() {
             @Override
             public Counter newMetric() {
                 return supplier.newMetric();
             }
+
             @Override
             public boolean isInstance(Metric metric) {
                 return Counter.class.isInstance(metric);
@@ -160,19 +166,21 @@ public class MetricRegistryImpl extends MetricRegistry {
     }
 
     /**
-     * Return the {@link Histogram} registered under this name; or create and register 
+     * Return the {@link Histogram} registered under this name; or create and register
      * a new {@link Histogram} if none is registered.
      *
      * @param name the name of the metric
      * @return a new or pre-existing {@link Histogram}
      */
+    @Override
     public Histogram histogram(String name) {
-    	//MP_Metrics, call overloaded method with default metadata
-    	return this.histogram(new Metadata(name, MetricType.HISTOGRAM));
+        return this.histogram(new Metadata(name, MetricType.HISTOGRAM));
     }
+
+    @Override
     public Histogram histogram(Metadata metadata) {
-    	Histogram histogram = getOrAdd(metadata.getName(), MetricBuilder.HISTOGRAMS);
-    	this.metadata.put(metadata.getName(), metadata);
+        Histogram histogram = getOrAdd(metadata.getName(), MetricBuilder.HISTOGRAMS);
+        this.metadata.put(metadata.getName(), metadata);
         return histogram;
     }
 
@@ -184,17 +192,18 @@ public class MetricRegistryImpl extends MetricRegistry {
      * @param supplier a MetricSupplier that can be used to manufacture a histogram
      * @return a new or pre-existing {@link Histogram}
      */
-     Histogram histogram(String name, final MetricSupplier<Histogram> supplier) {
-      return getOrAdd(name, new MetricBuilder<Histogram>() {
-        @Override
-        public Histogram newMetric() {
-          return supplier.newMetric();
-        }
-        @Override
-        public boolean isInstance(Metric metric) {
-          return Histogram.class.isInstance(metric);
-        }
-      });
+    Histogram histogram(String name, final MetricSupplier<Histogram> supplier) {
+        return getOrAdd(name, new MetricBuilder<Histogram>() {
+            @Override
+            public Histogram newMetric() {
+                return supplier.newMetric();
+            }
+
+            @Override
+            public boolean isInstance(Metric metric) {
+                return Histogram.class.isInstance(metric);
+            }
+        });
     }
 
     /**
@@ -204,13 +213,15 @@ public class MetricRegistryImpl extends MetricRegistry {
      * @param name the name of the metric
      * @return a new or pre-existing {@link Meter}
      */
+    @Override
     public Meter meter(String name) {
-    	//MP_Metrics, call overloaded method with default metadata
         return this.meter(new Metadata(name, MetricType.METERED));
     }
+
+    @Override
     public Meter meter(Metadata metadata) {
-    	Meter meter = getOrAdd(metadata.getName(), MetricBuilder.METERS);
-    	this.metadata.put(metadata.getName(), metadata);
+        Meter meter = getOrAdd(metadata.getName(), MetricBuilder.METERS);
+        this.metadata.put(metadata.getName(), metadata);
         return meter;
     }
 
@@ -222,12 +233,13 @@ public class MetricRegistryImpl extends MetricRegistry {
      * @param supplier a MetricSupplier that can be used to manufacture a Meter
      * @return a new or pre-existing {@link Meter}
      */
-     Meter meter(String name, final MetricSupplier<Meter> supplier) {
+    Meter meter(String name, final MetricSupplier<Meter> supplier) {
         return getOrAdd(name, new MetricBuilder<Meter>() {
             @Override
             public Meter newMetric() {
                 return supplier.newMetric();
             }
+
             @Override
             public boolean isInstance(Metric metric) {
                 return Meter.class.isInstance(metric);
@@ -242,13 +254,15 @@ public class MetricRegistryImpl extends MetricRegistry {
      * @param name the name of the metric
      * @return a new or pre-existing {@link Timer}
      */
+    @Override
     public Timer timer(String name) {
-    	//MP_Metrics, call overloaded method with default metadata
-       return timer(new Metadata(name, MetricType.TIMER));
+        return timer(new Metadata(name, MetricType.TIMER));
     }
+
+    @Override
     public Timer timer(Metadata metadata) {
-    	Timer timer = getOrAdd(metadata.getName(), MetricBuilder.TIMERS);
-    	this.metadata.put(metadata.getName(), metadata);
+        Timer timer = getOrAdd(metadata.getName(), MetricBuilder.TIMERS);
+        this.metadata.put(metadata.getName(), metadata);
         return timer;
     }
 
@@ -260,12 +274,13 @@ public class MetricRegistryImpl extends MetricRegistry {
      * @param supplier a MetricSupplier that can be used to manufacture a Timer
      * @return a new or pre-existing {@link Timer}
      */
-     Timer timer(String name, final MetricSupplier<Timer> supplier) {
+    Timer timer(String name, final MetricSupplier<Timer> supplier) {
         return getOrAdd(name, new MetricBuilder<Timer>() {
             @Override
             public Timer newMetric() {
                 return supplier.newMetric();
             }
+
             @Override
             public boolean isInstance(Metric metric) {
                 return Timer.class.isInstance(metric);
@@ -281,12 +296,13 @@ public class MetricRegistryImpl extends MetricRegistry {
      * @param supplier a MetricSupplier that can be used to manufacture a Gauge
      * @return a new or pre-existing {@link Gauge}
      */
-     Gauge gauge(String name, final MetricSupplier<Gauge> supplier) {
+    Gauge gauge(String name, final MetricSupplier<Gauge> supplier) {
         return getOrAdd(name, new MetricBuilder<Gauge>() {
             @Override
             public Gauge newMetric() {
                 return supplier.newMetric();
             }
+
             @Override
             public boolean isInstance(Metric metric) {
                 return Gauge.class.isInstance(metric);
@@ -294,13 +310,13 @@ public class MetricRegistryImpl extends MetricRegistry {
         });
     }
 
-
-        /**
-         * Removes the metric with the given name.
-         *
-         * @param name the name of the metric
-         * @return whether or not the metric was removed
-         */
+    /**
+     * Removes the metric with the given name.
+     *
+     * @param name the name of the metric
+     * @return whether or not the metric was removed
+     */
+    @Override
     public boolean remove(String name) {
         final Metric metric = metrics.remove(name);
         metadata.remove(name);
@@ -315,6 +331,7 @@ public class MetricRegistryImpl extends MetricRegistry {
      *
      * @param filter a filter
      */
+    @Override
     public void removeMatching(MetricFilter filter) {
         for (Map.Entry<String, Metric> entry : metrics.entrySet()) {
             if (filter.matches(entry.getKey(), entry.getValue())) {
@@ -323,12 +340,12 @@ public class MetricRegistryImpl extends MetricRegistry {
         }
     }
 
-
     /**
      * Returns a set of the names of all the metrics in the registry.
      *
      * @return the names of all the metrics
      */
+    @Override
     public SortedSet<String> getNames() {
         return Collections.unmodifiableSortedSet(new TreeSet<String>(metrics.keySet()));
     }
@@ -338,6 +355,7 @@ public class MetricRegistryImpl extends MetricRegistry {
      *
      * @return all the gauges in the registry
      */
+    @Override
     public SortedMap<String, Gauge> getGauges() {
         return getGauges(MetricFilter.ALL);
     }
@@ -345,9 +363,10 @@ public class MetricRegistryImpl extends MetricRegistry {
     /**
      * Returns a map of all the gauges in the registry and their names which match the given filter.
      *
-     * @param filter    the metric filter to match
+     * @param filter the metric filter to match
      * @return all the gauges in the registry
      */
+    @Override
     public SortedMap<String, Gauge> getGauges(MetricFilter filter) {
         return getMetrics(Gauge.class, filter);
     }
@@ -357,6 +376,7 @@ public class MetricRegistryImpl extends MetricRegistry {
      *
      * @return all the counters in the registry
      */
+    @Override
     public SortedMap<String, Counter> getCounters() {
         return getCounters(MetricFilter.ALL);
     }
@@ -365,9 +385,10 @@ public class MetricRegistryImpl extends MetricRegistry {
      * Returns a map of all the counters in the registry and their names which match the given
      * filter.
      *
-     * @param filter    the metric filter to match
+     * @param filter the metric filter to match
      * @return all the counters in the registry
      */
+    @Override
     public SortedMap<String, Counter> getCounters(MetricFilter filter) {
         return getMetrics(Counter.class, filter);
     }
@@ -377,6 +398,7 @@ public class MetricRegistryImpl extends MetricRegistry {
      *
      * @return all the histograms in the registry
      */
+    @Override
     public SortedMap<String, Histogram> getHistograms() {
         return getHistograms(MetricFilter.ALL);
     }
@@ -385,9 +407,10 @@ public class MetricRegistryImpl extends MetricRegistry {
      * Returns a map of all the histograms in the registry and their names which match the given
      * filter.
      *
-     * @param filter    the metric filter to match
+     * @param filter the metric filter to match
      * @return all the histograms in the registry
      */
+    @Override
     public SortedMap<String, Histogram> getHistograms(MetricFilter filter) {
         return getMetrics(Histogram.class, filter);
     }
@@ -397,6 +420,7 @@ public class MetricRegistryImpl extends MetricRegistry {
      *
      * @return all the meters in the registry
      */
+    @Override
     public SortedMap<String, Meter> getMeters() {
         return getMeters(MetricFilter.ALL);
     }
@@ -404,9 +428,10 @@ public class MetricRegistryImpl extends MetricRegistry {
     /**
      * Returns a map of all the meters in the registry and their names which match the given filter.
      *
-     * @param filter    the metric filter to match
+     * @param filter the metric filter to match
      * @return all the meters in the registry
      */
+    @Override
     public SortedMap<String, Meter> getMeters(MetricFilter filter) {
         return getMetrics(Meter.class, filter);
     }
@@ -416,6 +441,7 @@ public class MetricRegistryImpl extends MetricRegistry {
      *
      * @return all the timers in the registry
      */
+    @Override
     public SortedMap<String, Timer> getTimers() {
         return getTimers(MetricFilter.ALL);
     }
@@ -423,9 +449,10 @@ public class MetricRegistryImpl extends MetricRegistry {
     /**
      * Returns a map of all the timers in the registry and their names which match the given filter.
      *
-     * @param filter    the metric filter to match
+     * @param filter the metric filter to match
      * @return all the timers in the registry
      */
+    @Override
     public SortedMap<String, Timer> getTimers(MetricFilter filter) {
         return getMetrics(Timer.class, filter);
     }
@@ -460,23 +487,22 @@ public class MetricRegistryImpl extends MetricRegistry {
         return Collections.unmodifiableSortedMap(timers);
     }
 
-
+    @Override
     public Map<String, Metric> getMetrics() {
         return Collections.unmodifiableMap(metrics);
     }
 
-    // MP_METADATA
+    @Override
     public Map<String, Metadata> getMetadata() {
         return Collections.unmodifiableMap(metadata);
     }
-    
+
     public Metadata getMetadata(String name) {
         return metadata.get(name);
     }
-    
-  
-	interface MetricSupplier<T extends Metric> {
-      T newMetric();
+
+    interface MetricSupplier<T extends Metric> {
+        T newMetric();
     }
 
     /**

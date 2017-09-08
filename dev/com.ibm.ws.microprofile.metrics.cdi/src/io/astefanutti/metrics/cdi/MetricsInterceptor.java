@@ -15,23 +15,23 @@
  */
 package io.astefanutti.metrics.cdi;
 
-import org.eclipse.microprofile.metrics.MetricRegistry;
-import org.eclipse.microprofile.metrics.annotation.Counted;
-import org.eclipse.microprofile.metrics.annotation.Gauge;
-import org.eclipse.microprofile.metrics.annotation.Metered;
-import org.eclipse.microprofile.metrics.annotation.Timed;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.interceptor.AroundConstruct;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.concurrent.TimeUnit;
+
+import org.eclipse.microprofile.metrics.MetricRegistry;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Gauge;
+import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 
 @Interceptor
 @MetricsBinding
@@ -73,13 +73,6 @@ import java.util.concurrent.TimeUnit;
         do {
             // TODO: discover annotations declared on implemented interfaces
             for (Method method : type.getDeclaredMethods()) {
-            	
-            	// MP_EDIT
-            	/*
-                MetricResolver.Of<CachedGauge> cachedGauge = resolver.cachedGauge(bean, method);
-                if (cachedGauge.isPresent())
-                    registry.register(cachedGauge.metricName(), new CachingGauge(new ForwardingGauge(method, context.getTarget()), cachedGauge.metricAnnotation().timeout(), cachedGauge.metricAnnotation().timeoutUnit()));
-    */
                 MetricResolver.Of<Gauge> gauge = resolver.gauge(bean, method);
                 if (gauge.isPresent())
                     registry.register(gauge.metricName(), new ForwardingGauge(method, context.getTarget()));
@@ -103,24 +96,6 @@ import java.util.concurrent.TimeUnit;
         if (timed.isPresent())
             registry.timer(timed.metadata());
     }
-
-    // MP_EDIT
-    /*
-    private static final class CachingGauge extends org.eclipse.microprofile.metrics.CachedGauge<Object> {
-
-        private final org.eclipse.microprofile.metrics.Gauge<?> gauge;
-        
-        private CachingGauge(org.eclipse.microprofile.metrics.Gauge<?> gauge, long timeout, TimeUnit timeoutUnit) {
-            super(timeout, timeoutUnit);
-            this.gauge = gauge;
-        }
-
-        @Override
-        protected Object loadValue() {
-            return gauge.getValue();
-        }
-    }
-    */
 
     private static final class ForwardingGauge implements org.eclipse.microprofile.metrics.Gauge<Object> {
 
