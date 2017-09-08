@@ -38,6 +38,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.Currency;
@@ -213,6 +214,8 @@ public class DefaultConverters {
         return uri;
     };
 
+    public final static Converter<ChronoUnit> CHRONO_UNIT_CONVERTER = ChronoUnit::valueOf;
+
     /**
      * Convert the string to a URL or throw ConvertException if unable to convert
      */
@@ -276,6 +279,8 @@ public class DefaultConverters {
 
         defaultConverters.put(URL.class, URL_CONVERTER);
         defaultConverters.put(URI.class, URI_CONVERTER);
+
+        defaultConverters.put(ChronoUnit.class, CHRONO_UNIT_CONVERTER);
 
         defaultConverters = Collections.unmodifiableMap(defaultConverters);
 

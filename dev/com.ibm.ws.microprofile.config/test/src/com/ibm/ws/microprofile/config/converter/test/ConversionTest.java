@@ -29,6 +29,7 @@ import java.time.OffsetTime;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.BitSet;
 import java.util.Currency;
 import java.util.Locale;
@@ -45,6 +46,7 @@ import org.junit.Test;
 import com.ibm.ws.microprofile.config.dynamic.test.TestDynamicConfigSource;
 import com.ibm.ws.microprofile.config.interfaces.ConfigConstants;
 import com.ibm.ws.microprofile.config.interfaces.DefaultConverters;
+
 public class ConversionTest {
 
     @Test
@@ -237,6 +239,11 @@ public class ConversionTest {
         URL url = new URL(raw);
 
         assertConversion(raw, url, URL.class);
+    }
+
+    @Test
+    public void testChronoUnit() {
+        assertConversion("SECONDS", ChronoUnit.SECONDS, ChronoUnit.class);
     }
 
     public <T> void assertConversion(String rawString, T expected, Class<T> type) {

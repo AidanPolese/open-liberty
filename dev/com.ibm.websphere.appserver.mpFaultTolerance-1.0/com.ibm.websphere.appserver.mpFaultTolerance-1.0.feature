@@ -9,7 +9,8 @@ IBM-API-Package: org.eclipse.microprofile.faulttolerance.exceptions;  type="stab
 IBM-ShortName: mpFaultTolerance-1.0
 Subsystem-Name: MicroProfile Fault Tolerance 1.0
 -features=com.ibm.websphere.appserver.org.eclipse.microprofile.faulttolerance-1.0, \
- com.ibm.websphere.appserver.concurrent-1.0
+ com.ibm.websphere.appserver.concurrent-1.0, \
+ com.ibm.websphere.appserver.mpConfig-1.0
 -bundles=com.ibm.ws.require.java8, \
  com.ibm.ws.net.jodah.failsafe.1.0.4; apiJar=false; location:="lib/", \
  com.ibm.ws.microprofile.faulttolerance; apiJar=false; location:="lib/", \

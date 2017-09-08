@@ -65,7 +65,7 @@ public class PolicyValidationUtils {
             retryConfig = new RetryConfig(clazz, retry);
             target = clazz.getName();
         } else {
-            retryConfig = new RetryConfig(method, retry);
+            retryConfig = new RetryConfig(method, clazz, retry);
             target = clazz.getName() + "." + method.getName();
         }
 
@@ -109,7 +109,7 @@ public class PolicyValidationUtils {
             timeoutConfig = new TimeoutConfig(clazz, retry);
             target = clazz.getName();
         } else {
-            timeoutConfig = new TimeoutConfig(method, retry);
+            timeoutConfig = new TimeoutConfig(method, clazz, retry);
             target = clazz.getName() + "." + method.getName();
         }
 
@@ -135,7 +135,7 @@ public class PolicyValidationUtils {
             cbConfig = new CircuitBreakerConfig(clazz, cb);
             target = clazz.getName();
         } else {
-            cbConfig = new CircuitBreakerConfig(method, cb);
+            cbConfig = new CircuitBreakerConfig(method, clazz, cb);
             target = clazz.getName() + "." + method.getName();
         }
 
@@ -177,7 +177,7 @@ public class PolicyValidationUtils {
             bulkheadConfig = new BulkheadConfig(clazz, bulkhead);
             target = clazz.getName();
         } else {
-            bulkheadConfig = new BulkheadConfig(method, bulkhead);
+            bulkheadConfig = new BulkheadConfig(method, clazz, bulkhead);
             target = clazz.getName() + "." + method.getName();
         }
 
@@ -202,10 +202,10 @@ public class PolicyValidationUtils {
      * @param originalMethod
      * @param annotation
      */
-    public static void validateFallback(Method originalMethod, Fallback annotation) {
+    public static void validateFallback(Class<?> clazz, Method originalMethod, Fallback annotation) {
         //validate the fallback annotation
 
-        FallbackConfig fb = new FallbackConfig(originalMethod, annotation);
+        FallbackConfig fb = new FallbackConfig(originalMethod, clazz, annotation);
 
         Class<?> originalMethodReturnType = originalMethod.getReturnType();
         Class<?>[] originalMethodParamTypes = originalMethod.getParameterTypes();

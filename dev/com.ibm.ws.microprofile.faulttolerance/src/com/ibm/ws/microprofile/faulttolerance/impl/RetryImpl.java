@@ -11,6 +11,7 @@
 package com.ibm.ws.microprofile.faulttolerance.impl;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import com.ibm.ws.microprofile.faulttolerance.spi.RetryPolicy;
@@ -33,7 +34,9 @@ public class RetryImpl extends net.jodah.failsafe.RetryPolicy {
             int maxRetries = policy.getMaxRetries();
             Class<? extends Throwable>[] retryOn = policy.getRetryOn();
 
+            System.out.println("RetryImpl created");
             if (abortOn.length > 0) {
+                System.out.println("RetryImpl created with abortOn = " + Arrays.toString(abortOn));
                 abortOn(abortOn);
             }
             if (delay.toMillis() > 0) {

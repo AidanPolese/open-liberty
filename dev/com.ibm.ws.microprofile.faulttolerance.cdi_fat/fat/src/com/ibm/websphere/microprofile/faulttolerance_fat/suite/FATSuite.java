@@ -15,11 +15,14 @@ import java.io.File;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import com.ibm.websphere.microprofile.faulttolerance_fat.multimodule.tests.TestMultiModuleClassLoading;
+import com.ibm.websphere.microprofile.faulttolerance_fat.multimodule.tests.TestMultiModuleConfigLoad;
 import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDIAnnotationsDisabledTest;
 import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDIAsyncTest;
 import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDIBulkheadTest;
@@ -28,6 +31,7 @@ import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDIFallbackTest;
 import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDIRetryTest;
 import com.ibm.websphere.microprofile.faulttolerance_fat.tests.CDITimeoutTest;
 import com.ibm.websphere.simplicity.ShrinkHelper;
+import com.ibm.ws.fat.util.SharedServer;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -37,9 +41,13 @@ import com.ibm.websphere.simplicity.ShrinkHelper;
                 CDIFallbackTest.class,
                 CDIRetryTest.class,
                 CDITimeoutTest.class,
-                CDIAnnotationsDisabledTest.class
+                CDIAnnotationsDisabledTest.class,
+                TestMultiModuleConfigLoad.class,
+                TestMultiModuleClassLoading.class,
 })
 public class FATSuite {
+
+    public static SharedServer MULTI_MODULE_SERVER = new SharedServer("FaultToleranceMultiModule");
 
     @BeforeClass
     public static void setUp() throws Exception {
@@ -51,9 +59,17 @@ public class FATSuite {
         WebArchive CDIFaultTolerance_war = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
                         .addPackages(true, "com.ibm.ws.microprofile.faulttolerance_fat.cdi")
                         .addAsLibraries(faulttolerance_jar)
-                        .addAsManifestResource(new File("test-applications/" + APP_NAME + ".war/resources/META-INF/permissions.xml"), "persistence.xml");
+                        .addAsManifestResource(new File("test-applications/" + APP_NAME + ".war/resources/META-INF/permissions.xml"), "persistence.xml")
+                        .addAsManifestResource(new File("test-applications/" + APP_NAME + ".war/resources/META-INF/microprofile-config.properties"));
 
         ShrinkHelper.exportArtifact(CDIFaultTolerance_war, "publish/servers/CDIFaultTolerance/dropins/");
+    }
+
+    @AfterClass
+    public static void shutdownMultiModuleServer() throws Exception {
+        if (MULTI_MODULE_SERVER.getLibertyServer().isStarted()) {
+            MULTI_MODULE_SERVER.getLibertyServer().stopServer();
+        }
     }
 
 }

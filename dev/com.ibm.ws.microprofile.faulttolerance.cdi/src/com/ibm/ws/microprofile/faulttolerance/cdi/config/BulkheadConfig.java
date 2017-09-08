@@ -16,23 +16,26 @@ import org.eclipse.microprofile.faulttolerance.Bulkhead;
 
 public class BulkheadConfig extends AbstractAnnotationConfig<Bulkhead> implements Bulkhead {
 
+    private final AnnotationParameterConfig<Integer> valueConfig = getParameterConfig("value", Integer.class);
+    private final AnnotationParameterConfig<Integer> waitingTaskQueueConfig = getParameterConfig("waitingTaskQueue", Integer.class);
+
     public BulkheadConfig(Class<?> annotatedClass, Bulkhead annotation) {
         super(annotatedClass, annotation, Bulkhead.class);
     }
 
-    public BulkheadConfig(Method annotatedMethod, Bulkhead annotation) {
-        super(annotatedMethod, annotation, Bulkhead.class);
+    public BulkheadConfig(Method annotatedMethod, Class<?> annotatedClass, Bulkhead annotation) {
+        super(annotatedMethod, annotatedClass, annotation, Bulkhead.class);
     }
 
     /** {@inheritDoc} */
     @Override
     public int value() {
-        return super.getValue("value", int.class);
+        return valueConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public int waitingTaskQueue() {
-        return super.getValue("waitingTaskQueue", int.class);
+        return waitingTaskQueueConfig.getValue();
     }
 }

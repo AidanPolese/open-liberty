@@ -20,8 +20,8 @@ public class AsynchronousConfig extends AbstractAnnotationConfig<Asynchronous> i
         super(annotatedClass, annotation, Asynchronous.class);
     }
 
-    public AsynchronousConfig(Method annotatedMethod, Asynchronous annotation) {
-        super(annotatedMethod, annotation, Asynchronous.class);
+    public AsynchronousConfig(Method annotatedMethod, Class<?> annotatedClass, Asynchronous annotation) {
+        super(annotatedMethod, annotatedClass, annotation, Asynchronous.class);
     }
 
 }

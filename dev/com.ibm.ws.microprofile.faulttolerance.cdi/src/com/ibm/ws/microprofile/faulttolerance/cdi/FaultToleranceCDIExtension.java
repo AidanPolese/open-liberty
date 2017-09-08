@@ -64,7 +64,7 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
         Set<Annotation> annotations = annotatedType.getAnnotations();
         for (Annotation annotation : annotations) {
             //if we find any of the fault tolerance annotations on the class then we will add the intereceptor binding to the class
-            if (FTAnnotationUtils.ANNOTATIONS.contains(annotation.annotationType())) {
+            if (FTAnnotationUtils.getActiveAnnotations(clazz).contains(annotation.annotationType())) {
                 interceptedClass = true;
                 if (annotation.annotationType() == Asynchronous.class) {
                     classLevelAsync = true;
@@ -87,7 +87,7 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
 
             annotations = method.getAnnotations();
             for (Annotation annotation : annotations) {
-                if (FTAnnotationUtils.ANNOTATIONS.contains(annotation.annotationType())) {
+                if (FTAnnotationUtils.getActiveAnnotations(clazz).contains(annotation.annotationType())) {
                     interceptedMethods.add(method);
                 }
             }
@@ -119,11 +119,11 @@ public class FaultToleranceCDIExtension implements Extension, WebSphereCDIExtens
 
         Set<Annotation> annotations = method.getAnnotations();
         for (Annotation annotation : annotations) {
-            if (FTAnnotationUtils.ANNOTATIONS.contains(annotation.annotationType())) {
+            if (FTAnnotationUtils.getActiveAnnotations(clazz).contains(annotation.annotationType())) {
                 if (annotation.annotationType() == Asynchronous.class) {
                     PolicyValidationUtils.validateAsynchronous(javaMethod);
                 } else if (annotation.annotationType() == Fallback.class) {
-                    PolicyValidationUtils.validateFallback(javaMethod, (Fallback) annotation);
+                    PolicyValidationUtils.validateFallback(clazz, javaMethod, (Fallback) annotation);
                 } else if (annotation.annotationType() == Retry.class) {
                     PolicyValidationUtils.validateRetry(clazz, javaMethod, (Retry) annotation);
                 } else if (annotation.annotationType() == Timeout.class) {

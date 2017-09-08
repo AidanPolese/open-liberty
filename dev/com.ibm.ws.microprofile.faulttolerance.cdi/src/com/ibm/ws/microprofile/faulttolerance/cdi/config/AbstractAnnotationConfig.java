@@ -13,57 +13,200 @@ package com.ibm.ws.microprofile.faulttolerance.cdi.config;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
 
+import org.eclipse.microprofile.config.Config;
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.microprofile.faulttolerance.cdi.FTAnnotationUtils;
 import com.ibm.ws.microprofile.faulttolerance.cdi.FTUtils;
 
 public class AbstractAnnotationConfig<T extends Annotation> implements Annotation {
 
-    private static final TraceComponent tc = Tr.register(AbstractAnnotationConfig.class);
+    private static final TraceComponent tc = Tr.register(FTAnnotationUtils.class);
 
     private final Class<T> annotationType;
-    private final HashMap<String, Object> config = new HashMap<>();
+    private final String keyPrefix;
+    private final T annotation;
+    private final Class<?> annotatedClass;
 
     public AbstractAnnotationConfig(Class<?> annotatedClass, T annotation, Class<T> annotationType) {
-        this(getPropertyKeyPrefix(annotatedClass), annotation, annotationType);
+        this(getPropertyKeyPrefix(annotatedClass), annotatedClass, annotation, annotationType);
     }
 
-    public AbstractAnnotationConfig(Method annotatedMethod, T annotation, Class<T> annotationType) {
-        this(getPropertyKeyPrefix(annotatedMethod), annotation, annotationType);
+    public AbstractAnnotationConfig(Method annotatedMethod, Class<?> annotatedClass, T annotation, Class<T> annotationType) {
+        this(getPropertyKeyPrefix(annotatedMethod), annotatedClass, annotation, annotationType);
     }
 
-    private AbstractAnnotationConfig(String prefix, T annotation, Class<T> annotationType) {
+    private AbstractAnnotationConfig(String prefix, Class<?> annotatedClass, T annotation, Class<T> annotationType) {
         this.annotationType = annotationType;
+        this.keyPrefix = prefix;
+        this.annotation = annotation;
+        this.annotatedClass = annotatedClass;
+    }
 
-        Method[] methods = this.annotationType.getDeclaredMethods();
-        for (Method method : methods) {
-            String methodName = method.getName();
+    protected class AnnotationParameterConfig<S> {
+
+        protected S parameterValue = null;
+        protected final String parameterName;
+        protected final Class<S> parameterType;
+
+        private AnnotationParameterConfig(String parameterName, Class<S> parameterType) {
+            this.parameterType = parameterType;
+            this.parameterName = parameterName;
+        }
+
+        private void init() {
             try {
-                Object value = method.invoke(annotation);
-                String key = getPropertyKey(prefix, annotationType, methodName);
-                Object override = getSystemProperty(key, method.getReturnType());
-
-                if (override == null) {
-                    key = getPropertyKey("", annotationType, methodName);
-                    override = getSystemProperty(key, method.getReturnType());
+                S configValue = getConfigValue();
+                if (configValue != null) {
+                    parameterValue = configValue;
+                } else {
+                    Method m = annotationType.getDeclaredMethod(parameterName);
+                    parameterValue = parameterType.cast(m.invoke(annotation));
                 }
 
-                if (override != null) {
-                    value = override;
-                }
-
-                if (value != null) {
-                    config.put(methodName, value);
-                }
-
-            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 throw new FaultToleranceException(Tr.formatMessage(tc, "internal.error.CWMFT5997E", e), e);
             }
         }
+
+        protected S getValue() {
+            return parameterValue;
+        }
+
+        protected S getConfigValue() {
+            return readConfigValue(parameterType);
+        }
+
+        protected <P> P readConfigValue(Class<P> type) {
+            Config mpConfig = ConfigProvider.getConfig(annotatedClass.getClassLoader());
+
+            String key = getPropertyKey(keyPrefix, parameterName);
+            P configValue = mpConfig.getOptionalValue(key, type).orElse(null);
+
+            if (configValue == null) {
+                key = getPropertyKey("", parameterName);
+                configValue = mpConfig.getOptionalValue(key, type).orElse(null);
+            }
+
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                if (configValue != null) {
+                    Tr.debug(tc, "Found config value for " + getPropertyKey(keyPrefix, parameterName), configValue);
+                } else {
+                    Tr.debug(tc, "No config value found for " + getPropertyKey(keyPrefix, parameterName));
+                }
+            }
+
+            return configValue;
+        }
+    }
+
+    /**
+     * Config for parameters which take a class
+     * <p>
+     * If the value is retrieved from config, this class validates that the class is of the correct type
+     */
+    protected class AnnotationParameterConfigClass<S> extends AnnotationParameterConfig<Class<? extends S>> {
+
+        private final Class<S> parameterClass;
+
+        @SuppressWarnings("unchecked")
+        private AnnotationParameterConfigClass(String parameterName, Class<S> parameterClass) {
+            super(parameterName, (Class<Class<? extends S>>) (Class<?>) Class.class); // Hate generics
+            this.parameterClass = parameterClass;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected Class<? extends S> getConfigValue() {
+
+            String configValue = readConfigValue(String.class);
+
+            Class<?> result = null;
+            if (configValue != null) {
+                try {
+                    result = annotatedClass.getClassLoader().loadClass(configValue);
+                } catch (ClassNotFoundException ex) {
+                    throw new FaultToleranceException(Tr.formatMessage(tc, "Cannot load class {0} specified in config for {1}",
+                                                                       configValue, getPropertyKey(keyPrefix, parameterName)));
+                }
+
+                if (!parameterClass.isAssignableFrom(result)) {
+                    throw new FaultToleranceException(Tr.formatMessage(tc, "Class {0} cannot be assigned to type {1}, as specified in config for {2}",
+                                                                       configValue, parameterClass.getName(), getPropertyKey(keyPrefix, parameterName)));
+                }
+            }
+
+            // Safe as checked above
+            return (Class<? extends S>) result;
+        }
+
+    }
+
+    /**
+     * Config for parameters which take a class
+     * <p>
+     * If the value is retrieved from config, this class validates that the classes are of the correct type
+     */
+    protected class AnnotationParameterConfigClassArray<S> extends AnnotationParameterConfig<Class<? extends S>[]> {
+
+        private final Class<S> parameterClass;
+
+        @SuppressWarnings("unchecked")
+        private AnnotationParameterConfigClassArray(String parameterName, Class<S> parameterClass) {
+            super(parameterName, (Class<Class<? extends S>[]>) (Class<?>) Class[].class); // Hate generics
+            this.parameterClass = parameterClass;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected Class<? extends S>[] getConfigValue() {
+            String[] configValue = readConfigValue(String[].class);
+
+            Class<?>[] result = null;
+            if (configValue != null) {
+                result = new Class<?>[configValue.length];
+                for (int i = 0; i < configValue.length; i++) {
+                    try {
+                        result[i] = annotatedClass.getClassLoader().loadClass(configValue[i]);
+                    } catch (ClassNotFoundException ex) {
+                        throw new FaultToleranceException(Tr.formatMessage(tc, "Cannot load class {0} specified in config for {1}", configValue[i],
+                                                                           getPropertyKey(keyPrefix, parameterName)));
+                    }
+
+                    if (!parameterClass.isAssignableFrom(result[i])) {
+                        throw new FaultToleranceException(Tr.formatMessage(tc, "Class {0} cannot be assigned to type {1}, as specified in config for {2}",
+                                                                           configValue[i], parameterClass.getName(), getPropertyKey(keyPrefix, parameterName)));
+                    }
+                }
+            }
+
+            // Safe as checked above
+            return (Class<? extends S>[]) result;
+        }
+
+    }
+
+    protected <S> AnnotationParameterConfig<S> getParameterConfig(String name, Class<S> type) {
+        AnnotationParameterConfig<S> parameterConfig = new AnnotationParameterConfig<>(name, type);
+        parameterConfig.init();
+        return parameterConfig;
+    }
+
+    protected <S> AnnotationParameterConfig<Class<? extends S>> getParameterConfigClass(String name, Class<S> type) {
+        AnnotationParameterConfig<Class<? extends S>> parameterConfig = new AnnotationParameterConfigClass<>(name, type);
+        parameterConfig.init();
+        return parameterConfig;
+    }
+
+    protected <S> AnnotationParameterConfig<Class<? extends S>[]> getParameterConfigClassArray(String name, Class<S> type) {
+        AnnotationParameterConfig<Class<? extends S>[]> parameterConfig = new AnnotationParameterConfigClassArray<>(name, type);
+        parameterConfig.init();
+        return parameterConfig;
+
     }
 
     /** {@inheritDoc} */
@@ -72,29 +215,7 @@ public class AbstractAnnotationConfig<T extends Annotation> implements Annotatio
         return annotationType;
     }
 
-    protected <S> S getValue(String key, Class<S> type) {
-        @SuppressWarnings("unchecked")
-        S value = (S) config.get(key);
-        return value;
-    }
-
-    private static String getSystemProperty(String key) {
-        String value = System.getProperty(key);
-        return value;
-    }
-
-    private static <S> S getSystemProperty(String key, Class<S> type) {
-        String strValue = getSystemProperty(key);
-        S value = null;
-
-        if (strValue != null) {
-            value = DefaultConverters.convert(strValue, type);
-        }
-
-        return value;
-    }
-
-    private static String getPropertyKey(String prefix, Class<?> annotationType, String parameter) {
+    private String getPropertyKey(String prefix, String parameter) {
         // <prefix>Annotation/parameter
         String key = prefix + annotationType.getSimpleName() + "/" + parameter;
         return key;

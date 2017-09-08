@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.ibm.ws.microprofile.faulttolerance_fat.cdi;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -69,6 +70,18 @@ public class FallbackServlet extends FATServlet {
         assertThat(data, equalTo("Fallback for: connectA - data!"));
         // Connect count should only be 1 since retry is disabled
         assertThat("Call count", bean.getConnectCountA(), is(1));
+    }
+
+    public void testFallbackHandlerConfig() throws ConnectException {
+        // Fallback handler overridden as FallbackHandler2 in config
+        Connection connection = beanWithoutRetry.connectB();
+        assertThat(connection.getData(), containsString("MyFallbackHandler2"));
+    }
+
+    public void testFallbackMethodConfig() throws ConnectException {
+        // Fallback method overriden as connectFallback2 in config
+        Connection connection = beanWithoutRetry.connectC();
+        assertThat(connection.getData(), equalTo("connectFallback2"));
     }
 
 }

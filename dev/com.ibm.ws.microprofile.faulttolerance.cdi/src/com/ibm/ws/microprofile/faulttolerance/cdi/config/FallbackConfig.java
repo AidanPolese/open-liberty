@@ -17,24 +17,28 @@ import org.eclipse.microprofile.faulttolerance.FallbackHandler;
 
 public class FallbackConfig extends AbstractAnnotationConfig<Fallback> implements Fallback {
 
+    @SuppressWarnings("rawtypes")
+    private final AnnotationParameterConfig<Class<? extends FallbackHandler>> valueConfig = getParameterConfigClass("value", FallbackHandler.class);
+    private final AnnotationParameterConfig<String> fallbackMethodConfig = getParameterConfig("fallbackMethod", String.class);
+
     public FallbackConfig(Class<?> annotatedClass, Fallback annotation) {
         super(annotatedClass, annotation, Fallback.class);
     }
 
-    public FallbackConfig(Method annotatedMethod, Fallback annotation) {
-        super(annotatedMethod, annotation, Fallback.class);
+    public FallbackConfig(Method annotatedMethod, Class<?> annotatedClass, Fallback annotation) {
+        super(annotatedMethod, annotatedClass, annotation, Fallback.class);
     }
 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     @Override
     public Class<? extends FallbackHandler<?>> value() {
-        return super.getValue("value", Class.class);
+        return (Class<? extends FallbackHandler<?>>) valueConfig.getValue();
     }
 
     /** {@inheritDoc} */
     @Override
     public String fallbackMethod() {
-        return super.getValue("fallbackMethod", String.class);
+        return fallbackMethodConfig.getValue();
     }
 }
