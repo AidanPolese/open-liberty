@@ -23,7 +23,7 @@ import componenttest.custom.junit.runner.Mode;
 import componenttest.custom.junit.runner.Mode.TestMode;
 
 @Mode(TestMode.LITE)
-public class HealthTest extends LoggingTest {
+public class CDIRetryTest extends LoggingTest {
 
     @ClassRule
     public static SharedServer SHARED_SERVER = new SharedServer("CDIHealth");
@@ -38,7 +38,6 @@ public class HealthTest extends LoggingTest {
 
         assertNotNull("FeatureManager should report update is complete",
                       SHARED_SERVER.getLibertyServer().waitForStringInLog("CWWKF0008I"));
-
         SHARED_SERVER.getLibertyServer().stopServer();
 
     }
