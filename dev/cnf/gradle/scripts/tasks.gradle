@@ -19,7 +19,11 @@ subprojects {
   file("${rootDir}/generated.properties").withInputStream { props.load(it) }
 
   /* Project artifacts are versioned by bnd Bundle-Version attribute, with the qualifier being current Git branch. */
-  project.version = bnd('Bundle-Version', '1.0.' + qualifier + (isRelease ? '' : '-SNAPSHOT'))
+  def projectVersion = (isRelease ? bnd.buildID : "1.0.${qualifier}-SNAPSHOT")
+  if (releaseVersionOverride != null) {
+    projectVersion = releaseVersionOverride
+  }
+  project.version = bnd('Bundle-Version', projectVersion)
 
   repositories {
     if (usrHomeProps.exists() && !props.getProperty('artifactory.force.external.repo')) {
@@ -483,6 +487,7 @@ task testResults {
   dependsOn subprojects.test
 
   doLast {
+    //TODO: need a better mechanism for 'stowaway properties' that need to be used in future gradle invocations
     def props = new Properties()
     file("${rootDir}/generated.properties").withInputStream { props.load(it) }
 
@@ -499,6 +504,16 @@ task zipOpenLiberty(type: Zip) {
     baseName 'openliberty'
     from 'build.image/wlp'
     destinationDir file('build.image/generated/distributions')
+  doLast {
+    //TODO: need a better mechanism for 'stowaway properties' that need to be used in future gradle invocations
+    def props = new Properties()
+    file("${rootDir}/generated.properties").withInputStream { props.load(it) }
+
+    props.setProperty('zipopenliberty.archivename', zipOpenLiberty.archivePath.toString())
+
+    File propsFile = new File('generated.properties')
+    props.store(propsFile.newWriter(), null)
+  }
 }
 
 task zipMessageFiles(type: Zip) {

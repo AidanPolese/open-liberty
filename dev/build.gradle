@@ -31,37 +31,6 @@ Workspace.addGestalt(Constants.GESTALT_BATCH, null)
 ext.bndWorkspace = new Workspace(rootDir, bnd_cnf).setOffline(gradle.startParameter.offline)
 ext.cnf = rootProject.project(bnd_cnf)
 
-/* Set extra properties extension using generated.properties
- * generated.properties is tailored at Gradle initialization in settings.gradle
- */
-Properties props = new Properties()
-file("${rootDir}/generated.properties").withInputStream { props.load(it) }
-
-ext.qualifier = props.getProperty("version.qualifier")
-ext.matrixParams = props.getProperty("artifactory.matrix.parameters")
-ext.isAutomatedBuild = parseBoolean(props.getProperty("is.automated.build"))
-ext.isContinuousBuild = parseBoolean(props.getProperty("is.continuous.build"))
-ext.isRelease = parseBoolean(props.getProperty('is.release'))
-ext.isRemotePublishing = parseBoolean(props.getProperty('is.remote.publishing'))
-ext.reallyPublishPublically = parseBoolean(props.getProperty('really.publish.publically'))
-// Does userhome Gradle startup properties exist?
-ext.usrHomeProps = file(System.properties['user.home'] + '/gradle.startup.properties')
-if (!usrHomeProps.exists()) {
-  if (System.properties['build.properties.path']!=null) {
-    usrHomeProps = file(System.properties['build.properties.path']);
-  }
-}
-
-// Test results for this run
-ext.testCountTotal = 0
-ext.successfulTestCountTotal = 0
-ext.failedTestCountTotal = 0
-ext.skippedTestCountTotal = 0
-
-private boolean parseBoolean(String value) {
-    return 'on'.equalsIgnoreCase(value) || 'true'.equalsIgnoreCase(value)
-}
-
 /* Configure the subprojects */
 subprojects {
   def bndProject = bndWorkspace.getProject(name)
