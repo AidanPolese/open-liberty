@@ -2361,15 +2361,26 @@ public class LdapConnection {
         }
 
         try {
-            String oldURL = getProviderURL(oldCtx);
-            TimedDirContext ctx = createDirContext(getEnvironment(URLTYPE_SEQUENCE, getNextURL(oldURL)));
-            String newURL = getProviderURL(ctx);
+            // PM95697, check if we should get or create a DirContext
+            Long oldCreateTimeStamp = oldCtx.getCreateTimestamp();
+            TimedDirContext ctx;
+            if (oldCreateTimeStamp < iPoolCreateTimestampMillisec) {
+                if (tc.isDebugEnabled()) {
+                    Tr.debug(tc, METHODNAME + " Pool refreshed, skip to getDirContext. oldCreateTimeStamp: " + oldCreateTimeStamp + " iPoolCreateTimestampMillisec:"
+                                 + iPoolCreateTimestampMillisec);
+                }
+                ctx = getDirContext();
+            } else {
+                String oldURL = getProviderURL(oldCtx);
+                ctx = createDirContext(getEnvironment(URLTYPE_SEQUENCE, getNextURL(oldURL)));
+                String newURL = getProviderURL(ctx);
 
-            synchronized (lock) {
-                // Refresh context pool if another thread hasn't already done so
-                if (oldCtx.getCreateTimestamp() >= iPoolCreateTimestampSeconds) {
-                    createContextPool(iLiveContexts - 1, newURL);
-                    ctx.setCreateTimestamp(iPoolCreateTimestampSeconds);
+                synchronized (lock) {
+                    // Refresh context pool if another thread hasn't already done so
+                    if (oldCtx.getCreateTimestamp() >= iPoolCreateTimestampSeconds) {
+                        createContextPool(iLiveContexts - 1, newURL);
+                        ctx.setCreateTimestamp(iPoolCreateTimestampSeconds);
+                    }
                 }
             }
 
@@ -2727,6 +2738,7 @@ public class LdapConnection {
                     || ctx.getCreateTimestamp() < iPoolCreateTimestampSeconds
                     || !getProviderURL(ctx).equalsIgnoreCase(getActiveURL())) {
                     try {
+                        iLiveContexts--; //PM95697
                         ctx.close();
                     } catch (NamingException e) {
                         throw new WIMSystemException(WIMMessageKey.NAMING_EXCEPTION, Tr.formatMessage(
@@ -2734,7 +2746,7 @@ public class LdapConnection {
                                                                                                       WIMMessageKey.NAMING_EXCEPTION,
                                                                                                       WIMMessageHelper.generateMsgParms(e.toString(true))));
                     }
-                    iLiveContexts--;
+
                     if (tc.isDebugEnabled()) {
                         Tr.debug(tc, METHODNAME + " Context is discarded.");
                     }
