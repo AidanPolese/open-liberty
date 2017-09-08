@@ -42,6 +42,10 @@ public class MpJwtHelper {
 			JSON_WEB_TOKEN_UTIL_REF);
 
 	static private boolean isJdk18Up = (JavaInfo.majorVersion() >= 8);
+
+	public MpJwtHelper() {}
+
+	// ctor for the unit tests.
 	public MpJwtHelper(boolean isJdk18Up) {
 		this.isJdk18Up = isJdk18Up;
 	}
