@@ -30,23 +30,26 @@ import componenttest.topology.utils.HttpUtils;
 @RunWith(FATRunner.class)
 public class JSFContainerTest extends FATServletClient {
 
-    public static final String APP_NAME = "jsfApp";
+    public static final String MOJARRA_APP = "jsfApp";
+    public static final String MYFACES_APP = "jsfApp_myfaces";
 
     @Server("jsf.container.2.2_fat")
     public static LibertyServer server;
 
     @BeforeClass
     public static void setUp() throws Exception {
-        WebArchive app = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
+        WebArchive mojarraApp = ShrinkWrap.create(WebArchive.class, MOJARRA_APP + ".war")
                         .addPackages(true, "jsf.container")
-                        .addAsLibrary(new File("publish/files/mojarra/jsf-api-2.2.14.jar"))
-                        .addAsLibrary(new File("publish/files/mojarra/jsf-impl-2.2.14.jar"))
-                        .addAsWebResource(new File("test-applications/" + APP_NAME + "/resources/TestBean.xhtml"));
+                        .addAsWebResource(new File("test-applications/jsfApp/resources/TestBean.xhtml"));
+        mojarraApp = FATSuite.addMojarra(mojarraApp);
+        ShrinkHelper.exportToServer(server, "dropins", mojarraApp);
 
-        // TODO-6677: Eventually this library will be auto-added by the jsfContainer-2.2 feature
-        app = app.addAsLibrary(new File("publish/files/mojarra/com.ibm.ws.jsfContainer.2.2.jar"));
+        WebArchive myfacesApp = ShrinkWrap.create(WebArchive.class, MYFACES_APP + ".war")
+                        .addPackages(true, "jsf.container")
+                        .addAsWebResource(new File("test-applications/jsfApp/resources/TestBean.xhtml"));
+        mojarraApp = FATSuite.addMyFaces(myfacesApp);
+        ShrinkHelper.exportToServer(server, "dropins", myfacesApp);
 
-        ShrinkHelper.exportToServer(server, "dropins", app);
         server.startServer();
     }
 
@@ -56,15 +59,29 @@ public class JSFContainerTest extends FATServletClient {
     }
 
     @Test
-    public void testCDIBean() throws Exception {
-        HttpUtils.findStringInReadyUrl(server, '/' + APP_NAME + "/TestBean.jsf",
+    public void testCDIBean_Mojarra() throws Exception {
+        HttpUtils.findStringInReadyUrl(server, '/' + MOJARRA_APP + "/TestBean.jsf",
                                        "CDI Bean value:",
                                        ":CDIBean::PostConstructCalled:");
     }
 
     @Test
-    public void testJSFBean() throws Exception {
-        HttpUtils.findStringInReadyUrl(server, '/' + APP_NAME + "/TestBean.jsf",
+    public void testJSFBean_Mojarra() throws Exception {
+        HttpUtils.findStringInReadyUrl(server, '/' + MOJARRA_APP + "/TestBean.jsf",
+                                       "JSF Bean value:",
+                                       ":JSFBean::PostConstructCalled:");
+    }
+
+    @Test
+    public void testCDIBean_MyFaces() throws Exception {
+        HttpUtils.findStringInReadyUrl(server, '/' + MYFACES_APP + "/TestBean.jsf",
+                                       "CDI Bean value:",
+                                       ":CDIBean::PostConstructCalled:");
+    }
+
+    @Test
+    public void testJSFBean_MyFaces() throws Exception {
+        HttpUtils.findStringInReadyUrl(server, '/' + MYFACES_APP + "/TestBean.jsf",
                                        "JSF Bean value:",
                                        ":JSFBean::PostConstructCalled:");
     }

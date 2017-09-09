@@ -12,8 +12,6 @@ package com.ibm.ws.jsf.container.fat;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
@@ -47,24 +45,29 @@ import componenttest.topology.utils.FATServletClient;
 @RunWith(FATRunner.class)
 public class CDIFlowsTests extends FATServletClient {
 
-    private static final String APP_NAME = "JSF22CDIFacesFlows";
+    private static final String MOJARRA_APP = "JSF22CDIFacesFlows";
+    private static final String MYFACES_APP = "JSF22CDIFacesFlows_MyFaces";
 
     public static LibertyServer server = JSF22FlowsTests.server;
 
     @BeforeClass
     public static void setup() throws Exception {
-        WebArchive app = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
-                        .addAsLibrary(new File("publish/files/mojarra/jsf-api-2.2.14.jar"))
-                        .addAsLibrary(new File("publish/files/mojarra/jsf-impl-2.2.14.jar"))
-                        .addPackage("jsf.cdi.flow.beans");
-        app = (WebArchive) ShrinkHelper.addDirectory(app, "test-applications/" + APP_NAME + "/resources");
-
-        // TODO-6677: Eventually this library will be auto-added by the jsfContainer-2.2 feature
-        app = app.addAsLibrary(new File("publish/files/mojarra/com.ibm.ws.jsfContainer.2.2.jar"));
-
-        ShrinkHelper.exportToServer(server, "dropins", app);
         server.removeAllInstalledAppsForValidation();
-        server.addInstalledAppForValidation(APP_NAME);
+
+        WebArchive mojarraApp = ShrinkWrap.create(WebArchive.class, MOJARRA_APP + ".war")
+                        .addPackage("jsf.cdi.flow.beans");
+        mojarraApp = FATSuite.addMojarra(mojarraApp);
+        mojarraApp = (WebArchive) ShrinkHelper.addDirectory(mojarraApp, "test-applications/" + MOJARRA_APP + "/resources");
+        ShrinkHelper.exportToServer(server, "dropins", mojarraApp);
+        server.addInstalledAppForValidation(MOJARRA_APP);
+
+        WebArchive myfacesApp = ShrinkWrap.create(WebArchive.class, MYFACES_APP + ".war")
+                        .addPackage("jsf.cdi.flow.beans");
+        myfacesApp = FATSuite.addMyFaces(myfacesApp);
+        myfacesApp = (WebArchive) ShrinkHelper.addDirectory(myfacesApp, "test-applications/" + MOJARRA_APP + "/resources");
+        ShrinkHelper.exportToServer(server, "dropins", myfacesApp);
+        server.addInstalledAppForValidation(MYFACES_APP);
+
         server.startServer(CDIFlowsTests.class.getSimpleName() + ".log");
     }
 
@@ -74,12 +77,29 @@ public class CDIFlowsTests extends FATServletClient {
     }
 
     /**
+     * Ensure that each app is running with the appropriate provider so that
+     * we don't accidentally run both apps with a single provider.
+     */
+    @Test
+    public void verifyAppProviders() throws Exception {
+        server.resetLogMarks();
+        server.waitForStringInLogUsingMark("Initializing Mojarra .* for context '/" + MOJARRA_APP + "'");
+        server.resetLogMarks();
+        server.waitForStringInLogUsingMark("MyFaces CDI support enabled");
+    }
+
+    /**
      * Verify the behavior of a simple flow which is defined via a *-flow.xml configuration,
      * and which utilizes a simple flowScoped bean
      */
     @Test
     public void JSF22Flows_TestSimpleBean() throws Exception {
-        JSF22FlowsTests.testSimpleCase("simpleBean", APP_NAME);
+        JSF22FlowsTests.testSimpleCase("simpleBean", MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22Flows_TestSimpleBean_MyFaces() throws Exception {
+        JSF22FlowsTests.testSimpleCase("simpleBean", MYFACES_APP);
     }
 
     /**
@@ -87,7 +107,12 @@ public class CDIFlowsTests extends FATServletClient {
      */
     @Test
     public void JSF22Flows_TestFlowBuilder() throws Exception {
-        JSF22FlowsTests.testSimpleCase("simpleFlowBuilder", APP_NAME);
+        JSF22FlowsTests.testSimpleCase("simpleFlowBuilder", MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22Flows_TestFlowBuilder_MyFaces() throws Exception {
+        JSF22FlowsTests.testSimpleCase("simpleFlowBuilder", MYFACES_APP);
     }
 
     /**
@@ -96,32 +121,31 @@ public class CDIFlowsTests extends FATServletClient {
      */
     @Test
     public void JSF22Flows_TestMixedConfiguration() throws Exception {
-        JSF22FlowsTests.testNestedFlows("mixedNested1", "mixedNested2", "mixedNested", APP_NAME);
+        JSF22FlowsTests.testNestedFlows("mixedNested1", "mixedNested2", "mixedNested", MOJARRA_APP);
     }
 
-    /**
-     * Verify that we can define and use a custom navigation handler
-     */
-    //@Test
-    public void JSF22Flows_TestCustomNavigationHandler() throws Exception {
-        // Still running into an NPE here; we need to check for that in NavigationHandlerImpl
-        JSF22FlowsTests.testSimpleCase("customNavigationHandler", "/JSF22FacesFlowsNavigation/");
+    @Test
+    public void JSF22Flows_TestMixedConfiguration_MyFaces() throws Exception {
+        JSF22FlowsTests.testNestedFlows("mixedNested1", "mixedNested2", "mixedNested", MYFACES_APP);
     }
 
     /**
      * Verify the FlowBuilder initializer() and finalizer()
+     * 1. Navigate to first page
+     * 2. verify that <Current testBean.testValue value: test String> is on the page
+     * 3. enter something into textbox, navigate to page 2, verify page2 info is the same
+     * 4. navigate to return page
+     * 5. verify that <Count: 1> is on the page
+     * 6. return home
      */
     @Test
     public void JSF22Flows_TestInitializerAndFinalizer() throws Exception {
-        /*
-         * 1. Navigate to first page
-         * 2. verify that <Current testBean.testValue value: test String> is on the page
-         * 3. enter something into textbox, navigate to page 2, verify page2 info is the same
-         * 4. navigate to return page
-         * 5. verify that <Count: 1> is on the page
-         * 6. return home
-         */
-        testInitializerAndFinalizer();
+        testInitializerAndFinalizer(MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22Flows_TestInitializerAndFinalizer_MyFaces() throws Exception {
+        testInitializerAndFinalizer(MYFACES_APP);
     }
 
     /**
@@ -129,16 +153,21 @@ public class CDIFlowsTests extends FATServletClient {
      */
     @Test
     public void JSF22Flows_TestProgrammaticSwitch() throws Exception {
-        JSF22FlowsTests.testFlowSwitch("programmaticSwitch", APP_NAME);
+        JSF22FlowsTests.testFlowSwitch("programmaticSwitch", MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22Flows_TestProgrammaticSwitch_MyFaces() throws Exception {
+        JSF22FlowsTests.testFlowSwitch("programmaticSwitch", MYFACES_APP);
     }
 
     /**
      * Helper method to test the initializer and finalizer application
      */
-    private void testInitializerAndFinalizer() throws Exception {
+    private void testInitializerAndFinalizer(String app) throws Exception {
         // Navigate to the index
         WebClient webClient = JSF22FlowsTests.getWebClient();
-        HtmlPage page = JSF22FlowsTests.getIndex(webClient, APP_NAME);
+        HtmlPage page = JSF22FlowsTests.getIndex(webClient, app);
         String flowID = "initializeFinalize";
 
         /*

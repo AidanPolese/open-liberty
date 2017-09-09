@@ -10,8 +10,6 @@
  *******************************************************************************/
 package com.ibm.ws.jsf.container.fat;
 
-import java.io.File;
-
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
@@ -29,42 +27,65 @@ import com.ibm.websphere.simplicity.log.Log;
 
 import componenttest.annotation.Server;
 import componenttest.annotation.TestServlet;
+import componenttest.annotation.TestServlets;
 import componenttest.custom.junit.runner.FATRunner;
 import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.utils.FATServletClient;
 import jsf.beanval.BeanValTestServlet;
 
-/**
- * Tests to execute on the jsf22beanvalServer that use HtmlUnit.
- */
 @RunWith(FATRunner.class)
 public class JSF22BeanValidationTests extends FATServletClient {
 
-    private static final String APP_NAME = "BeanValidationTests";
+    private static final String MOJARRA_APP = "BeanValidationTests";
+    private static final String MYFACES_APP = "BeanValidationTests_MyFaces";
 
     @Server("jsf.container.2.2_fat.beanval")
-    @TestServlet(servlet = BeanValTestServlet.class, path = APP_NAME + "/BeanValTestServlet")
+    @TestServlets({
+                    @TestServlet(servlet = BeanValTestServlet.class, path = MOJARRA_APP + "/BeanValTestServlet"),
+                    @TestServlet(servlet = BeanValTestServlet.class, path = MYFACES_APP + "/BeanValTestServlet")
+    })
     public static LibertyServer server;
 
     @BeforeClass
     public static void setup() throws Exception {
-        WebArchive app = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
-                        .addAsLibrary(new File("publish/files/mojarra/jsf-api-2.2.14.jar"))
-                        .addAsLibrary(new File("publish/files/mojarra/jsf-impl-2.2.14.jar"))
+        WebArchive mojarraApp = ShrinkWrap.create(WebArchive.class, MOJARRA_APP + ".war")
                         .addPackage("jsf.beanval");
-        app = (WebArchive) ShrinkHelper.addDirectory(app, "test-applications/" + APP_NAME + "/resources");
+        mojarraApp = FATSuite.addMojarra(mojarraApp);
+        mojarraApp = (WebArchive) ShrinkHelper.addDirectory(mojarraApp, "test-applications/" + MOJARRA_APP + "/resources");
+        ShrinkHelper.exportToServer(server, "dropins", mojarraApp);
+        server.addInstalledAppForValidation(MOJARRA_APP);
 
-        // TODO-6677: Eventually this library will be auto-added by the jsfContainer-2.2 feature
-        app = app.addAsLibrary(new File("publish/files/mojarra/com.ibm.ws.jsfContainer.2.2.jar"));
+        WebArchive myfacesApp = ShrinkWrap.create(WebArchive.class, MYFACES_APP + ".war")
+                        .addPackage("jsf.beanval");
+        myfacesApp = FATSuite.addMyFaces(myfacesApp);
+        myfacesApp = (WebArchive) ShrinkHelper.addDirectory(myfacesApp, "test-applications/" + MOJARRA_APP + "/resources");
+        ShrinkHelper.exportToServer(server, "dropins", myfacesApp);
+        server.addInstalledAppForValidation(MYFACES_APP);
 
-        ShrinkHelper.exportToServer(server, "dropins", app);
-        server.addInstalledAppForValidation(APP_NAME);
         server.startServer();
     }
 
     @AfterClass
     public static void testCleanup() throws Exception {
         server.stopServer();
+    }
+
+    @Test
+    public void verifyAppProviders() throws Exception {
+        server.resetLogMarks();
+        server.waitForStringInLogUsingMark("Initializing Mojarra .* for context '/" + MOJARRA_APP + "'");
+        server.resetLogMarks();
+        server.waitForStringInLogUsingMark("MyFaces Bean Validation support enabled");
+    }
+
+    @Test
+    public void testValidationBeanTagBinding_Mojarra() throws Exception {
+        testValidationBeanTagBinding(MOJARRA_APP);
+    }
+
+    @Test
+    public void testValidationBeanTagBinding_MyFaces() throws Exception {
+        testValidationBeanTagBinding(MYFACES_APP);
     }
 
     /**
@@ -77,11 +98,10 @@ public class JSF22BeanValidationTests extends FATServletClient {
      * This test was moved out of the above bucket because of a message difference between bean validation
      * 1.0 and 1.1
      */
-    @Test
-    public void testValidationBeanTagBinding() throws Exception {
+    private void testValidationBeanTagBinding(String app) throws Exception {
         WebClient webClient = new WebClient();
 
-        HtmlPage page = (HtmlPage) webClient.getPage(getAppURL() + "/BeanValidation.jsf");
+        HtmlPage page = (HtmlPage) webClient.getPage(getServerURL() + app + "/BeanValidation.jsf");
 
         Log.info(getClass(), testName.getMethodName(), "Navigating to: /BeanValidationTests/BeanValidation.jsf");
         Log.info(getClass(), testName.getMethodName(), "Attempting to validate with a string greater than max length");
@@ -93,7 +113,7 @@ public class JSF22BeanValidationTests extends FATServletClient {
                           page.getElementById("bindingError").getTextContent().equals("binding: Validation Error: Length is greater than allowable maximum of '2'"));
 
         Log.info(getClass(), testName.getMethodName(), "Navigating to: /BeanValidationTests/BeanValidation.jsf");
-        page = (HtmlPage) webClient.getPage(getAppURL() + "/BeanValidation.jsf");
+        page = (HtmlPage) webClient.getPage(getServerURL() + app + "/BeanValidation.jsf");
 
         Log.info(getClass(), testName.getMethodName(), "Attempting to validate with a string of max length");
         bindingInputText = (HtmlTextInput) page.getElementById("binding");
@@ -109,7 +129,7 @@ public class JSF22BeanValidationTests extends FATServletClient {
         return button.click();
     }
 
-    private static String getAppURL() {
-        return "http://" + server.getHostname() + ":" + server.getHttpDefaultPort() + '/' + APP_NAME;
+    private static String getServerURL() {
+        return "http://" + server.getHostname() + ":" + server.getHttpDefaultPort() + '/';
     }
 }

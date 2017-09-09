@@ -12,8 +12,6 @@ package com.ibm.ws.jsf.container.fat;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -53,28 +51,34 @@ import junit.framework.Assert;
 @RunWith(FATRunner.class)
 public class JSF22FlowsTests extends FATServletClient {
 
-    private static final String APP_NAME = "JSF22FacesFlows";
+    private static final String MOJARRA_APP = "JSF22FacesFlows";
+    private static final String MYFACES_APP = "JSF22FacesFlows_MyFaces";
 
     public static LibertyServer server = LibertyServerFactory.getLibertyServer("jsf.container.2.2_fat");
 
     @BeforeClass
     public static void setup() throws Exception {
+        server.removeAllInstalledAppsForValidation();
+
         JavaArchive facesFlowJar = ShrinkWrap.create(JavaArchive.class, "JSF22FacesFlows.jar");
         facesFlowJar = (JavaArchive) ShrinkHelper.addDirectory(facesFlowJar, "test-applications/JSF22FacesFlows/resources/jar");
 
-        WebArchive app = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
-                        .addAsLibrary(new File("publish/files/mojarra/jsf-api-2.2.14.jar"))
-                        .addAsLibrary(new File("publish/files/mojarra/jsf-impl-2.2.14.jar"))
+        WebArchive mojarraApp = ShrinkWrap.create(WebArchive.class, MOJARRA_APP + ".war")
                         .addAsLibrary(facesFlowJar)
                         .addPackage("jsf.flow.beans");
-        app = (WebArchive) ShrinkHelper.addDirectory(app, "test-applications/JSF22FacesFlows/resources/war");
+        mojarraApp = FATSuite.addMojarra(mojarraApp);
+        mojarraApp = (WebArchive) ShrinkHelper.addDirectory(mojarraApp, "test-applications/JSF22FacesFlows/resources/war");
+        ShrinkHelper.exportToServer(server, "dropins", mojarraApp);
+        server.addInstalledAppForValidation(MOJARRA_APP);
 
-        // TODO-6677: Eventually this library will be auto-added by the jsfContainer-2.2 feature
-        app = app.addAsLibrary(new File("publish/files/mojarra/com.ibm.ws.jsfContainer.2.2.jar"));
+        WebArchive myfacesApp = ShrinkWrap.create(WebArchive.class, MYFACES_APP + ".war")
+                        .addAsLibrary(facesFlowJar)
+                        .addPackage("jsf.flow.beans");
+        myfacesApp = FATSuite.addMyFaces(myfacesApp);
+        myfacesApp = (WebArchive) ShrinkHelper.addDirectory(myfacesApp, "test-applications/JSF22FacesFlows/resources/war");
+        ShrinkHelper.exportToServer(server, "dropins", myfacesApp);
+        server.addInstalledAppForValidation(MOJARRA_APP);
 
-        ShrinkHelper.exportToServer(server, "dropins", app);
-        server.removeAllInstalledAppsForValidation();
-        server.addInstalledAppForValidation(APP_NAME);
         server.startServer(JSF22FlowsTests.class.getSimpleName() + ".log");
     }
 
@@ -84,19 +88,42 @@ public class JSF22FlowsTests extends FATServletClient {
     }
 
     /**
+     * Ensure that each app is running with the appropriate provider so that
+     * we don't accidentally run both apps with a single provider.
+     */
+    @Test
+    public void verifyAppProviders() throws Exception {
+        server.resetLogMarks();
+        server.waitForStringInLogUsingMark("Initializing Mojarra .* for context '/" + MOJARRA_APP + "'");
+        // Since MyFaces doesn't output any initialization messages that contain the app name,
+        // all we can do is check to make sure the MyFaces app didn't initialize with Mojarra
+        Assert.assertEquals(0, server.findStringsInLogs("Initializing Mojarra .* for context '/" + MYFACES_APP + "'").size());
+    }
+
+    /**
      * Verify the behavior of a simple flow which is defined via a *-flow.xml configuration
      */
     @Test
-    public void JSF22Flows_TestSimple() throws Exception {
-        testSimpleCase("simple", APP_NAME);
+    public void JSF22Flows_TestSimple_Mojarra() throws Exception {
+        testSimpleCase("simple", MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22Flows_TestSimple_MyFaces() throws Exception {
+        testSimpleCase("simple", MYFACES_APP);
     }
 
     /**
      * Verify the behavior of a simple flow which is defined via a faces-config.xml configuration
      */
     @Test
-    public void JSF22Flows_TestSimpleFacesConfig() throws Exception {
-        testSimpleCase("simpleFacesConfig", APP_NAME);
+    public void JSF22Flows_TestSimpleFacesConfig_Mojarra() throws Exception {
+        testSimpleCase("simpleFacesConfig", MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22Flows_TestSimpleFacesConfig_MyFaces() throws Exception {
+        testSimpleCase("simpleFacesConfig", MYFACES_APP);
     }
 
     /**
@@ -104,20 +131,25 @@ public class JSF22FlowsTests extends FATServletClient {
      * packaged in a JAR
      */
     @Test
-    @ExpectedFFDC("java.util.NoSuchElementException") // TODO is this really expected?
-    public void JSF22Flows_TestSimpleJar() throws Exception {
-        testSimpleCase("simple-jar", APP_NAME);
+    @ExpectedFFDC("java.util.NoSuchElementException")
+    public void JSF22Flows_TestSimpleJar_Mojarra() throws Exception {
+        testSimpleCase("simple-jar", MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22Flows_TestSimpleJar_MyFaces() throws Exception {
+        testSimpleCase("simple-jar", MYFACES_APP);
     }
 
     /**
      * Check that arbitrary flow nodes can't be accessed
      */
     @Test
-    @ExpectedFFDC("java.util.NoSuchElementException") // TODO is this really expected?
-    public void JSF22Flows_TestFailedFlowEntry() throws Exception {
+    @ExpectedFFDC("java.util.NoSuchElementException")
+    public void JSF22Flows_TestFailedFlowEntry_Mojarra() throws Exception {
         // Navigate to the failed flow entry page
         WebClient webClient = getWebClient();
-        HtmlPage page = webClient.getPage(getServerURL() + '/' + APP_NAME + "/JSF22Flows_noAccess.xhtml");
+        HtmlPage page = webClient.getPage(getServerURL() + '/' + MOJARRA_APP + "/JSF22Flows_noAccess.xhtml");
         assertNotInFlow(page);
 
         // Try navigating directly to the second page in an application-local flow
@@ -125,20 +157,43 @@ public class JSF22FlowsTests extends FATServletClient {
         assertNotInFlow(page);
 
         // MyFaces has slightly different err msg than Mojarra
-//        assertTrue("The page doesn't contain the right text: " + page.asText(),
-//                   page.asText().contains("No navigation case match"));
         assertTrue("The page doesn't contain the right text: " + page.asText(),
                    page.asText().contains("Unable to find matching navigation case"));
+    }
+
+    @Test
+    public void JSF22Flows_TestFailedFlowEntry_MyFaces() throws Exception {
+        // Navigate to the failed flow entry page
+        WebClient webClient = getWebClient();
+        HtmlPage page = webClient.getPage(getServerURL() + '/' + MYFACES_APP + "/JSF22Flows_noAccess.xhtml");
+        assertNotInFlow(page);
+
+        // Try navigating directly to the second page in an application-local flow
+        page = findAndClickButton(page, "button1");
+        assertNotInFlow(page);
+
+        // MyFaces has slightly different err msg than Mojarra
+        assertTrue("The page doesn't contain the right text: " + page.asText(),
+                   page.asText().contains("No navigation case match"));
     }
 
     /**
      * Verify the behavior of a simple flow which is defined via *-flow.xml, and which employs navigation rules
      */
     @Test
-    public void JSF22Flows_TestDeclarativeNavigation() throws Exception {
+    public void JSF22Flows_TestDeclarativeNavigation_Mojarra() throws Exception {
+        JSF22Flows_TestDeclarativeNavigation(MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22Flows_TestDeclarativeNavigation_MyFaces() throws Exception {
+        JSF22Flows_TestDeclarativeNavigation(MYFACES_APP);
+    }
+
+    public void JSF22Flows_TestDeclarativeNavigation(String app) throws Exception {
         // Navigate to the
         WebClient webClient = getWebClient();
-        HtmlPage page = getIndex(webClient, APP_NAME);
+        HtmlPage page = getIndex(webClient, app);
 
         String flowID = "simpleNavigationDeclarative";
 
@@ -187,8 +242,13 @@ public class JSF22FlowsTests extends FATServletClient {
      * Verify the behavior of a simple flow which utilizes a switch to test navigation outcomes
      */
     @Test
-    public void JSF22Flows_TestDeclarativeSwitch() throws Exception {
-        testFlowSwitch("declarativeSwitch", APP_NAME);
+    public void JSF22Flows_TestDeclarativeSwitch_Mojarra() throws Exception {
+        testFlowSwitch("declarativeSwitch", MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22Flows_TestDeclarativeSwitch_MyFaces() throws Exception {
+        testFlowSwitch("declarativeSwitch", MYFACES_APP);
     }
 
     /**
@@ -250,9 +310,15 @@ public class JSF22FlowsTests extends FATServletClient {
      * https://issues.apache.org/jira/browse/MYFACES-3969 (Also see Defect 169488)
      */
     @Test
-    public void JSF22Flows_TestDeclarativeNestedFlows() throws Exception {
+    public void JSF22Flows_TestDeclarativeNestedFlows_Mojarra() throws Exception {
         // Navigate to the index
-        testNestedFlows("declarativeNested1", "declarativeNested2", "declarativeNested", APP_NAME);
+        testNestedFlows("declarativeNested1", "declarativeNested2", "declarativeNested", MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22Flows_TestDeclarativeNestedFlows_MyFaces() throws Exception {
+        // Navigate to the index
+        testNestedFlows("declarativeNested1", "declarativeNested2", "declarativeNested", MYFACES_APP);
     }
 
     /**
