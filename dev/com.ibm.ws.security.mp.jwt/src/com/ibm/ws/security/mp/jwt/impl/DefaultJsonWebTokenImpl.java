@@ -196,7 +196,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
         }
         tmp.setLength(tmp.length() - 1);
         tmp.append("]}");
-        return tmp.toString();
+        return claimsSet.toJson(); //tmp.toString();
     }
 
     /** {@inheritDoc} */
