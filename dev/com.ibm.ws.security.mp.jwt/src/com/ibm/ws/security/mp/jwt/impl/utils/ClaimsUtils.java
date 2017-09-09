@@ -1,18 +1,16 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2017
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.security.mp.jwt.impl.utils;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -22,6 +20,7 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
+import org.jose4j.json.JsonUtil;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.lang.JoseException;
@@ -41,8 +40,19 @@ public class ClaimsUtils {
     public ClaimsUtils() {
     }
 
+    /**
+     * Parses the provided JWT and returns the claims found within its payload.
+     */
     public JwtClaims getJwtClaims(String jwt) throws JoseException {
+        JwtClaims jwtclaims = new JwtClaims();
+        String payload = getJwtPayload(jwt);
+        if (payload != null) {
+            jwtclaims = getClaimsFromJwtPayload(jwt, payload);
+        }
+        return jwtclaims;
+    }
 
+    String getJwtPayload(String jwt) {
         String payload = null;
         if (jwt != null) {
             String[] parts = JsonUtils.splitTokenString(jwt);
@@ -50,39 +60,44 @@ public class ClaimsUtils {
                 payload = JsonUtils.fromBase64ToJsonString(parts[1]); // payload - claims
             }
         }
-        JwtClaims jwtclaims = new JwtClaims();
+        return payload;
+    }
 
-        if (payload != null) {
-            Map<String, Object> payloadClaims = org.jose4j.json.JsonUtil.parseJson(payload);
-            Set<Entry<String, Object>> entries = payloadClaims.entrySet();
-            Iterator<Entry<String, Object>> it = entries.iterator();
-            while (it.hasNext()) {
-                Entry<String, Object> entry = it.next();
-
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "Key : " + key + ", Value: " + value);
-                }
-                if (key != null && value != null) {
-                    jwtclaims.setClaim(key, value);
-                }
-            }
-            jwtclaims.setStringClaim(org.eclipse.microprofile.jwt.Claims.raw_token.name(), jwt);
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "Key : " + "raw_token" + ", Value: " + "raw_token");
-            }
-            fixJoseTypes(jwtclaims);
+    JwtClaims getClaimsFromJwtPayload(String jwt, String payload) throws JoseException {
+        JwtClaims jwtclaims = parsePayloadAndCreateClaims(payload);
+        jwtclaims.setStringClaim(org.eclipse.microprofile.jwt.Claims.raw_token.name(), jwt);
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "Key : " + "raw_token" + ", Value: " + "raw_token");
         }
-
+        convertJoseTypes(jwtclaims);
         return jwtclaims;
+    }
 
+    JwtClaims parsePayloadAndCreateClaims(String payload) throws JoseException {
+        JwtClaims jwtClaims = new JwtClaims();
+        Map<String, Object> payloadClaims = JsonUtil.parseJson(payload);
+        Set<Entry<String, Object>> entries = payloadClaims.entrySet();
+        for (Entry<String, Object> entry : entries) {
+            addEntryToClaims(entry, jwtClaims);
+        }
+        return jwtClaims;
+    }
+
+    void addEntryToClaims(Entry<String, Object> entry, JwtClaims jwtclaims) {
+        String key = entry.getKey();
+        Object value = entry.getValue();
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "Key : " + key + ", Value: " + value);
+        }
+        if (key != null && value != null) {
+            jwtclaims.setClaim(key, value);
+        }
     }
 
     /**
      * Convert the types jose4j uses for address, sub_jwk, and jwk
      */
-    private void fixJoseTypes(JwtClaims claimsSet) {
+    private void convertJoseTypes(JwtClaims claimsSet) {
         //        if (claimsSet.hasClaim(Claims.address.name())) {
         //            replaceMap(Claims.address.name());
         //        }
@@ -93,13 +108,13 @@ public class ClaimsUtils {
         //            replaceMap(Claims.sub_jwk.name());
         //        }
         if (claimsSet.hasClaim("address")) {
-            replaceMap("address", claimsSet);
+            replaceMapWithJsonObject("address", claimsSet);
         }
         if (claimsSet.hasClaim("jwk")) {
-            replaceMap("jwk", claimsSet);
+            replaceMapWithJsonObject("jwk", claimsSet);
         }
         if (claimsSet.hasClaim("sub_jwk")) {
-            replaceMap("sub_jwk", claimsSet);
+            replaceMapWithJsonObject("sub_jwk", claimsSet);
         }
         if (claimsSet.hasClaim("aud")) {
             convertToList("aud", claimsSet);
@@ -111,47 +126,43 @@ public class ClaimsUtils {
 
     /**
      * Replace the jose4j Map<String,Object> with a JsonObject
-     *
-     * @param name
-     *            - claim name
-     * @param claimsSet
      */
-    private void replaceMap(String name, JwtClaims claimsSet) {
+    private void replaceMapWithJsonObject(String claimName, JwtClaims claimsSet) {
         try {
-            Map<String, Object> map = claimsSet.getClaimValue(name, Map.class);
+            Map<String, Object> map = claimsSet.getClaimValue(claimName, Map.class);
             JsonObjectBuilder builder = Json.createObjectBuilder();
             for (Map.Entry<String, Object> entry : map.entrySet()) {
                 builder.add(entry.getKey(), entry.getValue().toString());
             }
             JsonObject jsonObject = builder.build();
-            claimsSet.setClaim(name, jsonObject);
+            claimsSet.setClaim(claimName, jsonObject);
         } catch (MalformedClaimException e) {
-            //e.printStackTrace();
+            if (tc.isDebugEnabled()) {
+                Tr.debug(tc, "The value for the claim [" + claimName + "] could not be convered to a Map: " + e.getLocalizedMessage());
+            }
         }
     }
 
     /**
-     * @param claimsSet
-     * @param string
+     * Converts the value for the specified claim into a String list.
      */
     @FFDCIgnore({ MalformedClaimException.class })
-    private void convertToList(String name, JwtClaims claimsSet) {
-
+    private void convertToList(String claimName, JwtClaims claimsSet) {
         List<String> list = null;
         try {
-            list = claimsSet.getStringListClaimValue(name);
-
+            list = claimsSet.getStringListClaimValue(claimName);
         } catch (MalformedClaimException e) {
-            //e.printStackTrace();
             try {
-                String value = claimsSet.getStringClaimValue(name);
+                String value = claimsSet.getStringClaimValue(claimName);
                 if (value != null) {
                     list = new ArrayList<String>();
                     list.add(value);
-                    claimsSet.setClaim(name, list);
+                    claimsSet.setClaim(claimName, list);
                 }
             } catch (MalformedClaimException e1) {
-
+                if (tc.isDebugEnabled()) {
+                    Tr.debug(tc, "The value for the claim [" + claimName + "] could not be convered to a string list: " + e1.getLocalizedMessage());
+                }
             }
         }
     }

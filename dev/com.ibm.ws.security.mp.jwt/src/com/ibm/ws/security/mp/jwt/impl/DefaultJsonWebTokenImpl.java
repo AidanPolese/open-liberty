@@ -1,14 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2017
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.security.mp.jwt.impl;
 
 import java.io.IOException;
@@ -20,13 +19,8 @@ import java.io.ObjectStreamField;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -79,9 +73,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
     }
 
     public final JsonWebToken clone() {
-
         return new DefaultJsonWebTokenImpl(this.jwt, this.type, this.principal);
-
     }
 
     /**
@@ -96,7 +88,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
             }
             this.claimsSet = claimsUtils.getJwtClaims(jwt);
         } catch (JoseException e) {
-            // TODO:
+            Tr.error(tc, "ERROR_GETTING_CLAIMS_FROM_JWT_STRING", new Object[] { e.getLocalizedMessage() });
         }
     }
 
@@ -233,6 +225,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
                 String aud = claimsSet.getStringClaimValue("aud");
                 audSet.add(aud);
             } catch (MalformedClaimException e1) {
+                Tr.warning(tc, "CLAIM_MALFORMED", new Object[] { "aud", e.getLocalizedMessage() });
             }
         }
         return audSet;
@@ -247,53 +240,9 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
                 groups.addAll(globalGroups);
             }
         } catch (MalformedClaimException e) {
-
+            Tr.warning(tc, "CLAIM_MALFORMED", new Object[] { "groups", e.getLocalizedMessage() });
         }
         return groups;
-    }
-
-    /**
-     * Convert the types jose4j uses for address, sub_jwk, and jwk
-     */
-    private void fixJoseTypes() {
-        //        if (claimsSet.hasClaim(Claims.address.name())) {
-        //            replaceMap(Claims.address.name());
-        //        }
-        //        if (claimsSet.hasClaim(Claims.jwk.name())) {
-        //            replaceMap(Claims.jwk.name());
-        //        }
-        //        if (claimsSet.hasClaim(Claims.sub_jwk.name())) {
-        //            replaceMap(Claims.sub_jwk.name());
-        //        }
-        if (claimsSet.hasClaim("address")) {
-            replaceMap("address");
-        }
-        if (claimsSet.hasClaim("jwk")) {
-            replaceMap("jwk");
-        }
-        if (claimsSet.hasClaim("sub_jwk")) {
-            replaceMap("sub_jwk");
-        }
-    }
-
-    /**
-     * Replace the jose4j Map<String,Object> with a JsonObject
-     *
-     * @param name
-     *            - claim name
-     */
-    private void replaceMap(String name) {
-        try {
-            Map<String, Object> map = claimsSet.getClaimValue(name, Map.class);
-            JsonObjectBuilder builder = Json.createObjectBuilder();
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                builder.add(entry.getKey(), entry.getValue().toString());
-            }
-            JsonObject jsonObject = builder.build();
-            claimsSet.setClaim(name, jsonObject);
-        } catch (MalformedClaimException e) {
-            //e.printStackTrace();
-        }
     }
 
     /**

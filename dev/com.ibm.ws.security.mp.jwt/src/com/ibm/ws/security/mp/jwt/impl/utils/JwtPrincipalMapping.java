@@ -1,33 +1,27 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2017
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.security.mp.jwt.impl.utils;
 
 import java.util.ArrayList;
-
-import org.jose4j.lang.JoseException;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.ws.security.common.jwk.utils.JsonUtils;
 import com.ibm.ws.security.mp.jwt.TraceConstants;
+import com.ibm.ws.security.mp.jwt.impl.MicroProfileJwtConfigImpl;
 
 /**
  *
  */
 public class JwtPrincipalMapping {
-
-    /**
-     *
-     */
 
     private static TraceComponent tc = Tr.register(JwtPrincipalMapping.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
     //String realm = null;
@@ -35,56 +29,21 @@ public class JwtPrincipalMapping {
     String userName = null;
     ArrayList<String> groupIds = null;
 
-    @SuppressWarnings("unchecked")
     public JwtPrincipalMapping(String jsonstr, String userAttr, String groupAttr, boolean mapToUr) {
-
-        userName = getTheUserName(userAttr, jsonstr);
-        if (userName != null) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "user name = ", userName);
-            }
-            //customCacheKey = userName + tokenString.hashCode();
-
-            if (!mapToUr) {
-                Object group = null;
-                if (groupAttr != null) {
-                    try {
-                        group = JsonUtils.claimFromJsonObject(jsonstr, groupAttr);
-                    } catch (JoseException e) {
-
-                    }
-                }
-                if (group != null) {
-                    if (group instanceof ArrayList<?>) {
-                        groupIds = (ArrayList<String>) group;
-                    } else { // try if there is a single string identified as group
-                        try {
-                            String groupName = (String) group;
-                            groupIds = new ArrayList<String>();
-                            groupIds.add(groupName);
-                        } catch (ClassCastException cce) {
-                            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                                Tr.debug(tc, "cannot get meaningful group due to CCE.");
-                            }
-                        }
-                    }
-                }
-                if (groupIds != null && TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                    Tr.debug(tc, "groups size = ", groupIds.size());
-                }
-            }
+        userName = getUserName(userAttr, jsonstr);
+        if (userName == null) {
+            return;
+        }
+        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "user name = ", userName);
+        }
+        if (!mapToUr) {
+            populateGroupIds(jsonstr, groupAttr);
         }
     }
 
-    public boolean checkUserNameForNull() {
-        if (userName == null || userName.isEmpty()) {
-            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
-                Tr.debug(tc, "There is no principal");
-            }
-            return true;
-        } else {
-            return false;
-        }
+    public boolean isUserNameNull() {
+        return (userName == null || userName.isEmpty());
     }
 
     public String getMappedUser() {
@@ -95,27 +54,77 @@ public class JwtPrincipalMapping {
         return groupIds;
     }
 
-    private String getTheUserName(String userNameAttr, String jsonstr) {
-        if (jsonstr != null) {
-            if (userNameAttr != null && !userNameAttr.isEmpty()) {
-                Object user = null;
-                try {
-                    user = JsonUtils.claimFromJsonObject(jsonstr, userNameAttr);
-                } catch (JoseException e) {
-
-                }
-                if (user != null) {
-                    if (user instanceof String) {
-                        userName = (String) user;
-                    } else {
-                        Tr.error(tc, "SUBJECT_MAPPING_INCORRECT_CLAIM_TYPE", new Object[] { userNameAttr, "userNameAttribute" });
-                    }
-                }
-            }
+    private String getUserName(String userNameAttr, String jsonstr) {
+        if (jsonstr != null && userNameAttr != null && !userNameAttr.isEmpty()) {
+            Object user = getClaim(jsonstr, userNameAttr);
+            setUserName(userNameAttr, user);
         }
         if (userName == null) {
-            Tr.error(tc, "SUBJECT_MAPPING_MISSING_ATTR", new Object[] { userNameAttr, "userNameAttribute" });
+            Tr.error(tc, "PRINCIPAL_MAPPING_MISSING_ATTR", new Object[] { userNameAttr, MicroProfileJwtConfigImpl.KEY_userNameAttribute });
         }
         return userName;
     }
+
+    void setUserName(String userNameAttr, Object user) {
+        if (user == null) {
+            if (tc.isDebugEnabled()) {
+                Tr.debug(tc, "Provided user name object is null. Current user name [" + userName + "] will not be changed");
+            }
+            return;
+        }
+        if (user instanceof String) {
+            userName = (String) user;
+        } else {
+            Tr.error(tc, "PRINCIPAL_MAPPING_INCORRECT_CLAIM_TYPE", new Object[] { userNameAttr, MicroProfileJwtConfigImpl.KEY_userNameAttribute });
+        }
+    }
+
+    void populateGroupIds(String jsonstr, String groupAttr) {
+        Object groupClaim = null;
+        if (groupAttr != null) {
+            groupClaim = getClaim(jsonstr, groupAttr);
+        }
+        populateGroupIdsFromGroupClaim(groupClaim);
+    }
+
+    Object getClaim(String jsonstr, String claimAttr) {
+        try {
+            return JsonUtils.claimFromJsonObject(jsonstr, claimAttr);
+        } catch (Exception e) {
+            Tr.error(tc, "CANNOT_GET_CLAIM_FROM_JSON", new Object[] { claimAttr, e.getLocalizedMessage() });
+        }
+        return null;
+    }
+
+    void populateGroupIdsFromGroupClaim(Object groupClaim) {
+        if (groupClaim == null) {
+            return;
+        }
+        if (groupClaim instanceof ArrayList<?>) {
+            setGroupIdArrayList(groupClaim);
+        } else {
+            setGroupClaimAsOnlyGroupId(groupClaim);
+        }
+        if (groupIds != null && TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+            Tr.debug(tc, "groups size = ", groupIds.size());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    void setGroupIdArrayList(Object groupClaim) {
+        groupIds = (ArrayList<String>) groupClaim;
+    }
+
+    void setGroupClaimAsOnlyGroupId(Object groupClaim) {
+        try {
+            String groupName = (String) groupClaim;
+            groupIds = new ArrayList<String>();
+            groupIds.add(groupName);
+        } catch (ClassCastException cce) {
+            if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+                Tr.debug(tc, "cannot get meaningful group due to CCE: " + cce.getMessage());
+            }
+        }
+    }
+
 }

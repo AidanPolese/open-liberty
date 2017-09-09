@@ -1,13 +1,13 @@
-/*
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2017
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.security.mp.jwt.impl;
 
 import java.security.PublicKey;
@@ -100,6 +100,8 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
     public static final String CFG_KEY_CLOCK_SKEW = "clockSkew";
     private long clockSkewMilliSeconds;
 
+    protected CommonConfigUtils configUtils = new CommonConfigUtils();
+
     @Reference(service = MicroProfileJwtService.class, name = KEY_MP_JWT_SERVICE, cardinality = ReferenceCardinality.MANDATORY)
     protected void setMicroProfileJwtService(ServiceReference<MicroProfileJwtService> ref) {
         this.mpJwtServiceRef.setReference(ref);
@@ -131,30 +133,26 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
 
     public void initProps(ComponentContext cc, Map<String, Object> props) throws MpJwtProcessingException {
 
-        this.issuer = getConfigAttribute(props, KEY_ISSUER, true); //required?
+        this.issuer = configUtils.getRequiredConfigAttribute(props, KEY_ISSUER);
 
-        this.audience = trim((String[]) props.get(KEY_AUDIENCE));
-        this.jwksUri = getConfigAttribute(props, KEY_jwksUri);
+        this.audience = configUtils.getStringArrayConfigAttribute(props, KEY_AUDIENCE);
+        this.jwksUri = configUtils.getConfigAttribute(props, KEY_jwksUri);
 
-        this.userNameAttribute = getConfigAttribute(props, KEY_userNameAttribute);
-        this.groupNameAttribute = getConfigAttribute(props, KEY_groupNameAttribute);
+        this.userNameAttribute = configUtils.getConfigAttribute(props, KEY_userNameAttribute);
+        this.groupNameAttribute = configUtils.getConfigAttribute(props, KEY_groupNameAttribute);
 
-        this.clockSkewMilliSeconds = (Long) props.get(CFG_KEY_CLOCK_SKEW);
+        this.clockSkewMilliSeconds = configUtils.getLongConfigAttribute(props, CFG_KEY_CLOCK_SKEW, clockSkewMilliSeconds);
 
-        this.sslRef = getConfigAttribute(props, KEY_sslRef);
+        this.sslRef = configUtils.getConfigAttribute(props, KEY_sslRef);
         this.sslRefInfo = null; // lazy init
 
         //this.authFilterRef = getConfigAttribute(props, KEY_authFilterRef);
         //this.authFilter = null; // lazy init
 
         this.sslContext = null;
-        this.trustAliasName = getConfigAttribute(props, KEY_TRUSTED_ALIAS);
-        if (props.containsKey(CFG_KEY_HOST_NAME_VERIFICATION_ENABLED)) {
-            this.hostNameVerificationEnabled = (Boolean) props.get(CFG_KEY_HOST_NAME_VERIFICATION_ENABLED);
-        }
-        if (props.containsKey(CFG_KEY_TOKEN_REUSE)) {
-            this.tokenReuse = (Boolean) props.get(CFG_KEY_TOKEN_REUSE);
-        }
+        this.trustAliasName = configUtils.getConfigAttribute(props, KEY_TRUSTED_ALIAS);
+        this.hostNameVerificationEnabled = configUtils.getBooleanConfigAttribute(props, CFG_KEY_HOST_NAME_VERIFICATION_ENABLED, hostNameVerificationEnabled);
+        this.tokenReuse = configUtils.getBooleanConfigAttribute(props, CFG_KEY_TOKEN_REUSE, tokenReuse);
         jwkSet = null; // the jwkEndpoint may have been changed during dynamic update
         consumerUtils = null; // the parameters in consumerUtils may have been changed during dynamic changing
 
@@ -174,39 +172,6 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
             //Tr.debug(tc, "authFilterRef = " + authFilterRef);
             Tr.debug(tc, "sslRef = " + sslRef);
         }
-    }
-
-    protected String getConfigAttribute(Map<String, Object> props, String key) {
-        return getConfigAttribute(props, key, IS_NOT_REQUIRED);
-    }
-
-    protected String getConfigAttribute(Map<String, Object> props, String key, String defaultValue) {
-        return getConfigAttribute(props, key, IS_NOT_REQUIRED, defaultValue);
-    }
-
-    protected String getConfigAttribute(Map<String, Object> props, String key, boolean isRequired) {
-        return getConfigAttribute(props, key, isRequired, null);
-    }
-
-    protected String getConfigAttribute(Map<String, Object> props, String key, boolean isRequired, String defaultValue) {
-        String result = trim((String) props.get(key));
-        if (key != null && result == null) {
-            if (isRequired) {
-                Tr.error(tc, "CONFIG_REQUIRED_ATTRIBUTE_NULL", new Object[] { key, uniqueId });
-            }
-            if (defaultValue != null) {
-                result = defaultValue;
-            }
-        }
-        return result;
-    }
-
-    public static String[] trim(final String[] originals) {
-        return CommonConfigUtils.trim(originals);
-    }
-
-    public static String trim(final String original) {
-        return CommonConfigUtils.trim(original);
     }
 
     /** {@inheritDoc} */
@@ -261,7 +226,7 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
             MicroProfileJwtService service = mpJwtServiceRef.getService();
             if (service == null) {
                 if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, "mpjwt service is not available");
+                    Tr.debug(tc, "MP JWT service is not available");
                 }
                 return null;
             }
@@ -334,7 +299,7 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
             MicroProfileJwtService service = mpJwtServiceRef.getService();
             if (service == null) {
                 if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, "Social login service is not available");
+                    Tr.debug(tc, "MP JWT service is not available");
                 }
                 return null;
             }
@@ -349,7 +314,7 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
             MicroProfileJwtService service = mpJwtServiceRef.getService();
             if (service == null) {
                 if (tc.isDebugEnabled()) {
-                    Tr.debug(tc, "Social login service is not available");
+                    Tr.debug(tc, "MP JWT service is not available");
                 }
                 return null;
             }
@@ -482,6 +447,7 @@ public class MicroProfileJwtConfigImpl implements MicroProfileJwtConfig, JwtCons
         return clockSkewMilliSeconds;
     }
 
+    @Override
     public boolean getTokenReuse() {
         return this.tokenReuse;
     }

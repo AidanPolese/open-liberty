@@ -1,14 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2016
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.security.mp.jwt.error;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,26 +38,20 @@ public class ErrorHandlerImpl implements ErrorHandler {
 
     @Override
     public TAIResult handleErrorResponse(HttpServletResponse response, TAIResult result) {
-
         handleErrorResponse(response, result.getStatus());
         return result;
     }
 
     @Override
     public void handleErrorResponse(HttpServletResponse response, int httpErrorCode) {
-
         if (!response.isCommitted()) {
             response.setStatus(httpErrorCode);
         }
-
-        String errorMessage = getErrorMessage();//Tr.formatMessage(tc, "SOCIAL_LOGIN_FRONT_END_ERROR"); // CWWKS5489E
+        String errorMessage = getErrorMessage();
         response.setHeader(AUTH_HEADER, errorMessage);
-
-        //writeErrorHtml(response, errorHeader, errorMessage);
     }
 
     String getErrorMessage() {
-
         String message = getRealmMessage();
 
         message += ERROR_CODE;
