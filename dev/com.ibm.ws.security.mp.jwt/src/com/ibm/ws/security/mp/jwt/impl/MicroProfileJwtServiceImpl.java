@@ -1,13 +1,13 @@
-/*
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2016
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.security.mp.jwt.impl;
 
 import java.util.Map;
@@ -36,9 +36,7 @@ import com.ibm.wsspi.ssl.SSLSupport;
 @Component(service = MicroProfileJwtService.class, immediate = true, configurationPolicy = ConfigurationPolicy.IGNORE, property = "service.vendor=IBM", name = "microProfileJwtService")
 public class MicroProfileJwtServiceImpl implements MicroProfileJwtService {
 
-    public static final TraceComponent tc = Tr.register(MicroProfileJwtServiceImpl.class,
-            TraceConstants.TRACE_GROUP,
-            TraceConstants.MESSAGE_BUNDLE);
+    public static final TraceComponent tc = Tr.register(MicroProfileJwtServiceImpl.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
 
     static final String KEY_UNIQUE_ID = "id";
 

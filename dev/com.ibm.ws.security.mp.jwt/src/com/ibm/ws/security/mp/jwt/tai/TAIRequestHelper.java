@@ -1,14 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2017 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2017
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.security.mp.jwt.tai;
 
 import java.util.Iterator;
@@ -59,7 +58,7 @@ public class TAIRequestHelper {
      * @param request
      * @return
      */
-    public MicroProfileJwtTaiRequest createSocialTaiRequestAndSetRequestAttribute(HttpServletRequest request) {
+    public MicroProfileJwtTaiRequest createMicroProfileJwtTaiRequestAndSetRequestAttribute(HttpServletRequest request) {
         MicroProfileJwtTaiRequest mpJwtTaiRequest = new MicroProfileJwtTaiRequest(request);
         request.setAttribute(ATTRIBUTE_TAI_REQUEST, mpJwtTaiRequest);
         return mpJwtTaiRequest;
@@ -113,25 +112,37 @@ public class TAIRequestHelper {
     }
 
     public String getBearerToken(HttpServletRequest req, MicroProfileJwtConfig clientConfig) {
+        String token = getBearerTokenFromHeader(req);
+        if (token == null) {
+            token = getBearerTokenFromParameter(req);
+        }
+        return token;
+    }
 
+    String getBearerTokenFromHeader(HttpServletRequest req) {
         String hdrValue = req.getHeader(Authorization_Header);
         if (tc.isDebugEnabled()) {
             Tr.debug(tc, "Authorization header=", hdrValue);
         }
-        if (hdrValue != null && hdrValue.startsWith("Bearer ")) {
-            hdrValue = hdrValue.substring(7);
-        } else {
-            String reqMethod = req.getMethod();
-            if (REQ_METHOD_POST.equalsIgnoreCase(reqMethod)) {
-                String contentType = req.getHeader(REQ_CONTENT_TYPE_NAME);
-                if (REQ_CONTENT_TYPE_APP_FORM_URLENCODED.equals(contentType)) {
-                    hdrValue = req.getParameter(ACCESS_TOKEN);
-                }
+        String bearerAuthzMethod = "Bearer ";
+        if (hdrValue != null && hdrValue.startsWith(bearerAuthzMethod)) {
+            hdrValue = hdrValue.substring(bearerAuthzMethod.length());
+        }
+        return hdrValue;
+    }
+
+    String getBearerTokenFromParameter(HttpServletRequest req) {
+        String reqMethod = req.getMethod();
+        if (REQ_METHOD_POST.equalsIgnoreCase(reqMethod)) {
+            String contentType = req.getHeader(REQ_CONTENT_TYPE_NAME);
+            if (tc.isDebugEnabled()) {
+                Tr.debug(tc, "Request content type: " + contentType);
+            }
+            if (REQ_CONTENT_TYPE_APP_FORM_URLENCODED.equals(contentType)) {
+                return req.getParameter(ACCESS_TOKEN);
             }
         }
-
-        return hdrValue;
-
+        return null;
     }
 
     MicroProfileJwtTaiRequest setTaiRequestConfigInfo(HttpServletRequest request, String specifiedServiceId, MicroProfileJwtTaiRequest mpJwtTaiRequest) {
@@ -141,13 +152,12 @@ public class TAIRequestHelper {
             }
             return setGenericAndFilteredConfigTaiRequestInfo(request, mpJwtTaiRequest);
         }
-
-        return setSpecificConfigTaiRequestInfo(request, specifiedServiceId, mpJwtTaiRequest); //TODO:
+        return setSpecificConfigTaiRequestInfo(request, specifiedServiceId, mpJwtTaiRequest);
     }
 
     MicroProfileJwtTaiRequest setGenericAndFilteredConfigTaiRequestInfo(HttpServletRequest request, MicroProfileJwtTaiRequest mpJwtTaiRequest) {
         if (mpJwtTaiRequest == null) {
-            mpJwtTaiRequest = createSocialTaiRequestAndSetRequestAttribute(request);
+            mpJwtTaiRequest = createMicroProfileJwtTaiRequestAndSetRequestAttribute(request);
         }
         Iterator<MicroProfileJwtConfig> services = getConfigServices();
         return setGenericAndFilteredConfigTaiRequestInfoFromConfigServices(request, mpJwtTaiRequest, services);
@@ -158,7 +168,7 @@ public class TAIRequestHelper {
             return mpJwtTaiRequest;
         }
         if (mpJwtTaiRequest == null) {
-            mpJwtTaiRequest = createSocialTaiRequestAndSetRequestAttribute(request);
+            mpJwtTaiRequest = createMicroProfileJwtTaiRequestAndSetRequestAttribute(request);
         }
 
         while (services.hasNext()) {
@@ -177,19 +187,23 @@ public class TAIRequestHelper {
 
     MicroProfileJwtTaiRequest setSpecificConfigTaiRequestInfo(HttpServletRequest request, String configId, MicroProfileJwtTaiRequest mpJwtTaiRequest) {
         if (mpJwtTaiRequest == null) {
-            mpJwtTaiRequest = createSocialTaiRequestAndSetRequestAttribute(request);
+            mpJwtTaiRequest = createMicroProfileJwtTaiRequestAndSetRequestAttribute(request);
         }
 
         MicroProfileJwtConfig config = getConfigAssociatedWithRequestAndId(request, configId);
         if (config == null) {
-            // error handling-- the specified service is not found
-            String msg = Tr.formatMessage(tc, "MPJWT_NO_SUCH_PROVIDER", new Object[] { configId });
-            Tr.error(tc, msg);
-            MpJwtProcessingException mpjwtException = new MpJwtProcessingException(msg);
-            mpJwtTaiRequest.setTaiException(mpjwtException);
+            mpJwtTaiRequest = handleNoMatchingConfiguration(configId, mpJwtTaiRequest);
         } else {
             mpJwtTaiRequest.setSpecifiedConfig(config);
         }
+        return mpJwtTaiRequest;
+    }
+
+    MicroProfileJwtTaiRequest handleNoMatchingConfiguration(String configId, MicroProfileJwtTaiRequest mpJwtTaiRequest) {
+        String msg = Tr.formatMessage(tc, "MPJWT_NO_SUCH_PROVIDER", new Object[] { configId });
+        Tr.error(tc, msg);
+        MpJwtProcessingException mpjwtException = new MpJwtProcessingException(msg);
+        mpJwtTaiRequest.setTaiException(mpjwtException);
         return mpJwtTaiRequest;
     }
 
