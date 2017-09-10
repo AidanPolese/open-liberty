@@ -2,8 +2,8 @@
 symbolicName=com.ibm.websphere.appserver.mpMetrics-1.0
 visibility=public
 singleton=true
-IBM-API-Package: org.eclipse.microprofile.metrics.annotation;  type="spec", \
- org.eclipse.microprofile.metrics; type="spec"
+IBM-API-Package: org.eclipse.microprofile.metrics.annotation;  type="stable", \
+ org.eclipse.microprofile.metrics; type="stable"
 IBM-ShortName: mpMetrics-1.0
 Subsystem-Name: MicroProfile Metrics 1.0
 -features=com.ibm.websphere.appserver.org.eclipse.microprofile.metrics-1.0, \
