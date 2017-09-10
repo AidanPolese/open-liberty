@@ -10,6 +10,7 @@
  *******************************************************************************/
 package com.ibm.ws.threading.internal;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -17,6 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
@@ -394,13 +396,13 @@ public class PolicyExecutorImpl implements PolicyExecutor {
      * the queued up tasks.
      *
      * @param policyTaskFuture submitted task and its Future.
+     * @param wait amount of time to wait for a queue position.
+     * @param canRunLocal indicates if a task can run locally if the QueueFullAction permits it
      * @throws RejectedExecutionException if the task is rejected rather than being queued.
      */
     @FFDCIgnore(value = { InterruptedException.class, RejectedExecutionException.class }) // these are raised directly to invoker, who decides how to handle
-    @Trivial // because invoker is traced
-    private void enqueue(PolicyTaskFuture<?> policyTaskFuture) {
+    private void enqueue(PolicyTaskFuture<?> policyTaskFuture, long wait, boolean canRunLocal) {
         try {
-            long wait = maxWaitForEnqueue.get();
             if (wait <= 0 ? maxQueueSizeConstraint.tryAcquire() : maxQueueSizeConstraint.tryAcquire(wait, TimeUnit.MILLISECONDS)) {
                 queue.offer(policyTaskFuture);
                 if (maxConcurrencyConstraint.tryAcquire())
@@ -410,7 +412,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                         enqueueGlobal(new PollingTask());
             } else if (state.get() == State.ACTIVE) {
                 QueueFullAction action = queueFullAction.get();
-                if (action == QueueFullAction.Abort)
+                if (action == QueueFullAction.Abort || !canRunLocal && (action == QueueFullAction.CallerRuns || action == QueueFullAction.CallerRunsIfSameExecutor))
                     throw new RejectedExecutionException(Tr.formatMessage(tc, "CWWKE1201.queue.full.abort", identifier, maxQueueSize, wait));
                 else
                     throw new UnsupportedOperationException("queueFullAction=" + action); // TODO CallerRuns, CallerRunsIfSameExecutor, and null (which defaults based on maxConcurrency)
@@ -424,7 +426,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(this, tc, "enqueue", x);
             throw new RejectedExecutionException(x);
-        } catch (RejectedExecutionException x) { // redundant with RuntimeException codde path, but added to allow FFDCIgnore
+        } catch (RejectedExecutionException x) { // redundant with RuntimeException code path, but added to allow FFDCIgnore
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled())
                 Tr.debug(this, tc, "enqueue", x);
             throw x;
@@ -464,7 +466,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public void execute(Runnable command) {
-        enqueue(new PolicyTaskFuture<Void>(command, null));
+        enqueue(new PolicyTaskFuture<Void>(command, null), maxWaitForEnqueue.get(), true);
     }
 
     /**
@@ -493,14 +495,67 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         }
     }
 
+    // Submit and run tasks and return list of completed (possibly canceled) tasks.
+    // Because this method is not timed, tasks can run locally if maxConcurrency is unlimited or a permit is available.
     @Override
     public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException {
         throw new UnsupportedOperationException();
     }
 
+    // Submit and run tasks within allotted interval and return list of completed (possibly canceled) tasks.
+    // Because this method is timed, tasks will never run locally.
     @Override
+    @FFDCIgnore(value = { CancellationException.class, RejectedExecutionException.class, TimeoutException.class })
     public <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks, long timeout, TimeUnit unit) throws InterruptedException {
-        throw new UnsupportedOperationException();
+        final boolean trace = TraceComponent.isAnyTracingEnabled();
+
+        int taskCount = tasks.size();
+        long stop = System.nanoTime() + unit.toNanos(timeout);
+        long qWait = TimeUnit.MILLISECONDS.toNanos(maxWaitForEnqueue.get());
+        long remaining;
+
+        ArrayList<Future<T>> futures = new ArrayList<Future<T>>(taskCount);
+        try {
+            // submit all tasks
+            for (Callable<T> task : tasks) {
+                PolicyTaskFuture<T> taskFuture = new PolicyTaskFuture<T>(task);
+                remaining = stop - System.nanoTime();
+                if (remaining <= 0)
+                    throw new RejectedExecutionException("timed out before all tasks could be submitted"); // TODO NLS message for timed out
+                enqueue(taskFuture,
+                        qWait < remaining ? qWait : remaining, // limit waiting to lesser of maxWaitForEnqueue and remaining time
+                        false); // never run locally because it would prevent timeout
+                futures.add(taskFuture);
+            }
+
+            // wait for completion
+            for (Future<T> future : futures)
+                try {
+                    future.get(stop - System.nanoTime(), TimeUnit.NANOSECONDS);
+                    taskCount--;
+                } catch (CancellationException x) {
+                    if (trace && tc.isDebugEnabled())
+                        Tr.debug(this, tc, "task is canceled", x);
+                } catch (ExecutionException x) {
+                    if (trace && tc.isDebugEnabled())
+                        Tr.debug(this, tc, "task completed exceptionally", x);
+                } catch (TimeoutException x) {
+                    break; // stop waiting
+                }
+        } catch (RejectedExecutionException x) {
+            if (trace && tc.isDebugEnabled())
+                Tr.debug(this, tc, "rejected", x);
+            if (x.getCause() instanceof InterruptedException)
+                throw (InterruptedException) x.getCause();
+            else
+                throw x;
+        } finally {
+            if (taskCount != 0)
+                for (Future<T> f : futures)
+                    f.cancel(true);
+        }
+
+        return futures;
     }
 
     @Override
@@ -750,21 +805,21 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     @Override
     public <T> Future<T> submit(Callable<T> task) {
         PolicyTaskFuture<T> policyTaskFuture = new PolicyTaskFuture<T>(task);
-        enqueue(policyTaskFuture);
+        enqueue(policyTaskFuture, maxWaitForEnqueue.get(), true);
         return policyTaskFuture;
     }
 
     @Override
     public <T> Future<T> submit(Runnable task, T result) {
         PolicyTaskFuture<T> policyTaskFuture = new PolicyTaskFuture<T>(task, result);
-        enqueue(policyTaskFuture);
+        enqueue(policyTaskFuture, maxWaitForEnqueue.get(), true);
         return policyTaskFuture;
     }
 
     @Override
     public Future<?> submit(Runnable task) {
         PolicyTaskFuture<?> policyTaskFuture = new PolicyTaskFuture<Void>(task, null);
-        enqueue(policyTaskFuture);
+        enqueue(policyTaskFuture, maxWaitForEnqueue.get(), true);
         return policyTaskFuture;
     }
 }
