@@ -104,6 +104,12 @@ public class PolicyExecutorImpl implements PolicyExecutor {
      */
     private final AtomicReference<State> state = new AtomicReference<State>(State.ACTIVE);
 
+    /**
+     * Counter of tasks for which we didn't submit a PollingTask in order to honor maxConcurrency.
+     * In deciding whether a PollingTask should be resubmitted, this counter can be decremented (if positive).
+     */
+    private final AtomicInteger withheldConcurrency = new AtomicInteger();
+
     @Trivial
     private static enum State {
         ACTIVE, // task submit/start/run all possible
@@ -211,11 +217,13 @@ public class PolicyExecutorImpl implements PolicyExecutor {
                          coreConcurrencyAvailable, maxConcurrencyConstraint.availablePermits(), canRun);
 
             // Avoid reschedule if there are no tasks on the queue or we are in a state that disallows starting tasks
-            if (canRun && !queue.isEmpty() && maxConcurrencyConstraint.tryAcquire())
+            if (canRun && !queue.isEmpty() && withheldConcurrency.get() > 0 && maxConcurrencyConstraint.tryAcquire()) {
+                acquireWithheldConcurrency();
                 if (acquireCoreConcurrency() > 0)
                     expediteGlobal(PollingTask.this);
                 else
                     enqueueGlobal(PollingTask.this);
+            }
         }
     }
 
@@ -285,6 +293,17 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         int cca;
         while ((cca = coreConcurrencyAvailable.get()) > 0 && !coreConcurrencyAvailable.compareAndSet(cca, cca - 1));
         return cca; // returning the value rather than true/false will enable better debug
+    }
+
+    /**
+     * Decrement the counter of withheld concurrency only if positive.
+     *
+     * @return amount of withheld concurrency at the time we decremented it. 0 if none remains and we were unable to decrement.
+     */
+    private int acquireWithheldConcurrency() {
+        int w;
+        while ((w = withheldConcurrency.get()) > 0 && !withheldConcurrency.compareAndSet(w, w - 1));
+        return w;
     }
 
     @Override
@@ -379,13 +398,15 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         if (cca > 0) {
             int numToExpedite = queue.size();
             numToExpedite = cca < numToExpedite ? cca : numToExpedite;
-            while (numToExpedite-- > 0 && maxConcurrencyConstraint.tryAcquire())
+            while (numToExpedite-- > 0 && withheldConcurrency.get() > 0 && maxConcurrencyConstraint.tryAcquire()) {
+                acquireWithheldConcurrency();
                 if (acquireCoreConcurrency() > 0)
                     expediteGlobal(new PollingTask());
                 else {
                     maxConcurrencyConstraint.release();
                     break;
                 }
+            }
         }
 
         return this;
@@ -407,11 +428,14 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         try {
             if (wait <= 0 ? maxQueueSizeConstraint.tryAcquire() : maxQueueSizeConstraint.tryAcquire(wait, TimeUnit.NANOSECONDS)) {
                 queue.offer(policyTaskFuture);
-                if (maxConcurrencyConstraint.tryAcquire())
+                withheldConcurrency.incrementAndGet();
+                if (maxConcurrencyConstraint.tryAcquire()) {
+                    acquireWithheldConcurrency();
                     if (acquireCoreConcurrency() > 0)
                         expediteGlobal(new PollingTask());
                     else
                         enqueueGlobal(new PollingTask());
+                }
             } else if (state.get() == State.ACTIVE) {
                 QueueFullAction action = queueFullAction.get();
                 if (action == QueueFullAction.Abort || !canRunLocal && (action == QueueFullAction.CallerRuns || action == QueueFullAction.CallerRunsIfSameExecutor))
@@ -634,8 +658,10 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         }
 
         int numOnQueue = queue.size();
-        while (numOnQueue-- > 0 && maxConcurrencyConstraint.tryAcquire())
+        while (numOnQueue-- > 0 && withheldConcurrency.get() > 0 && maxConcurrencyConstraint.tryAcquire()) {
+            acquireWithheldConcurrency();
             enqueueGlobal(new PollingTask());
+        }
 
         return this;
     }
