@@ -16,11 +16,10 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.eclipse.microprofile.faulttolerance.exceptions.BulkheadException;
+import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
@@ -36,12 +35,17 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
 
     private static final TraceComponent tc = Tr.register(QueuedFuture.class);
 
+    //innerTask is the task which will be run on the new thread
     private final Callable<Future<R>> innerTask;
-
-    private Future<Future<R>> futureFuture;
+    //outerFuture is the Future which represents the execution of the innerTask
+    private Future<Future<R>> outerFuture;
+    //threadContext is the context retrieved from the originating thread
     private final ThreadContextDescriptor threadContext;
-
+    //executionContext is the overall FT execution context, covering both synchronous halves of the asynchronous execution
     private final ExecutionContextImpl executionContext;
+    //has the user called the cancel method
+    private boolean cancelled = false;
+    private boolean internallyCancelled = false;
 
     public QueuedFuture(Callable<Future<R>> innerTask, ExecutionContextImpl executionContext, ThreadContextDescriptor threadContext) {
         this.innerTask = innerTask;
@@ -52,26 +56,87 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
     /** {@inheritDoc} */
     @Override
     public boolean cancel(boolean mayInterruptIfRunning) {
-        return getFutureFuture().cancel(mayInterruptIfRunning);
+        synchronized (this) {
+            if (this.cancelled) {
+                return false; //if already cancelled then this call should fail
+            } else if (this.internallyCancelled) {
+                this.cancelled = true; //if this was internally cancelled then just set the flag and return true
+                return true;
+            } else {
+                //go ahead and cancel, return the result, setting the flags accordingly
+                boolean outerCancelled = getOuterFuture().cancel(mayInterruptIfRunning);
+                this.cancelled = outerCancelled;
+                this.internallyCancelled = outerCancelled;
+                return outerCancelled;
+            }
+
+        }
+    }
+
+    /**
+     * Cancel the inner future and interrupt if running but do not set the cancelled flag for this QueuedFuture.
+     * This is typically used as part of timeout.
+     */
+    public void internalCancel() {
+        synchronized (this) {
+            if (!this.internallyCancelled) {
+                boolean outerCancelled = getOuterFuture().cancel(true);
+                this.internallyCancelled = outerCancelled;
+            }
+        }
     }
 
     /** {@inheritDoc} */
     @Override
     public boolean isCancelled() {
-        return getFutureFuture().isCancelled();
+        Future<Future<R>> outerFuture = getOuterFuture();
+        if (outerFuture.isCancelled()) {
+            return true;
+        } else {
+            try {
+                Future<R> innerFuture = outerFuture.get();
+                return innerFuture.isCancelled();
+            } catch (InterruptedException e) {
+                throw new FaultToleranceException(e);
+            } catch (ExecutionException e) {
+                //this is most likely to be caused if an exception is thrown from the business method ... or a TimeoutException
+                //either way, the future was not cancelled
+                return false;
+            }
+        }
     }
 
     /** {@inheritDoc} */
     @Override
+    @FFDCIgnore({ ExecutionException.class })
     public boolean isDone() {
-        return getFutureFuture().isDone();
+        Future<Future<R>> outerFuture = getOuterFuture();
+        if (outerFuture.isDone()) {
+            if (outerFuture.isCancelled()) {
+                return true;
+            } else {
+                try {
+                    Future<R> innerFuture = outerFuture.get();
+                    return innerFuture.isDone();
+                } catch (InterruptedException e) {
+                    //outerFuture was done but not cancelled but the innerFuture was interrupted so we don't know if it was done
+                    throw new FaultToleranceException(e);
+                } catch (ExecutionException e) {
+                    //this is most likely to be caused if an exception is thrown from the business method ... or a TimeoutException
+                    //either way, the future is done
+                    return true;
+                }
+            }
+        } else {
+            return false;
+        }
     }
 
     /** {@inheritDoc} */
     @Override
     public R get() throws InterruptedException, ExecutionException {
         R result = null;
-        Future<Future<R>> future = getFutureFuture();
+        Future<Future<R>> outerFuture = getOuterFuture();
 
         try {
             executionContext.check();
@@ -80,7 +145,7 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
         }
 
         try {
-            result = future.get().get();
+            result = outerFuture.get().get();
         } catch (InterruptedException | CancellationException e) {
             //if the future was interrupted or cancelled, check if it was because the FT Timeout popped
             try {
@@ -99,7 +164,7 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
     @FFDCIgnore({ CancellationException.class, org.eclipse.microprofile.faulttolerance.exceptions.TimeoutException.class })
     public R get(long methodTimeout, TimeUnit methodUnit) throws InterruptedException, ExecutionException, TimeoutException {
         R result = null;
-        Future<Future<R>> future = getFutureFuture();
+        Future<Future<R>> outerFuture = getOuterFuture();
 
         try {
             executionContext.check();
@@ -108,7 +173,13 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
         }
 
         try {
-            result = future.get(methodTimeout, methodUnit).get(methodTimeout, methodUnit); //TODO do both get calls need timeout?
+            long start = System.nanoTime();
+            long methodNanos = TimeUnit.NANOSECONDS.convert(methodTimeout, methodUnit);
+            Future<R> innerFuture = outerFuture.get(methodNanos, TimeUnit.NANOSECONDS);
+            long middle = System.nanoTime();
+            long diff = middle - start;
+            long remaining = methodNanos - diff;
+            result = innerFuture.get(remaining, TimeUnit.NANOSECONDS);
         } catch (InterruptedException | CancellationException e) {
             //if the future was interrupted or cancelled, check if it was because the FT Timeout popped
             try {
@@ -147,30 +218,25 @@ public class QueuedFuture<R> implements Future<R>, Callable<Future<R>> {
         return result;
     }
 
-    private Future<Future<R>> getFutureFuture() {
+    private Future<Future<R>> getOuterFuture() {
         synchronized (this) {
-            if (this.futureFuture == null) {
+            if (this.outerFuture == null) {
                 //shouldn't be possible unless the QueuedFuture was created but not started
                 throw new IllegalStateException(Tr.formatMessage(tc, "internal.error.CWMFT4999E"));
             }
         }
-        return this.futureFuture;
+        return this.outerFuture;
     }
 
     /**
+     * Submit this task for execution by the given executor service.
+     *
      * @param executorService
      */
-    @FFDCIgnore({ RejectedExecutionException.class })
     public void start(ExecutorService executorService) {
         synchronized (this) {
-            executionContext.start(this);
-            try {
-                Future<Future<R>> futureFuture = executorService.submit(this);
-                this.futureFuture = futureFuture;
-            } catch (RejectedExecutionException e) {
-                executionContext.end();
-                throw new BulkheadException(Tr.formatMessage(tc, "bulkhead.no.threads.CWMFT0001E", executionContext.getMethod()), e);
-            }
+            //submit the innerTask (wrapped by this) for execution
+            this.outerFuture = executorService.submit(this);
         }
     }
 }

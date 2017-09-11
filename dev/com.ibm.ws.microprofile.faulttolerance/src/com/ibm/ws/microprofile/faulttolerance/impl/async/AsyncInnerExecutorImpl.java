@@ -23,18 +23,22 @@ import com.ibm.ws.microprofile.faulttolerance.spi.Executor;
 /**
  *
  */
-public class NestedExecutorImpl<R> extends SynchronousExecutorImpl<R> implements Executor<R> {
+public class AsyncInnerExecutorImpl<R> extends SynchronousExecutorImpl<R> implements Executor<R> {
 
     private final TaskRunner<R> taskRunner;
 
     //internal constructor for the nested synchronous part of an asynchronous execution
-    public NestedExecutorImpl() {
+    public AsyncInnerExecutorImpl() {
         this.taskRunner = new SimpleTaskRunner<>();
     }
 
     @Override
-    protected TaskRunner<R> getTaskRunner() {
-        return this.taskRunner;
+    protected Callable<R> createTask(Callable<R> callable, ExecutionContextImpl executionContext) {
+        Callable<R> task = () -> {
+            R result = this.taskRunner.runTask(callable, executionContext);
+            return result;
+        };
+        return task;
     }
 
     @Override
