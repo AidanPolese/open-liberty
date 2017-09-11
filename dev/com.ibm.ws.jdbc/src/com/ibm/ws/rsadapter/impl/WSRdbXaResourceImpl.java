@@ -136,7 +136,7 @@ public class WSRdbXaResourceImpl implements WSXAResource, FFDCSelfIntrospectable
             ivManagedConnection.detectMultithreadedAccess(); 
 
         // Reset so we can deferred enlist in a future global transaction. 
-        ivManagedConnection.wasLazilyEnlisted = false; 
+        ivManagedConnection.wasLazilyEnlistedInGlobalTran = false; 
 
         if (ivXid == null) { 
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) 
@@ -707,7 +707,7 @@ public class WSRdbXaResourceImpl implements WSXAResource, FFDCSelfIntrospectable
                 try {
                     //  flag is reset since no commit/rollbak is issued here
                     // adn we don't want inGlobalTransaction to return the wrong value
-                    ivManagedConnection.wasLazilyEnlisted = false;
+                    ivManagedConnection.wasLazilyEnlistedInGlobalTran = false;
 
                     ivStateManager.setState(WSStateManager.XA_READONLY);
                 } catch (TransactionException te) {
@@ -827,7 +827,7 @@ public class WSRdbXaResourceImpl implements WSXAResource, FFDCSelfIntrospectable
             Tr.entry(this, tc, "rollback", ivManagedConnection, AdapterUtil.toString(xid));
 
         // Reset so we can deferred enlist in a future global transaction. 
-        ivManagedConnection.wasLazilyEnlisted = false; 
+        ivManagedConnection.wasLazilyEnlistedInGlobalTran = false; 
 
         // if the MC marked Stale, it means the user requested a purge pool with an immediate option
         // so don't allow any work to continue.  In this case, we throw XAER_RMFAIL xa error

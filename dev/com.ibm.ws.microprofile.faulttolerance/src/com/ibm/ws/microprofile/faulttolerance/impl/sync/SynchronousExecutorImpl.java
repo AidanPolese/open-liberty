@@ -94,14 +94,10 @@ public class SynchronousExecutorImpl<R> implements Executor<R> {
         return executionContext;
     }
 
-    protected TaskRunner<R> getTaskRunner() {
-        return this.taskRunner;
-    }
-
     protected Callable<R> createTask(Callable<R> callable, ExecutionContextImpl executionContext) {
         Callable<R> task = () -> {
             executionContext.start();
-            R result = getTaskRunner().runTask(callable, executionContext);
+            R result = this.taskRunner.runTask(callable, executionContext);
             return result;
         };
         return task;
@@ -151,5 +147,10 @@ public class SynchronousExecutorImpl<R> implements Executor<R> {
         }
 
         return result;
+    }
+
+    @Override
+    public void close() {
+        // nothing to do
     }
 }
