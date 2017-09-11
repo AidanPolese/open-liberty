@@ -1,1 +1,1 @@
-com.ibm.ws.jsf.mojarra.spi.WASMojarraApplicationFactory
+com.ibm.ws.jsf.container.application.JSFContainerApplicationFactory
