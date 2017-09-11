@@ -15,6 +15,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 
+import javax.annotation.PreDestroy;
 import javax.annotation.Priority;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
@@ -122,5 +123,13 @@ public class FaultToleranceInterceptor {
             result = invocationContext.proceed();
         }
         return result;
+    }
+
+    @PreDestroy
+    public void cleanUpExecutors(InvocationContext ctx) throws Exception {
+        ctx.proceed();
+        execCache.forEach((k, v) -> {
+            v.close();
+        });
     }
 }

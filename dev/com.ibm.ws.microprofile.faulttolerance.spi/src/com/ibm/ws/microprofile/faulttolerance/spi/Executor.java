@@ -21,4 +21,11 @@ public interface Executor<R> {
 
     public FTExecutionContext newExecutionContext(String id, Method method, Object... parameters);
 
+    /**
+     * Shuts down any thread pools created by this executor
+     * <p>
+     * Will be called when the executor goes out of scope
+     */
+    public void close();
+
 }
