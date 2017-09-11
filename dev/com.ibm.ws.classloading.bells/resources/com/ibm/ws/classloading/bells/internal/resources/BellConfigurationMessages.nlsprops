@@ -1,13 +1,14 @@
-# IBM Confidential
+###############################################################################
+# Copyright (c) 2011, 2014 IBM Corporation and others.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
 #
-# OCO Source Materials
-#
-# Copyright IBM Corp. 2011, 2014
-#
-# The source code for this program is not published or otherwise divested 
-# of its trade secrets, irrespective of what has been deposited with the 
-# U.S. Copyright Office.
-#
+# Contributors:
+#     IBM Corporation - initial API and implementation
+###############################################################################
+
 #CMVCPATHNAME com.ibm.ws.classloading/resources/com/ibm/ws/classloading/internal/resources/ClassLoadingServiceMessages.nlsprops
 #ISMESSAGEFILE TRUE
 #NLS_ENCODING=UNICODE
@@ -16,13 +17,6 @@
 #COMPONENTNAMEFOR CWWKL Class Loading Service
 #
 # NLS_MESSAGEFORMAT_VAR
-#
-#   Strings in this file which contain replacement variables are processed by the MessageFormat 
-#   class (single quote must be coded as 2 consecutive single quotes ''). Strings in this file 
-#   which do NOT contain replacement variables are NOT processed by the MessageFormat class 
-#   (single quote must be coded as one single quote '). 
-
-#################################################################################
 ################### LIBRARY SERVICE EXPORT MESSAGES 0050-0058 ################### 
 #################################################################################
 

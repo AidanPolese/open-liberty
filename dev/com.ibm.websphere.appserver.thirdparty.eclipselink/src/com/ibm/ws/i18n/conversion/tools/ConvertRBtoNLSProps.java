@@ -191,11 +191,14 @@ public class ConvertRBtoNLSProps {
     }
     
     private static void printHeader(PrintWriter out, File file) {
-        println(out, "# IBM Confidential OCO Source Material");
-        println(out, "# (C) COPYRIGHT International Business Machines Corp. 2014");
-        println(out, "# The source code for this program is not published or otherwise divested");
-        println(out, "# of its trade secrets, irrespective of what has been deposited with the");
-        println(out, "# U.S. Copyright Office.");
+        println(out, "# Copyright (c) 2014 IBM Corporation and others.");
+        println(out, "# All rights reserved. This program and the accompanying materials");
+        println(out, "# are made available under the terms of the Eclipse Public License v1.0");
+        println(out, "# which accompanies this distribution, and is available at");
+        println(out, "# http://www.eclipse.org/legal/epl-v10.html");
+        println(out, "#                                            ");
+        println(out, "# Contributors:                               ");
+        println(out, "#     IBM Corporation - initial API and implementation");
         println(out, "# -------------------------------------------------------------------------------------------------");
         println(out, "# # {0} description of each insert field");
         println(out, "# MSG_DESCRIPTIVE_NAME_CWSJX0000=CWSJX0000I: This is a message with inserts {0}");

@@ -1,41 +1,13 @@
-// IBM Confidential OCO Source Material
-// Copyright IBM Corp. 2006, 2013
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d392996   EJB3      20060930 leealber : Initial Release
-// d392996.3 EJB3      20061020 leealber : Add and change system property names for provider & data sources
-// d403070   EJB3      20061105 leealber : set Websphere version as default persistence provider to
-// d406735   EJB3      20061120 leealber : Correct <exclude-unlisted-classes> semantics interpretation.
-// d406994   EJB3      20071122 leealber : CI:change package to com.ibm.ws.jpa.pxml10
-// d406994.4 EJB3      20061120 leealber : CI: miscellaneous clean up
-// d407846   EJB3      20061123 leealber : Integrate openJPA logging to WAS Tr
-// d408321   EJB3      20061128 leealber : Safe-guarding substring results exception
-// d416151   EJB3      20070120 leealber : Container manager persistence context part 1
-// d416151.2 EJB3      20070220 leealber : Container managed persistence context part 2
-// d416151.3.11 EJB3   20070504 leealber : Code review clean up.
-// d473432.1 EJB3      20071011 leealber : Add Versions class name
-// d472866.1 EJB3      20071015 tkb      : register non-transactional with local tran
-// d496032.1 WAS70     20080220 jckrueg  : Add EJB 3.0 module version constant
-// d510184   WAS70     20080505 tkb      : Create separate EMF for each java:comp
-// F1879-16302
-//           WAS80     20091112 tkb      : support 2.0 and 1.0 xml separately
-// F743-8155 WAS80     20100305 bkail    : Use SchemaHelper
-// PM20625   WAS70     20100816 jckrueg  : Add property to exclude apps from JPA processing
-// d706751   WAS80     20110609 bkail    : Add ALWAYS_USE_EMF_PROXY and EMF constants
-// F61057    WAS85     20120224 bkail    : Support JPAEMPoolHelper
-// 734773    WAS855    20120524 daboshe  : Removed JNDI_NAMESPACE_GLOBAL 
-// d731877   WAS8501   20120518 jrbauer  : Enable pool access to WsJpa provider via lightweight EMF wrapper
-// F84119    WAS855    20121010 jrbauer  : Moved loggers and logger factories into their own pkg
-// RTC113511 RWAS90    20131009 bkail    : Use public visibility for constants
-// RTC109631 RWAS90    20140128 rgcurtis : Automatically set eclipselink.target-server
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2006,2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import java.security.AccessController;

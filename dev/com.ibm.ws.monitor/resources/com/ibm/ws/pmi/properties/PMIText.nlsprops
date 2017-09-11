@@ -1,18 +1,14 @@
 
-#  @(#) 1.35.1.7 ws/code/pmi/src/com/ibm/ws/pmi/properties/PMIText.nlsprops, WAS.pmi, ASV 7/9/03 11:49:16 [7/15/03 10:17:38]
+###############################################################################
+# Copyright (c) 2001, 2003 IBM Corporation and others.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
 #
-#  ORIGINS: 27         (used for IBM originated files)
-
-# IBM Confidential OCO Source Material
-# 5639-D57 (C) COPYRIGHT International Business Machines Corp. 2001, 2003
-# The source code for this program is not published or otherwise divested
-# of its trade secrets, irrespective of what has been deposited with the
-# U.S. Copyright Office.
-#
-# This file has been modified to follow the WebSphere Message Guidelines.
-# For more information, visit:
-#   http://washome.austin.ibm.com/xwiki/bin/view/InformationDevelopmentTeam/MESSAGES_DISTRIBUTED
-#
+# Contributors:
+#     IBM Corporation - initial API and implementation
+###############################################################################
 # cmvc_en_version_level=1.11,0,02/04/01,10:58:32
 #
 #
@@ -20,8 +16,6 @@
 #ISMESSAGEFILE FALSE
 #NLS_MESSAGEFORMAT_VAR
 # NLS_ENCODING=UNICODE
-
-# -------------------------------------------------------------------------------------------------
 # EPM Names
 epm.moduleName.epm=Performance Modules
 

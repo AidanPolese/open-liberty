@@ -1,21 +1,13 @@
-# -------------------------------------------------------------------------------------------------
-# 
-# 
-# ============================================================================
-# IBM Confidential OCO Source Materials
+###############################################################################
+# Copyright (c) 2012, 2013 IBM Corporation and others.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
 #
-# Copyright IBM Corp. 2012,2013
-#
-# The source code for this program is not published or otherwise divested
-# of its trade secrets, irrespective of what has been deposited with the
-# U.S. Copyright Office.
-# ============================================================================
-# 
-#
-# Change activity:
-#
-# Reason          Date      Origin   Description
-# --------------- ------    -------- ---------------------------------------
+# Contributors:
+#     IBM Corporation - initial API and implementation
+###############################################################################
 # 284561          10-Aug-05 pnickoll Added extra data to the exception thrown when validating an activation spec
 # 320291                  04-Nov-05 ajw          Problem in message 1181
 # 344741                  08-Feb-06 ajw          Removed msgs CWSJR1115 and CWSJR1116

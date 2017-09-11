@@ -1,19 +1,19 @@
-# IBM Confidential OCO Source Material
-# 5639-D57 (C) COPYRIGHT International Business Machines Corp. 1997-2001
-# The source code for this program is not published or otherwise divested
-# of its trade secrets, irrespective of what has been deposited with the
-# U.S. Copyright Office.
+###############################################################################
+# Copyright (c) 1997, 2001 IBM Corporation and others.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
 #
-# This file has been modified to follow the WebSphere Message Guidelines.
-#
+# Contributors:
+#     IBM Corporation - initial API and implementation
+###############################################################################
 #CMVCPATHNAME com.ibm.ws.session-3.0/resources/com/ibm/ws/session/resources/WASSessionCore.nlsprops
 #COMPONENTPREFIX SESN
 #COMPONENTNAMEFOR SESN Session
 #ISMESSAGEFILE TRUE
 #NLS_MESSAGEFORMAT_VAR
 #NLS_ENCODING=UNICODE
-
-# -------------------------------------------------------------------------------------------------
 SessionContext.createWhenStop=SESN0006E: There was an attempt to create a session while the application server was stopping.
 SessionContext.createWhenStop.explanation=This error occurs when a session request is received while the server is stopping.
 SessionContext.createWhenStop.useraction=Restart the server.
