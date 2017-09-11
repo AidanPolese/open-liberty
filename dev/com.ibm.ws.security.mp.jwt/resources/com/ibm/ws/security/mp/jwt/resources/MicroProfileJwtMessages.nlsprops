@@ -34,7 +34,7 @@ ERROR_GETTING_CLAIMS_FROM_JWT_STRING.useraction=Verify that the JWT string is a 
 # 0=List of principal names
 TOO_MANY_JWT_PRINCIPALS=CWWKS5504W: The provided subject contains more than one principal of type JsonWebToken. Only one JsonWebToken principal can exist in the subject. The names of the JsonWebToken principals are: {0}
 TOO_MANY_JWT_PRINCIPALS.explanation=The subject contains too many principals of type JsonWebToken. Only one principal of this type is supported.
-TOO_MANY_JWT_PRINCIPALS.useraction=To do
+TOO_MANY_JWT_PRINCIPALS.useraction=Verify that the application does not inject additional JsonWebToken principals into the subject.
 
 # Do not translate "mpjwt_login_hint"
 # 0=mpJwt configuration ID
