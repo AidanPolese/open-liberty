@@ -22,9 +22,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.Stack;
+import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -1506,7 +1509,8 @@ public class PolicyExecutorServlet extends FATServlet {
         Future<?> future2 = executor.submit((Runnable) new SharedIncrementTask(count));
 
         // From a thread owned by the test servlet, interrupt the current thread
-        Future<?> interrupterFuture = testThreads.submit(new InterrupterTask(Thread.currentThread(), 1, TimeUnit.SECONDS));
+        CountDownLatch blocker = new CountDownLatch(1);
+        Future<?> interrupterFuture = testThreads.submit(new InterrupterTask(Thread.currentThread(), blocker, 1, TimeUnit.SECONDS));
 
         try {
             Future<Integer> future3 = executor.submit((Callable<Integer>) new SharedIncrementTask(count));
@@ -1658,6 +1662,77 @@ public class PolicyExecutorServlet extends FATServlet {
         assertEquals(0, canceledFromQueue.size());
     }
 
+    // Interrupt timed invokeAll while that tasks that it submitted are in progress.
+    // All of the tasks should be canceled when invokeAll returns and finish stopping in a timely manner.
+    @Test
+    public void testInvokeAllTimedInterruptWaitForCompletion() throws Exception {
+        PolicyExecutor executor = provider.create("testInvokeAllTimedInterruptWaitForCompletion")
+                        .coreConcurrency(2);
+
+        CountDownLatch beginLatch = new CountDownLatch(3);
+        CountDownLatch blocker = new CountDownLatch(1);
+        Stack<CountDownTask> tasks = new Stack<CountDownTask>();
+        tasks.push(new CountDownTask(beginLatch, blocker, TimeUnit.MINUTES.toNanos(7)));
+        tasks.push(new CountDownTask(beginLatch, blocker, TimeUnit.MINUTES.toNanos(8)));
+        tasks.push(new CountDownTask(beginLatch, blocker, TimeUnit.MINUTES.toNanos(9)));
+
+        // Interrupt the current thread only after all of the tasks that we will invoke have started,
+        Future<?> interrupterFuture = testThreads.submit(new InterrupterTask(Thread.currentThread(), beginLatch, TIMEOUT_NS * 3, TimeUnit.NANOSECONDS));
+
+        try {
+            fail("Should have been interrupted. Instead: " + executor.invokeAll(tasks, 10, TimeUnit.MINUTES));
+        } catch (InterruptedException x) {
+        } // pass
+
+        // Ensure the tasks all stop in a timely manner
+        boolean stopped = false;
+        for (long start = System.nanoTime(); !stopped && System.nanoTime() - start < TIMEOUT_NS; Thread.sleep(200))
+            stopped = tasks.get(0).executionThreads.isEmpty() && tasks.get(1).executionThreads.isEmpty() && tasks.get(2).executionThreads.isEmpty();
+        assertTrue(stopped);
+
+        interrupterFuture.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+
+        List<Runnable> canceledFromQueue = executor.shutdownNow();
+        assertEquals(0, canceledFromQueue.size());
+    }
+
+    // Interrupt timed invokeAll while it is waiting for a queue position in order to submit one of the tasks.
+    // All of the tasks that previously started should be canceled when invokeAll returns and finish stopping in a timely manner.
+    @Test
+    public void testInvokeAllTimedInterruptWaitForEnqueue() throws Exception {
+        PolicyExecutor executor = provider.create("testInvokeAllTimedInterruptWaitForEnqueue")
+                        .coreConcurrency(1)
+                        .maxConcurrency(1)
+                        .maxQueueSize(1)
+                        .maxWaitForEnqueue(TimeUnit.MINUTES.toMillis(8));
+
+        CountDownLatch beginLatch = new CountDownLatch(1); // wait for any 1 task to begin
+        CountDownLatch blocker = new CountDownLatch(1);
+        Vector<CountDownTask> tasks = new Vector<CountDownTask>();
+        tasks.add(new CountDownTask(beginLatch, blocker, TimeUnit.MINUTES.toNanos(4)));
+        tasks.add(new CountDownTask(beginLatch, blocker, TimeUnit.MINUTES.toNanos(5)));
+        tasks.add(new CountDownTask(beginLatch, blocker, TimeUnit.MINUTES.toNanos(6)));
+
+        // Interrupt the current thread only after one of the tasks that we will invoke has started,
+        Future<?> interrupterFuture = testThreads.submit(new InterrupterTask(Thread.currentThread(), beginLatch, TIMEOUT_NS * 3, TimeUnit.NANOSECONDS));
+
+        try {
+            fail("Should have been interrupted. Instead: " + executor.invokeAll(tasks, 9, TimeUnit.MINUTES));
+        } catch (InterruptedException x) {
+        } // pass
+
+        // Ensure the tasks all stop in a timely manner (some won't ever have started)
+        boolean stopped = false;
+        for (long start = System.nanoTime(); !stopped && System.nanoTime() - start < TIMEOUT_NS; Thread.sleep(200))
+            stopped = tasks.get(0).executionThreads.isEmpty() && tasks.get(1).executionThreads.isEmpty() && tasks.get(2).executionThreads.isEmpty();
+        assertTrue(stopped);
+
+        interrupterFuture.get(TIMEOUT_NS, TimeUnit.NANOSECONDS);
+
+        List<Runnable> canceledFromQueue = executor.shutdownNow();
+        assertEquals(0, canceledFromQueue.size());
+    }
+
     // Test invalid parameters for invokeAll with timeout. This includes a null task list, null as the only element in
     // the task list, null within a list of otherwise valid tasks, null time unit, and negative timeout.
     @Test
@@ -1718,6 +1793,54 @@ public class PolicyExecutorServlet extends FATServlet {
 
         List<Runnable> canceledFromQueue = executor.shutdownNow();
         assertEquals(0, canceledFromQueue.size());
+    }
+
+    // Using timed invokeAll submit a group of tasks where some block, such that invokeAll times out before
+    // all of the tasks complete. Verify that the blocking tasks are canceled such that invokeAll can return
+    // in a timely manner, and that any non-blocking tasks completed, either successfully or exceptionally.
+    @Test
+    public void testInvokeAllTimedTimeoutWaitForCompletion() throws Exception {
+        PolicyExecutor executor = provider.create("testInvokeAllTimedTimeoutWaitForCompletion");
+
+        LinkedHashSet<CountDownTask> tasks = new LinkedHashSet<CountDownTask>();
+        CountDownLatch beginLatch = new CountDownLatch(4);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+        tasks.add(new CountDownTask(beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(6)));
+        tasks.add(new CountDownTask(beginLatch, continueLatch, 0)); // non-blocking
+        tasks.add(new CountDownTask(beginLatch, continueLatch, 0)); // non-blocking
+        tasks.add(new CountDownTask(beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(6)));
+
+        List<Future<Boolean>> futures = null;
+        Future<Boolean> future;
+        for (int retry = 0; futures == null && retry < 100; retry++)
+            try {
+                futures = executor.invokeAll(tasks, 1, TimeUnit.SECONDS);
+            } catch (RejectedExecutionException x) {
+                System.out.println("Retry submitting 4 tasks within a second.");
+                x.printStackTrace(System.out);
+            }
+
+        assertNotNull("After 100 attempts, still unable to submit 4 simple tasks within a second. Aborting the test.", futures);
+
+        assertEquals(4, futures.size());
+
+        assertNotNull(future = futures.get(0));
+        assertTrue(future.isDone());
+        assertTrue(future.isCancelled());
+
+        assertNotNull(future = futures.get(1));
+        assertTrue(future.isDone());
+        if (!future.isCancelled())
+            assertFalse(future.get(0, TimeUnit.SECONDS));
+
+        assertNotNull(future = futures.get(2));
+        assertTrue(future.isDone());
+        if (!future.isCancelled())
+            assertFalse(future.get());
+
+        assertNotNull(future = futures.get(3));
+        assertTrue(future.isCancelled());
+        assertTrue(future.isDone());
     }
 
     // Using timed invokeAll where the timeout is much longer than the maxWaitForEnqueue and maxConcurrency is less
