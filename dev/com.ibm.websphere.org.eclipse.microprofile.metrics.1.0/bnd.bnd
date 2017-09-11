@@ -32,4 +32,4 @@ WS-TraceGroup: METRICS
 
 instrument.disabled: true
 
-publish.wlp.jar.suffix: dev/api/spec
+publish.wlp.jar.suffix: dev/api/stable

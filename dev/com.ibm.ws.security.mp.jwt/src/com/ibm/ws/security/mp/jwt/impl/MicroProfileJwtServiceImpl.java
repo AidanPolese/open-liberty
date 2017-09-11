@@ -36,9 +36,7 @@ import com.ibm.wsspi.ssl.SSLSupport;
 @Component(service = MicroProfileJwtService.class, immediate = true, configurationPolicy = ConfigurationPolicy.IGNORE, property = "service.vendor=IBM", name = "microProfileJwtService")
 public class MicroProfileJwtServiceImpl implements MicroProfileJwtService {
 
-    public static final TraceComponent tc = Tr.register(MicroProfileJwtServiceImpl.class,
-            TraceConstants.TRACE_GROUP,
-            TraceConstants.MESSAGE_BUNDLE);
+    public static final TraceComponent tc = Tr.register(MicroProfileJwtServiceImpl.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
 
     static final String KEY_UNIQUE_ID = "id";
 

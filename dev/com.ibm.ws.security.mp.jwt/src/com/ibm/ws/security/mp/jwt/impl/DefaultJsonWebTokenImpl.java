@@ -19,13 +19,8 @@ import java.io.ObjectStreamField;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -70,17 +65,23 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
     private ClaimsUtils claimsUtils = new ClaimsUtils();
 
     public DefaultJsonWebTokenImpl(String jwt, String type, String name) {
+        String methodName = "<init>";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, jwt, type, name);
+        }
         this.jwt = jwt;
         this.type = type;
         //this.claimsSet = claimsSet;
         principal = name;
         handleClaims(jwt);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
+    @Override
     public final JsonWebToken clone() {
-
         return new DefaultJsonWebTokenImpl(this.jwt, this.type, this.principal);
-
     }
 
     /**
@@ -95,7 +96,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
             }
             this.claimsSet = claimsUtils.getJwtClaims(jwt);
         } catch (JoseException e) {
-            // TODO:
+            Tr.error(tc, "ERROR_GETTING_CLAIMS_FROM_JWT_STRING", new Object[] { e.getLocalizedMessage() });
         }
     }
 
@@ -203,7 +204,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
         }
         tmp.setLength(tmp.length() - 1);
         tmp.append("]}");
-        return tmp.toString();
+        return claimsSet.toJson(); //tmp.toString();
     }
 
     /** {@inheritDoc} */
@@ -232,6 +233,7 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
                 String aud = claimsSet.getStringClaimValue("aud");
                 audSet.add(aud);
             } catch (MalformedClaimException e1) {
+                Tr.warning(tc, "CLAIM_MALFORMED", new Object[] { "aud", e.getLocalizedMessage() });
             }
         }
         return audSet;
@@ -246,53 +248,9 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
                 groups.addAll(globalGroups);
             }
         } catch (MalformedClaimException e) {
-
+            Tr.warning(tc, "CLAIM_MALFORMED", new Object[] { "groups", e.getLocalizedMessage() });
         }
         return groups;
-    }
-
-    /**
-     * Convert the types jose4j uses for address, sub_jwk, and jwk
-     */
-    private void fixJoseTypes() {
-        //        if (claimsSet.hasClaim(Claims.address.name())) {
-        //            replaceMap(Claims.address.name());
-        //        }
-        //        if (claimsSet.hasClaim(Claims.jwk.name())) {
-        //            replaceMap(Claims.jwk.name());
-        //        }
-        //        if (claimsSet.hasClaim(Claims.sub_jwk.name())) {
-        //            replaceMap(Claims.sub_jwk.name());
-        //        }
-        if (claimsSet.hasClaim("address")) {
-            replaceMap("address");
-        }
-        if (claimsSet.hasClaim("jwk")) {
-            replaceMap("jwk");
-        }
-        if (claimsSet.hasClaim("sub_jwk")) {
-            replaceMap("sub_jwk");
-        }
-    }
-
-    /**
-     * Replace the jose4j Map<String,Object> with a JsonObject
-     *
-     * @param name
-     *            - claim name
-     */
-    private void replaceMap(String name) {
-        try {
-            Map<String, Object> map = claimsSet.getClaimValue(name, Map.class);
-            JsonObjectBuilder builder = Json.createObjectBuilder();
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                builder.add(entry.getKey(), entry.getValue().toString());
-            }
-            JsonObject jsonObject = builder.build();
-            claimsSet.setClaim(name, jsonObject);
-        } catch (MalformedClaimException e) {
-            //e.printStackTrace();
-        }
     }
 
     /**

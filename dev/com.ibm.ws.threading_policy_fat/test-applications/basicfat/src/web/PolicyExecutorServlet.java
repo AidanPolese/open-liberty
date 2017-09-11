@@ -20,6 +20,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -1587,6 +1588,73 @@ public class PolicyExecutorServlet extends FATServlet {
         assertTrue(executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS));
         long duration = start - System.nanoTime();
         assertTrue("awaitTermination took " + duration + "ns", duration < TIMEOUT_NS);
+    }
+
+    // Submit and wait for groups of tasks via the timed invokeAll method.
+    // Includes coverage of scenarios where core/max concurrency is insufficient to run all of the tasks at once,
+    // and where the maximum queue size is insufficient to allow all of the tasks to be queued and
+    // requires waiting.
+    @Test
+    public void testInvokeAllTimed() throws Exception {
+        PolicyExecutor executor = provider.create("testInvokeAllTimed")
+                        .coreConcurrency(2)
+                        .maxConcurrency(3)
+                        .maxQueueSize(2)
+                        .maxWaitForEnqueue(TimeUnit.NANOSECONDS.toMillis(TIMEOUT_NS))
+                        .queueFullAction(QueueFullAction.Abort);
+
+        List<Future<Integer>> futures;
+        Future<Integer> future;
+
+        // Invoke nothing
+        futures = executor.invokeAll(Collections.<Callable<Integer>> emptyList(), 20, TimeUnit.SECONDS);
+        assertEquals(0, futures.size());
+
+        // Invoke one
+        SharedIncrementTask task = new SharedIncrementTask();
+        futures = executor.invokeAll(Arrays.asList(task), TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        assertEquals(1, futures.size());
+        assertNotNull(future = futures.get(0));
+        assertTrue(future.isDone());
+        assertFalse(future.isCancelled());
+        assertEquals(Integer.valueOf(1), future.get(0, TimeUnit.SECONDS));
+
+        // Invoke three of the same task
+        int sum = 0;
+        futures = executor.invokeAll(Arrays.asList(task, task, task), TIMEOUT_NS * 3, TimeUnit.NANOSECONDS);
+        assertEquals(3, futures.size());
+        assertNotNull(future = futures.get(0));
+        assertTrue(future.isDone());
+        assertFalse(future.isCancelled());
+        sum += future.get(0, TimeUnit.HOURS);
+        assertNotNull(future = futures.get(1));
+        assertTrue(future.isDone());
+        assertFalse(future.isCancelled());
+        sum += future.get(0, TimeUnit.DAYS);
+        assertNotNull(future = futures.get(2));
+        assertTrue(future.isDone());
+        assertFalse(future.isCancelled());
+        sum += future.get(0, TimeUnit.MINUTES);
+        assertEquals(9 /* 2 + 3 + 4 */, sum);
+
+        // Invoke 5 different tasks with minor waiting for enqueue
+        AtomicInteger counter = new AtomicInteger();
+        ArrayList<SharedIncrementTask> tasks = new ArrayList<SharedIncrementTask>();
+        for (int i = 0; i < 5; i++)
+            tasks.add(new SharedIncrementTask(counter));
+        futures = executor.invokeAll(tasks, TIMEOUT_NS, TimeUnit.NANOSECONDS);
+        assertEquals(5, futures.size());
+        sum = 0;
+        for (int i = 0; i < 5; i++) {
+            assertNotNull("Future #" + i, future = futures.get(i));
+            sum += future.get(0, TimeUnit.NANOSECONDS);
+            assertTrue("Future #" + i, future.isDone());
+            assertFalse("Future #" + i, future.isCancelled());
+        }
+        assertEquals(15, sum);
+
+        List<Runnable> canceledFromQueue = executor.shutdownNow();
+        assertEquals(0, canceledFromQueue.size());
     }
 
     // Poll isTerminated until the executor terminates while concurrently awaiting termination from another thread.

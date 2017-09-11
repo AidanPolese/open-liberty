@@ -8,7 +8,8 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package com.ibm.ws.security.mp.jwt.impl.utils;
+package com.ibm.ws.security.common.structures;
+
 
 import java.util.Collections;
 import java.util.Map;
@@ -18,7 +19,7 @@ import java.util.TimerTask;
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
 import com.ibm.websphere.ras.annotation.Sensitive;
-import com.ibm.ws.security.common.structures.BoundedHashMap;
+import com.ibm.ws.security.common.TraceConstants;
 
 /**
  * Cache containing three internal tables in order to implement a
@@ -26,7 +27,7 @@ import com.ibm.ws.security.common.structures.BoundedHashMap;
  */
 public class Cache {
 
-    private static final TraceComponent tc = Tr.register(Cache.class);
+    private static final TraceComponent tc = Tr.register(Cache.class, TraceConstants.TRACE_GROUP, TraceConstants.MESSAGE_BUNDLE);
 
     /**
      * Primary hash table containing the most recently used entries.

@@ -39,6 +39,10 @@ public class JsonWebTokenUtilImpl implements JsonWebTokenUtil {
 
     @Override
     public Principal getJsonWebTokenPrincipal(Subject subject) {
+        String methodName = "getJsonWebTokenPrincipal";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, subject);
+        }
 
         Set<JsonWebToken> jsonWebTokenPrincipal = subject.getPrincipals(JsonWebToken.class);
 
@@ -47,40 +51,65 @@ public class JsonWebTokenUtilImpl implements JsonWebTokenUtil {
         }
 
         if (!jsonWebTokenPrincipal.isEmpty()) {
-            return jsonWebTokenPrincipal.iterator().next();
+            Principal principal = jsonWebTokenPrincipal.iterator().next();
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, principal);
+            }
+            return principal;
         }
 
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, null);
+        }
         return null;
     }
 
     @Override
     public void addJsonWebToken(Subject subject, Hashtable<String, ?> customProperties, String key) {
+        String methodName = "addJsonWebToken";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, subject, customProperties, key);
+        }
         if (customProperties != null) {
             JsonWebToken jsonWebToken = (JsonWebToken) customProperties.get(key);
             if (jsonWebToken != null) {
                 subject.getPrincipals().add(jsonWebToken);
             }
         }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
     @Override
     public Principal cloneJsonWebToken(Subject subject) {
+        String methodName = "cloneJsonWebToken";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, subject);
+        }
         if (getJsonWebTokenPrincipal(subject) != null) {
-            return ((DefaultJsonWebTokenImpl) getJsonWebTokenPrincipal(subject)).clone();
+            Principal p = ((DefaultJsonWebTokenImpl) getJsonWebTokenPrincipal(subject)).clone();
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, p);
+            }
+            return p;
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, null);
         }
         return null;
     }
 
-    private static void multipleJsonWebTokenPrincipalsError(Set<JsonWebToken> principals) {
+    private void multipleJsonWebTokenPrincipalsError(Set<JsonWebToken> principals) {
         String principalNames = null;
         for (JsonWebToken principal : principals) {
-            if (principalNames == null)
+            if (principalNames == null) {
                 principalNames = principal.getName();
-            else
+            } else {
                 principalNames = principalNames + ", " + principal.getName();
+            }
         }
-        // throw new IllegalStateException(Tr.formatMessage(tc,
-        // "SEC_TOO_MANY_PRINCIPALS", principalNames));
+        Tr.warning(tc, "TOO_MANY_JWT_PRINCIPALS", new Object[] { principalNames });
     }
 
     @Activate

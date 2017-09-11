@@ -78,6 +78,10 @@ public class MicroProfileJwtTaiRequest {
      * @param service
      */
     public void addGenericConfig(MicroProfileJwtConfig mpJwtConfig) {
+        String methodName = "addGenericConfig";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, mpJwtConfig);
+        }
         if (mpJwtConfig != null) {
             if (this.genericConfigs == null) {
                 this.genericConfigs = new ArrayList<MicroProfileJwtConfig>();
@@ -86,13 +90,23 @@ public class MicroProfileJwtTaiRequest {
                 this.genericConfigs.add(mpJwtConfig);
             }
         }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
     public String getProviderName() {
+        String methodName = "getProviderName";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         if (this.providerName == null) {
             if (this.microProfileJwtConfig != null) {
                 this.providerName = this.microProfileJwtConfig.getUniqueId();
             }
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, this.providerName);
         }
         return this.providerName;
     }
@@ -110,6 +124,10 @@ public class MicroProfileJwtTaiRequest {
     }
 
     public Set<MicroProfileJwtConfig> getAllMatchingConfigs() {
+        String methodName = "getAllMatchingConfigs";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         Set<MicroProfileJwtConfig> allConfigs = new HashSet<MicroProfileJwtConfig>();
         if (microProfileJwtConfig != null) {
             allConfigs.add(microProfileJwtConfig);
@@ -120,14 +138,24 @@ public class MicroProfileJwtTaiRequest {
         if (genericConfigs != null) {
             allConfigs.addAll(genericConfigs);
         }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, allConfigs);
+        }
         return allConfigs;
     }
 
     public Set<String> getAllMatchingConfigIds() {
+        String methodName = "getAllMatchingConfigIds";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         Set<String> allConfigIds = new HashSet<String>();
         Set<MicroProfileJwtConfig> allConfigs = getAllMatchingConfigs();
         for (MicroProfileJwtConfig config : allConfigs) {
             allConfigIds.add(config.getUniqueId());
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, allConfigIds);
         }
         return allConfigIds;
     }
@@ -135,40 +163,64 @@ public class MicroProfileJwtTaiRequest {
     /**
      * @return
      */
-    public MicroProfileJwtConfig getTheOnlyConfig() throws MpJwtProcessingException {
+    public MicroProfileJwtConfig getOnlyMatchingConfig() throws MpJwtProcessingException {
+        String methodName = "getOnlyMatchingConfig";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
+        throwExceptionIfPresent();
+        if (microProfileJwtConfig == null) {
+            microProfileJwtConfig = findAppropriateGenericConfig();
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, microProfileJwtConfig);
+        }
+        return microProfileJwtConfig;
+    }
+
+    void throwExceptionIfPresent() throws MpJwtProcessingException {
         if (taiException != null) {
             MpJwtProcessingException exception = this.taiException;
             this.taiException = null;
             throw exception;
         }
-        if (this.microProfileJwtConfig == null) {
-            //            if (this.filteredConfigs != null) {
-            //                if (this.filteredConfigs.size() == 1) {
-            //                    this.microProfileJwtConfig = this.filteredConfigs.get(0);
-            //                } else {
-            //                    // error handling -- multiple mpJwtConfig qualified and we do not know how to select
-            //                    String configIds = getConfigIds(filteredConfigs);
-            //                    throw new MpJwtProcessingException("SOCIAL_LOGIN_MANY_PROVIDERS", null, new Object[] { configIds });
-            //                }
-            //            } else
-            if (this.genericConfigs != null) {
-                if (this.genericConfigs.size() == 1) {
-                    this.microProfileJwtConfig = this.genericConfigs.get(0);
-                } else {
-                    // error handling -- multiple mpJwtConfig qualified and we do not know how to select
-                    String configIds = getConfigIds(genericConfigs);
-                    String msg = Tr.formatMessage(tc, "SOCIAL_LOGIN_MANY_PROVIDERS", new Object[] { configIds });
-                    Tr.error(tc, msg);
-                    throw new MpJwtProcessingException(msg);
-                }
+    }
+
+    MicroProfileJwtConfig findAppropriateGenericConfig() throws MpJwtProcessingException {
+        String methodName = "findAppropriateGenericConfig";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
+        //            if (this.filteredConfigs != null) {
+        //                if (this.filteredConfigs.size() == 1) {
+        //                    this.microProfileJwtConfig = this.filteredConfigs.get(0);
+        //                } else {
+        //                    // error handling -- multiple mpJwtConfig qualified and we do not know how to select
+        //                    String configIds = getConfigIds(filteredConfigs);
+        //                    throw new MpJwtProcessingException("SOCIAL_LOGIN_MANY_PROVIDERS", null, new Object[] { configIds });
+        //                }
+        //            } else
+        if (this.genericConfigs != null) {
+            if (this.genericConfigs.size() == 1) {
+                this.microProfileJwtConfig = this.genericConfigs.get(0);
+            } else {
+                handleTooManyConfigurations();
             }
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, this.microProfileJwtConfig);
         }
         return this.microProfileJwtConfig;
     }
 
-    /**
-     * @return
-     */
+    void handleTooManyConfigurations() throws MpJwtProcessingException {
+        // error handling -- multiple mpJwtConfig qualified and we do not know how to select
+        String configIds = getConfigIds(genericConfigs);
+        String msg = Tr.formatMessage(tc, "TOO_MANY_MP_JWT_PROVIDERS", new Object[] { configIds });
+        Tr.error(tc, msg);
+        throw new MpJwtProcessingException(msg);
+    }
+
     String getConfigIds(List<MicroProfileJwtConfig> multiConfigs) {
         String result = "";
         if (multiConfigs == null) {
@@ -197,8 +249,15 @@ public class MicroProfileJwtTaiRequest {
      * @return
      */
     public boolean hasServices() {
-        return this.genericConfigs != null ||
-                this.microProfileJwtConfig != null;
+        String methodName = "hasServices";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
+        boolean hasServices = (this.genericConfigs != null || this.microProfileJwtConfig != null);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, hasServices);
+        }
+        return hasServices;
     }
 
     public void setTaiException(MpJwtProcessingException taiException) {

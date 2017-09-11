@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 IBM Corporation and others.
+ * Copyright (c) 2015,2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -206,7 +206,7 @@ public class JCAMBeanRuntime {
             }
 
             //Find the right URL presenting the full path to the RA
-            if (urls != null && !urls.isEmpty())
+            if (urls != null && !urls.isEmpty()) {
                 for (URL urlItem : urls) {
                     String path = urlItem.getPath();
                     if (path.endsWith(rarFileName)) {
@@ -214,7 +214,17 @@ public class JCAMBeanRuntime {
                         break;
                     }
                 }
-            else if (trace && tc.isDebugEnabled())
+                // workaround: If we didn't find an exact match, see if any paths contain the RA id
+                if (fullPathToRAR == null) {
+                    for (URL urlItem : urls) {
+                        String path = urlItem.getPath();
+                        if (path.contains(rarFileName)) {
+                            fullPathToRAR = urlItem;
+                            break;
+                        }
+                    }
+                }
+            } else if (trace && tc.isDebugEnabled())
                 Tr.debug(tc, "ResourceAdapterModuleMBean: Failed to obtain the full path to the RAR file because the URLs Collection is null or empty."
                              + " Used server: " + serverLocation
                              + " This happened in " + className + methodName);
