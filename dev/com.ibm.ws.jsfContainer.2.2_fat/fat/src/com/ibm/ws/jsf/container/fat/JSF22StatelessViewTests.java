@@ -12,8 +12,6 @@ package com.ibm.ws.jsf.container.fat;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.AfterClass;
@@ -32,30 +30,31 @@ import componenttest.topology.impl.LibertyServer;
 import componenttest.topology.utils.FATServletClient;
 import junit.framework.Assert;
 
-/**
- * Tests to execute on the jsf22StatelessViewServer that use HtmlUnit.
- */
 @RunWith(FATRunner.class)
 public class JSF22StatelessViewTests extends FATServletClient {
 
-    private static final String APP_NAME = "JSF22StatelessView";
+    private static final String MOJARRA_APP = "JSF22StatelessView";
+    private static final String MYFACES_APP = "JSF22StatelessView_MyFaces";
 
     @Server("jsf.container.2.2_fat")
     public static LibertyServer server;
 
     @BeforeClass
     public static void setup() throws Exception {
-        WebArchive app = ShrinkWrap.create(WebArchive.class, APP_NAME + ".war")
-                        .addAsLibrary(new File("publish/files/mojarra/jsf-api-2.2.14.jar"))
-                        .addAsLibrary(new File("publish/files/mojarra/jsf-impl-2.2.14.jar"))
+        WebArchive mojarraApp = ShrinkWrap.create(WebArchive.class, MOJARRA_APP + ".war")
                         .addPackage("jsf.view.beans");
-        app = (WebArchive) ShrinkHelper.addDirectory(app, "test-applications/" + APP_NAME + "/resources");
+        mojarraApp = FATSuite.addMojarra(mojarraApp);
+        mojarraApp = (WebArchive) ShrinkHelper.addDirectory(mojarraApp, "test-applications/" + MOJARRA_APP + "/resources");
+        ShrinkHelper.exportToServer(server, "dropins", mojarraApp);
+        server.addInstalledAppForValidation(MOJARRA_APP);
 
-        // TODO-6677: Eventually this library will be auto-added by the jsfContainer-2.2 feature
-        app = app.addAsLibrary(new File("publish/files/mojarra/com.ibm.ws.jsfContainer.2.2.jar"));
+        WebArchive myfacesApp = ShrinkWrap.create(WebArchive.class, MYFACES_APP + ".war")
+                        .addPackage("jsf.view.beans");
+        myfacesApp = FATSuite.addMyFaces(myfacesApp);
+        myfacesApp = (WebArchive) ShrinkHelper.addDirectory(myfacesApp, "test-applications/" + MOJARRA_APP + "/resources");
+        ShrinkHelper.exportToServer(server, "dropins", myfacesApp);
+        server.addInstalledAppForValidation(MYFACES_APP);
 
-        ShrinkHelper.exportToServer(server, "dropins", app);
-        server.addInstalledAppForValidation(APP_NAME);
         server.startServer();
     }
 
@@ -64,14 +63,31 @@ public class JSF22StatelessViewTests extends FATServletClient {
         server.stopServer();
     }
 
+    @Test
+    public void verifyAppProviders() throws Exception {
+        server.resetLogMarks();
+        server.waitForStringInLogUsingMark("Initializing Mojarra .* for context '/" + MOJARRA_APP + "'");
+        server.resetLogMarks();
+        server.waitForStringInLogUsingMark("MyFaces CDI support enabled");
+    }
+
+    @Test
+    public void JSF22StatelessView_TestSimpleStatelessView_Mojarra() throws Exception {
+        JSF22StatelessView_TestSimpleStatelessView(MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22StatelessView_TestSimpleStatelessView_MyFaces() throws Exception {
+        JSF22StatelessView_TestSimpleStatelessView(MYFACES_APP);
+    }
+
     /**
      * Check to make sure that a transient view renders with the correct viewstate value
      */
-    @Test
-    public void JSF22StatelessView_TestSimpleStatelessView() throws Exception {
+    private void JSF22StatelessView_TestSimpleStatelessView(String app) throws Exception {
         WebClient webClient = new WebClient();
 
-        HtmlPage page = (HtmlPage) webClient.getPage(getAppURL() + "/JSF22StatelessView_Simple.xhtml");
+        HtmlPage page = (HtmlPage) webClient.getPage(getServerURL() + app + "/JSF22StatelessView_Simple.xhtml");
 
         if (page == null) {
             Assert.fail("JSF22StatelessView_Simple.xhtml did not render properly.");
@@ -86,15 +102,24 @@ public class JSF22StatelessViewTests extends FATServletClient {
         }
     }
 
+    @Test
+    public void JSF22StatelessView_TestIsTransientTrue_Mojarra() throws Exception {
+        JSF22StatelessView_TestIsTransientTrue(MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22StatelessView_TestIsTransientTrue_MyFaces() throws Exception {
+        JSF22StatelessView_TestIsTransientTrue(MYFACES_APP);
+    }
+
     /**
      * Programmatically tests if a view is marked as transient via UIViewRoot.isTransient() and
      * ResponseStateManager.isStateless() methods. In this case, transient=true.
      */
-    @Test
-    public void JSF22StatelessView_TestIsTransientTrue() throws Exception {
+    private void JSF22StatelessView_TestIsTransientTrue(String app) throws Exception {
         WebClient webClient = new WebClient();
 
-        HtmlPage page = (HtmlPage) webClient.getPage(getAppURL() + "/JSF22StatelessView_isTransient_true.xhtml");
+        HtmlPage page = (HtmlPage) webClient.getPage(getServerURL() + app + "/JSF22StatelessView_isTransient_true.xhtml");
         // Make sure the page initially renders correctly
         if (page == null) {
             Assert.fail("JSF22StatelessView_isTransient_true.xhtml did not render properly.");
@@ -122,15 +147,24 @@ public class JSF22StatelessViewTests extends FATServletClient {
         }
     }
 
+    @Test
+    public void JSF22StatelessView_TestIsTransientFalse_Mojarra() throws Exception {
+        JSF22StatelessView_TestIsTransientFalse(MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22StatelessView_TestIsTransientFalse_MyFaces() throws Exception {
+        JSF22StatelessView_TestIsTransientFalse(MYFACES_APP);
+    }
+
     /**
      * Programmatically tests if a view is marked as transient via UIViewRoot.isTransient() and
      * ResponseStateManager.isStateless() methods. In this case, transient=false.
      */
-    @Test
-    public void JSF22StatelessView_TestIsTransientFalse() throws Exception {
+    private void JSF22StatelessView_TestIsTransientFalse(String app) throws Exception {
         WebClient webClient = new WebClient();
 
-        HtmlPage page = (HtmlPage) webClient.getPage(getAppURL() + "/JSF22StatelessView_isTransient_false.xhtml");
+        HtmlPage page = (HtmlPage) webClient.getPage(getServerURL() + app + "/JSF22StatelessView_isTransient_false.xhtml");
         // Make sure the page initially renders correctly
         if (page == null) {
             Assert.fail("JSF22StatelessView_isTransient_false.xhtml did not render properly.");
@@ -158,15 +192,24 @@ public class JSF22StatelessViewTests extends FATServletClient {
         }
     }
 
+    @Test
+    public void JSF22StatelessView_TestIsTransientDefault_Mojarra() throws Exception {
+        JSF22StatelessView_TestIsTransientDefault(MOJARRA_APP);
+    }
+
+    @Test
+    public void JSF22StatelessView_TestIsTransientDefault_MyFaces() throws Exception {
+        JSF22StatelessView_TestIsTransientDefault(MYFACES_APP);
+    }
+
     /**
      * Programmatically tests if a view is marked as transient via UIViewRoot.isTransient() and
      * ResponseStateManager.isStateless() methods. In this case, transient is undefined; the default is false.
      */
-    @Test
-    public void JSF22StatelessView_TestIsTransientDefault() throws Exception {
+    private void JSF22StatelessView_TestIsTransientDefault(String app) throws Exception {
         WebClient webClient = new WebClient();
 
-        HtmlPage page = (HtmlPage) webClient.getPage(getAppURL() + "/JSF22StatelessView_isTransient_default.xhtml");
+        HtmlPage page = (HtmlPage) webClient.getPage(getServerURL() + app + "/JSF22StatelessView_isTransient_default.xhtml");
         // Make sure the page initially renders correctly
         if (page == null) {
             Assert.fail("JSF22StatelessView_isTransient_default.xhtml did not render properly.");
@@ -199,8 +242,13 @@ public class JSF22StatelessViewTests extends FATServletClient {
      * Since the view here is stateless, the ViewScoped bean should be re-initialized on every submit.
      */
     @Test
-    public void JSF22StatelessView_TestViewScopeManagedBeanTransient() throws Exception {
-        testViewScopeManagedBeanTransient("/JSF22StatelessView_ViewScope_Transient.xhtml");
+    public void JSF22StatelessView_TestViewScopeManagedBeanTransient_Mojarra() throws Exception {
+        testViewScopeManagedBeanTransient(MOJARRA_APP, "/JSF22StatelessView_ViewScope_Transient.xhtml");
+    }
+
+    @Test
+    public void JSF22StatelessView_TestViewScopeManagedBeanTransient_MyFaces() throws Exception {
+        testViewScopeManagedBeanTransient(MYFACES_APP, "/JSF22StatelessView_ViewScope_Transient.xhtml");
     }
 
     /**
@@ -208,8 +256,13 @@ public class JSF22StatelessViewTests extends FATServletClient {
      * Since the view here is NOT stateless, the ViewScoped bean should persist through a submit.
      */
     @Test
-    public void JSF22StatelessView_TestViewScopeManagedBeanNotTransient() throws Exception {
-        testViewScopeManagedBeanNotTransient("/JSF22StatelessView_ViewScope_NotTransient.xhtml");
+    public void JSF22StatelessView_TestViewScopeManagedBeanNotTransient_Mojarra() throws Exception {
+        testViewScopeManagedBeanNotTransient(MOJARRA_APP, "/JSF22StatelessView_ViewScope_NotTransient.xhtml");
+    }
+
+    @Test
+    public void JSF22StatelessView_TestViewScopeManagedBeanNotTransient_MyFaces() throws Exception {
+        testViewScopeManagedBeanNotTransient(MYFACES_APP, "/JSF22StatelessView_ViewScope_NotTransient.xhtml");
     }
 
     /**
@@ -217,8 +270,13 @@ public class JSF22StatelessViewTests extends FATServletClient {
      * Since the view here is stateless, the ViewScoped bean should be re-initialized on every submit.
      */
     @Test
-    public void JSF22StatelessView_TestViewScopeCDIBeanTransient() throws Exception {
-        testViewScopeManagedBeanTransient("/JSF22StatelessView_ViewScope_CDI_Transient.xhtml");
+    public void JSF22StatelessView_TestViewScopeCDIBeanTransient_Mojarra() throws Exception {
+        testViewScopeManagedBeanTransient(MOJARRA_APP, "/JSF22StatelessView_ViewScope_CDI_Transient.xhtml");
+    }
+
+    @Test
+    public void JSF22StatelessView_TestViewScopeCDIBeanTransient_MyFaces() throws Exception {
+        testViewScopeManagedBeanTransient(MYFACES_APP, "/JSF22StatelessView_ViewScope_CDI_Transient.xhtml");
     }
 
     /**
@@ -226,17 +284,22 @@ public class JSF22StatelessViewTests extends FATServletClient {
      * Since the view here is NOT stateless, the ViewScoped bean should persist through a submit.
      */
     @Test
-    public void JSF22StatelessView_TestViewScopeCDIBeanNotTransient() throws Exception {
-        testViewScopeManagedBeanNotTransient("/JSF22StatelessView_ViewScope_CDI_NotTransient.xhtml");
+    public void JSF22StatelessView_TestViewScopeCDIBeanNotTransient_Mojarra() throws Exception {
+        testViewScopeManagedBeanNotTransient(MOJARRA_APP, "/JSF22StatelessView_ViewScope_CDI_NotTransient.xhtml");
     }
 
-    private void testViewScopeManagedBeanTransient(String url) throws Exception {
+    @Test
+    public void JSF22StatelessView_TestViewScopeCDIBeanNotTransient_MyFaces() throws Exception {
+        testViewScopeManagedBeanNotTransient(MYFACES_APP, "/JSF22StatelessView_ViewScope_CDI_NotTransient.xhtml");
+    }
+
+    private void testViewScopeManagedBeanTransient(String app, String part) throws Exception {
         WebClient webClient = new WebClient();
 
-        HtmlPage page = (HtmlPage) webClient.getPage(getAppURL() + url);
+        HtmlPage page = (HtmlPage) webClient.getPage(getServerURL() + app + part);
         // Make sure the page initially renders correctly
         if (page == null) {
-            Assert.fail(url + " did not render properly.");
+            Assert.fail(part + " did not render properly.");
         }
         assertTrue(page.asText().contains("This page tests the behavior of a viewscoped bean in a stateless JSF22 view."));
 
@@ -265,13 +328,13 @@ public class JSF22StatelessViewTests extends FATServletClient {
         }
     }
 
-    private void testViewScopeManagedBeanNotTransient(String url) throws Exception {
+    private void testViewScopeManagedBeanNotTransient(String app, String part) throws Exception {
         WebClient webClient = new WebClient();
 
-        HtmlPage page = (HtmlPage) webClient.getPage(getAppURL() + url);
+        HtmlPage page = (HtmlPage) webClient.getPage(getServerURL() + app + part);
         // Make sure the page initially renders correctly
         if (page == null) {
-            Assert.fail("JSF22StatelessView_ViewScope_NotTransient.xhtml did not render properly.");
+            Assert.fail(part + " did not render properly.");
         }
         assertTrue(page.asText().contains("This page tests the behavior of a viewscoped bean in a stateless JSF22 view."));
 
@@ -313,8 +376,8 @@ public class JSF22StatelessViewTests extends FATServletClient {
             return true;
     }
 
-    private static String getAppURL() {
-        return "http://" + server.getHostname() + ":" + server.getHttpDefaultPort() + '/' + APP_NAME;
+    private static String getServerURL() {
+        return "http://" + server.getHostname() + ":" + server.getHttpDefaultPort() + '/';
     }
 
 }

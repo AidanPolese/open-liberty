@@ -8,5 +8,15 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-@org.osgi.annotation.versioning.Version("1.0.0")
-package com.ibm.ws.jsf.mojarra.spi;
+package com.ibm.ws.jdbc.fat.loadfromapp;
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
+
+@RunWith(Suite.class)
+@SuiteClasses({
+                JDBCLoadFromAppTest.class
+
+})
+public class FATSuite {}

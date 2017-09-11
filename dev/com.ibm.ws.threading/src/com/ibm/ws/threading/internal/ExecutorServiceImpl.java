@@ -123,7 +123,7 @@ public final class ExecutorServiceImpl implements WSExecutorService {
             createExecutor();
         }
     }
-    
+
     /**
      * Activate this executor service component.
      */
@@ -200,17 +200,11 @@ public final class ExecutorServiceImpl implements WSExecutorService {
         threadPoolController.setCoreThreads(coreThreads);
         threadPoolController.setMaxThreads(maxThreads);
 
-        BlockingQueue<Runnable> workQueue = new BoundedBuffer<Runnable>(java.lang.Runnable.class, 1000);
+        BlockingQueue<Runnable> workQueue = new BoundedBuffer<Runnable>(java.lang.Runnable.class, 1000, 1000);
 
         RejectedExecutionHandler rejectedExecutionHandler = new ExpandPolicy(workQueue, this);
 
-        threadPool = new ThreadPoolExecutor(coreThreads,
-                        maxThreads,
-                        keepAliveMillis,
-                        TimeUnit.MILLISECONDS,
-                        workQueue,
-                        threadFactory != null ? threadFactory : new ThreadFactoryImpl(poolName, threadGroupName),
-                        rejectedExecutionHandler);
+        threadPool = new ThreadPoolExecutor(coreThreads, maxThreads, keepAliveMillis, TimeUnit.MILLISECONDS, workQueue, threadFactory != null ? threadFactory : new ThreadFactoryImpl(poolName, threadGroupName), rejectedExecutionHandler);
 
         threadPoolController.activate(threadPool);
 
@@ -317,8 +311,8 @@ public final class ExecutorServiceImpl implements WSExecutorService {
      * For internal use only. Invoker is responsible for ensuring that the interceptors are applied
      * to the underlying task that the proxy eventually delegates to. This allows the proxy Runnable
      * to be offered directly to the BlockingQueue, which can then identify information about it,
-     * such as whether it ought to be expedited instead of inserted at the tail of the queue. 
-     * 
+     * such as whether it ought to be expedited instead of inserted at the tail of the queue.
+     *
      * @param proxy
      */
     void executeWithoutInterceptors(Runnable proxy) {
@@ -347,7 +341,7 @@ public final class ExecutorServiceImpl implements WSExecutorService {
      * down. A soft shutdown, on the other hand, will still allow new work to get submitted while the pool
      * is shutting down. The thread pool will stay alive until no more references to it exist and all work
      * in the queue has been processed.
-     * 
+     *
      * @param threadPool the ThreadPoolExecutor to shutdown
      */
     private void softShutdown(final ThreadPoolExecutor oldThreadPool) {
@@ -361,10 +355,10 @@ public final class ExecutorServiceImpl implements WSExecutorService {
         //
         // The bug is that when you lower coreThreads, existing idle threads may not be interrupted and thus may
         // never go away if no more work is submitted to the executor.
-        // 
+        //
         // The workaround I am using is to submit dummy work to the executor until all of the idle threads go
         // away.
-        // 
+        //
         // Note that another workaround exists:
         //  1.  Set keepAlive=0 before coreThreads=0 (we are doing that anyway, but technically the
         //      order shouldn't matter)
@@ -391,8 +385,7 @@ public final class ExecutorServiceImpl implements WSExecutorService {
                         }
                         try {
                             Thread.sleep(1000);
-                        }
-                        catch (InterruptedException ie) {
+                        } catch (InterruptedException ie) {
                         }
                     }
                 }
@@ -418,7 +411,7 @@ public final class ExecutorServiceImpl implements WSExecutorService {
 
         /**
          * Expand the work queue
-         * 
+         *
          * @param r the runnable task requested to be executed
          * @param e the executor attempting to execute this task
          * @throws RejectedExecutionException always.
@@ -429,16 +422,18 @@ public final class ExecutorServiceImpl implements WSExecutorService {
                 throw new RejectedExecutionException("Task " + r.toString() +
                                                      " rejected from " +
                                                      e.toString());
-            }
-            else {
-                workQueue.expand(1000);
+            } else {
+                if (r instanceof QueueItem && ((QueueItem) r).isExpedited())
+                    workQueue.expandExpedited(1000);
+                else
+                    workQueue.expand(1000);
 
                 //Resubmit rejected task
                 exService.execute(r);
             }
         }
     }
-    
+
     Runnable wrap(Runnable r) {
         Iterator<ExecutorServiceTaskInterceptor> i = interceptors.iterator();
         while (i.hasNext()) {

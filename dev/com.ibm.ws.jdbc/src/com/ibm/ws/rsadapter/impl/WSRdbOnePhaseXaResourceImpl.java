@@ -138,7 +138,7 @@ public class WSRdbOnePhaseXaResourceImpl implements WSXAResource, OnePhaseXAReso
         boolean setStateFailed = false;
 
         // Reset so we can deferred enlist in a future global transaction. 
-        ivManagedConnection.wasLazilyEnlisted = false; 
+        ivManagedConnection.wasLazilyEnlistedInGlobalTran = false; 
 
         try {
             // If no work was done during the transaction, the autoCommit value may still
@@ -450,7 +450,7 @@ public class WSRdbOnePhaseXaResourceImpl implements WSXAResource, OnePhaseXAReso
         }
 
         // Reset so we can deferred enlist in a future global transaction. 
-        ivManagedConnection.wasLazilyEnlisted = false; 
+        ivManagedConnection.wasLazilyEnlistedInGlobalTran = false; 
 
         try {
             // If no work was done during the transaction, the autoCommit value may still

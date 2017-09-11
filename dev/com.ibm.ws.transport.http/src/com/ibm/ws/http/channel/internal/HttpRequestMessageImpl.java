@@ -1912,10 +1912,6 @@ public class HttpRequestMessageImpl extends HttpBaseMessageImpl implements HttpR
             throw new Http2PushException("HTTPRequestMessageImpl.pushNewRequest():  The H2HttpInboundLinkWrap muxlink is null.");
         }
 
-        /*
-         * TODO Change the getEnabledPush to a boolean
-         */
-
         // Don't send the push_promise frame if the client doesn't want it
         if (((H2HttpInboundLinkWrap) link).muxLink.getConnectionSettings().getEnablePush() != 1) {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {

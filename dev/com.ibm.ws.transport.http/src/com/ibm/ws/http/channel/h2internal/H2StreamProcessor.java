@@ -1003,7 +1003,7 @@ public class H2StreamProcessor {
      * stream
      */
     public void sendRequestToWc(FrameHeaders frame) {
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.entry(tc, "sendRequestToWc");
         }
 
@@ -1029,10 +1029,10 @@ public class H2StreamProcessor {
                 if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                     Tr.debug(tc, "sendRequestToWc: compression exception when creating the pushed reqeust on stream-id " + myID);
                 }
-                // Free the buffer and exit
+                // Free the buffer, set the current frame to null, and remove the SP from the table
                 buf.release();
-                // TODO This SP is left hanging
-                currentFrame = null;
+                this.currentFrame = null;
+                h2HttpInboundLinkWrap.muxLink.streamTable.remove(this);
                 return;
             }
 
@@ -1040,7 +1040,7 @@ public class H2StreamProcessor {
             setReadyForRead();
         }
 
-        if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
+        if (TraceComponent.isAnyTracingEnabled() && tc.isEntryEnabled()) {
             Tr.exit(tc, "sendRequestToWc");
         }
 

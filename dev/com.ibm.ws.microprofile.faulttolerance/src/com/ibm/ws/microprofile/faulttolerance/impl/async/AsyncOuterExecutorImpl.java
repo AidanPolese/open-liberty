@@ -17,13 +17,16 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.microprofile.faulttolerance.exceptions.BulkheadException;
 import org.eclipse.microprofile.faulttolerance.exceptions.FaultToleranceException;
 
 import com.ibm.websphere.ras.Tr;
 import com.ibm.websphere.ras.TraceComponent;
+import com.ibm.ws.ffdc.annotation.FFDCIgnore;
 import com.ibm.ws.microprofile.faulttolerance.impl.ExecutionContextImpl;
 import com.ibm.ws.microprofile.faulttolerance.impl.FTConstants;
 import com.ibm.ws.microprofile.faulttolerance.impl.sync.SynchronousExecutorImpl;
@@ -43,27 +46,27 @@ import com.ibm.wsspi.threadcontext.WSContextService;
  *
  * Ultimately an Asynchronous execution consists of two synchronous executions, on different threads but with a shared execution context.
  */
-public class AsyncExecutorImpl<R> extends SynchronousExecutorImpl<Future<R>> {
+public class AsyncOuterExecutorImpl<R> extends SynchronousExecutorImpl<Future<R>> {
 
-    private static final TraceComponent tc = Tr.register(AsyncExecutorImpl.class);
+    private static final TraceComponent tc = Tr.register(AsyncOuterExecutorImpl.class);
 
-    private final NestedExecutorImpl<Future<R>> nestedExecutor;
+    private final AsyncInnerExecutorImpl<Future<R>> nestedExecutor;
     private final BulkheadPolicy bulkheadPolicy;
     private final WSContextService contextService;
-    private ExecutorService executorService;
+    private final ExecutorService executorService;
 
-    public AsyncExecutorImpl(RetryPolicy retryPolicy,
-                             CircuitBreakerPolicy circuitBreakerPolicy,
-                             TimeoutPolicy timeoutPolicy,
-                             BulkheadPolicy bulkheadPolicy,
-                             FallbackPolicy fallbackPolicy,
-                             WSContextService contextService,
-                             PolicyExecutorProvider policyExecutorProvider,
-                             ScheduledExecutorService scheduledExecutorService) {
+    public AsyncOuterExecutorImpl(RetryPolicy retryPolicy,
+                                  CircuitBreakerPolicy circuitBreakerPolicy,
+                                  TimeoutPolicy timeoutPolicy,
+                                  BulkheadPolicy bulkheadPolicy,
+                                  FallbackPolicy fallbackPolicy,
+                                  WSContextService contextService,
+                                  PolicyExecutorProvider policyExecutorProvider,
+                                  ScheduledExecutorService scheduledExecutorService) {
 
         super(retryPolicy, circuitBreakerPolicy, timeoutPolicy, bulkheadPolicy, fallbackPolicy, scheduledExecutorService);
 
-        this.nestedExecutor = new NestedExecutorImpl<>();
+        this.nestedExecutor = new AsyncInnerExecutorImpl<>();
 
         this.bulkheadPolicy = bulkheadPolicy;
         this.contextService = contextService;
@@ -115,15 +118,40 @@ public class AsyncExecutorImpl<R> extends SynchronousExecutorImpl<Future<R>> {
         };
 
         //this is the outer task which will be run synchronously but launch a new thread to to run the inner one
-        Callable<Future<R>> outerTask = () -> {
-            ThreadContextDescriptor threadContext = null;
-            if (this.contextService != null) {
-                threadContext = this.contextService.captureThreadContext(new HashMap<String, String>());
+        Callable<Future<R>> outerTask = new Callable<Future<R>>() {
+
+            @Override
+            @FFDCIgnore({ RejectedExecutionException.class })
+            public Future<R> call() {
+                ThreadContextDescriptor threadContext = null;
+                if (contextService != null) {
+                    threadContext = contextService.captureThreadContext(new HashMap<String, String>());
+                }
+                QueuedFuture<R> queuedFuture = new QueuedFuture<>(innerTask, executionContext, threadContext);
+
+                //start the execution context (e.g. start the timeout)
+                executionContext.start(queuedFuture);
+                try {
+                    //begin the queuedFuture execution
+                    queuedFuture.start(executorService);
+                } catch (RejectedExecutionException e) {
+                    //if the execution was rejected then end the execution and throw a BulkheadException
+                    //TODO there might not really have been a bulkhead?? but it's pretty unlikely that the execution would
+                    //be rejected otherwise!
+                    executionContext.end();
+                    throw new BulkheadException(Tr.formatMessage(tc, "bulkhead.no.threads.CWMFT0001E", executionContext.getMethod()), e);
+                }
+
+                return queuedFuture;
             }
-            QueuedFuture<R> queuedFuture = new QueuedFuture<>(innerTask, executionContext, threadContext);
-            queuedFuture.start(this.executorService);
-            return queuedFuture;
         };
         return outerTask;
+    }
+
+    @Override
+    public void close() {
+        executorService.shutdown();
+        super.close();
+        nestedExecutor.close();
     }
 }

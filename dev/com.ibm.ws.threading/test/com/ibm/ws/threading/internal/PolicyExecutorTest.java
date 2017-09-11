@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2014 IBM Corporation and others.
+ * Copyright (c) 2017 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,11 +20,54 @@ import com.ibm.ws.threading.PolicyExecutor;
 import com.ibm.ws.threading.PolicyExecutorProvider;
 
 /**
- *
+ * Unit tests for policy executor.
  */
 public class PolicyExecutorTest {
 
     PolicyExecutorProvider provider = new PolicyExecutorProvider();
+
+    // Verify that core concurrency can be -1 (unlimited) but otherwise not negative or greater than maximum concurrency,
+    // except where maximum concurrency is -1 (unlimited).
+    @Test
+    public void testCoreConcurrencyConfiguration() {
+        PolicyExecutor executor = provider.create("testCoreConcurrencyConfiguration");
+
+        try {
+            executor.coreConcurrency(-2);
+            fail("Should reject negative core concurrency.");
+        } catch (IllegalArgumentException x) {
+            if (!x.getMessage().contains("-2"))
+                throw x;
+        }
+
+        executor.maxConcurrency(10);
+        try {
+            executor.coreConcurrency(12);
+            fail("Should reject core concurrency set greater than max concurrency.");
+        } catch (IllegalArgumentException x) {
+            if (!x.getMessage().contains("12"))
+                throw x;
+        }
+
+        executor.coreConcurrency(10);
+        try {
+            executor.maxConcurrency(5);
+            fail("Should reject max concurrency set less than core concurrency.");
+        } catch (IllegalArgumentException x) {
+            if (!x.getMessage().contains("5"))
+                throw x;
+        }
+
+        executor.maxConcurrency(Integer.MAX_VALUE);
+        executor.coreConcurrency(Integer.MAX_VALUE);
+
+        executor.coreConcurrency(-1);
+        executor.maxConcurrency(-1);
+
+        executor.coreConcurrency(0);
+
+        executor.shutdownNow();
+    }
 
     /**
      * Test max concurrency configuration boundaries.
