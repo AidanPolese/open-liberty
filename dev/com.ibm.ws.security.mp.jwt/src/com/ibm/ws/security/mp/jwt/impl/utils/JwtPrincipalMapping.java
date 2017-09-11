@@ -30,8 +30,15 @@ public class JwtPrincipalMapping {
     ArrayList<String> groupIds = null;
 
     public JwtPrincipalMapping(String jsonstr, String userAttr, String groupAttr, boolean mapToUr) {
+        String methodName = "<init>";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, jsonstr, userAttr, groupAttr, mapToUr);
+        }
         userName = getUserName(userAttr, jsonstr);
         if (userName == null) {
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName);
+            }
             return;
         }
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
@@ -39,6 +46,9 @@ public class JwtPrincipalMapping {
         }
         if (!mapToUr) {
             populateGroupIds(jsonstr, groupAttr);
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
         }
     }
 
@@ -55,12 +65,19 @@ public class JwtPrincipalMapping {
     }
 
     private String getUserName(String userNameAttr, String jsonstr) {
+        String methodName = "getUserName";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, userNameAttr, jsonstr);
+        }
         if (jsonstr != null && userNameAttr != null && !userNameAttr.isEmpty()) {
             Object user = getClaim(jsonstr, userNameAttr);
             setUserName(userNameAttr, user);
         }
         if (userName == null) {
             Tr.error(tc, "PRINCIPAL_MAPPING_MISSING_ATTR", new Object[] { userNameAttr, MicroProfileJwtConfigImpl.KEY_userNameAttribute });
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, userName);
         }
         return userName;
     }
@@ -80,24 +97,46 @@ public class JwtPrincipalMapping {
     }
 
     void populateGroupIds(String jsonstr, String groupAttr) {
+        String methodName = "populateGroupIds";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, jsonstr, groupAttr);
+        }
         Object groupClaim = null;
         if (groupAttr != null) {
             groupClaim = getClaim(jsonstr, groupAttr);
         }
         populateGroupIdsFromGroupClaim(groupClaim);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
     Object getClaim(String jsonstr, String claimAttr) {
+        String methodName = "getClaim";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, jsonstr, claimAttr);
+        }
+        Object claim = null;
         try {
-            return JsonUtils.claimFromJsonObject(jsonstr, claimAttr);
+            claim = JsonUtils.claimFromJsonObject(jsonstr, claimAttr);
         } catch (Exception e) {
             Tr.error(tc, "CANNOT_GET_CLAIM_FROM_JSON", new Object[] { claimAttr, e.getLocalizedMessage() });
         }
-        return null;
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, claim);
+        }
+        return claim;
     }
 
     void populateGroupIdsFromGroupClaim(Object groupClaim) {
+        String methodName = "populateGroupIdsFromGroupClaim";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, groupClaim);
+        }
         if (groupClaim == null) {
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName);
+            }
             return;
         }
         if (groupClaim instanceof ArrayList<?>) {
@@ -108,14 +147,28 @@ public class JwtPrincipalMapping {
         if (groupIds != null && TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
             Tr.debug(tc, "groups size = ", groupIds.size());
         }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
     @SuppressWarnings("unchecked")
     void setGroupIdArrayList(Object groupClaim) {
+        String methodName = "setGroupIdArrayList";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, groupClaim);
+        }
         groupIds = (ArrayList<String>) groupClaim;
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
     void setGroupClaimAsOnlyGroupId(Object groupClaim) {
+        String methodName = "setGroupClaimAsOnlyGroupId";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, groupClaim);
+        }
         try {
             String groupName = (String) groupClaim;
             groupIds = new ArrayList<String>();
@@ -124,6 +177,9 @@ public class JwtPrincipalMapping {
             if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) {
                 Tr.debug(tc, "cannot get meaningful group due to CCE: " + cce.getMessage());
             }
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
         }
     }
 

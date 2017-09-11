@@ -77,6 +77,10 @@ public class MicroProfileJwtTaiRequest {
      * @param service
      */
     public void addGenericConfig(MicroProfileJwtConfig mpJwtConfig) {
+        String methodName = "addGenericConfig";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, mpJwtConfig);
+        }
         if (mpJwtConfig != null) {
             if (this.genericConfigs == null) {
                 this.genericConfigs = new ArrayList<MicroProfileJwtConfig>();
@@ -85,13 +89,23 @@ public class MicroProfileJwtTaiRequest {
                 this.genericConfigs.add(mpJwtConfig);
             }
         }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
     public String getProviderName() {
+        String methodName = "getProviderName";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         if (this.providerName == null) {
             if (this.microProfileJwtConfig != null) {
                 this.providerName = this.microProfileJwtConfig.getUniqueId();
             }
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, this.providerName);
         }
         return this.providerName;
     }
@@ -109,6 +123,10 @@ public class MicroProfileJwtTaiRequest {
     }
 
     public Set<MicroProfileJwtConfig> getAllMatchingConfigs() {
+        String methodName = "getAllMatchingConfigs";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         Set<MicroProfileJwtConfig> allConfigs = new HashSet<MicroProfileJwtConfig>();
         if (microProfileJwtConfig != null) {
             allConfigs.add(microProfileJwtConfig);
@@ -119,14 +137,24 @@ public class MicroProfileJwtTaiRequest {
         if (genericConfigs != null) {
             allConfigs.addAll(genericConfigs);
         }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, allConfigs);
+        }
         return allConfigs;
     }
 
     public Set<String> getAllMatchingConfigIds() {
+        String methodName = "getAllMatchingConfigIds";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         Set<String> allConfigIds = new HashSet<String>();
         Set<MicroProfileJwtConfig> allConfigs = getAllMatchingConfigs();
         for (MicroProfileJwtConfig config : allConfigs) {
             allConfigIds.add(config.getUniqueId());
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, allConfigIds);
         }
         return allConfigIds;
     }
@@ -135,9 +163,16 @@ public class MicroProfileJwtTaiRequest {
      * @return
      */
     public MicroProfileJwtConfig getOnlyMatchingConfig() throws MpJwtProcessingException {
+        String methodName = "getOnlyMatchingConfig";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         throwExceptionIfPresent();
         if (microProfileJwtConfig == null) {
             microProfileJwtConfig = findAppropriateGenericConfig();
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, microProfileJwtConfig);
         }
         return microProfileJwtConfig;
     }
@@ -151,6 +186,10 @@ public class MicroProfileJwtTaiRequest {
     }
 
     MicroProfileJwtConfig findAppropriateGenericConfig() throws MpJwtProcessingException {
+        String methodName = "findAppropriateGenericConfig";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         //            if (this.filteredConfigs != null) {
         //                if (this.filteredConfigs.size() == 1) {
         //                    this.microProfileJwtConfig = this.filteredConfigs.get(0);
@@ -166,6 +205,9 @@ public class MicroProfileJwtTaiRequest {
             } else {
                 handleTooManyConfigurations();
             }
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, this.microProfileJwtConfig);
         }
         return this.microProfileJwtConfig;
     }
@@ -206,7 +248,15 @@ public class MicroProfileJwtTaiRequest {
      * @return
      */
     public boolean hasServices() {
-        return (this.genericConfigs != null || this.microProfileJwtConfig != null);
+        String methodName = "hasServices";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
+        boolean hasServices = (this.genericConfigs != null || this.microProfileJwtConfig != null);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, hasServices);
+        }
+        return hasServices;
     }
 
     public void setTaiException(MpJwtProcessingException taiException) {

@@ -171,20 +171,40 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
 
     @Override
     public boolean isTargetInterceptor(HttpServletRequest request) throws WebTrustAssociationException {
+        String methodName = "isTargetInterceptor";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, request);
+        }
         MicroProfileJwtTaiRequest mpJwtTaiRequest = taiRequestHelper.createMicroProfileJwtTaiRequestAndSetRequestAttribute(request);
-        return taiRequestHelper.requestShouldBeHandledByTAI(request, mpJwtTaiRequest);
+        boolean result = taiRequestHelper.requestShouldBeHandledByTAI(request, mpJwtTaiRequest);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, result);
+        }
+        return result;
     }
 
     @Override
     public TAIResult negotiateValidateandEstablishTrust(HttpServletRequest request, HttpServletResponse response) throws WebTrustAssociationFailedException {
+        String methodName = "negotiateValidateandEstablishTrust";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, request, response);
+        }
         TAIResult taiResult = TAIResult.create(HttpServletResponse.SC_FORBIDDEN);
 
         MicroProfileJwtTaiRequest mpJwtTaiRequest = (MicroProfileJwtTaiRequest) request.getAttribute(ATTRIBUTE_TAI_REQUEST);
-        return getAssociatedConfigAndHandleRequest(request, response, mpJwtTaiRequest, taiResult);
+        TAIResult result = getAssociatedConfigAndHandleRequest(request, response, mpJwtTaiRequest, taiResult);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, result);
+        }
+        return result;
     }
 
     @FFDCIgnore({ MpJwtProcessingException.class })
     TAIResult getAssociatedConfigAndHandleRequest(HttpServletRequest request, HttpServletResponse response, MicroProfileJwtTaiRequest mpJwtTaiRequest, TAIResult defaultTaiResult) throws WebTrustAssociationFailedException {
+        String methodName = "getAssociatedConfigAndHandleRequest";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, request, response, mpJwtTaiRequest, defaultTaiResult);
+        }
         MicroProfileJwtConfig clientConfig = null;
         try {
             clientConfig = mpJwtTaiRequest.getOnlyMatchingConfig();
@@ -193,19 +213,39 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, "A unique mpJwt config wasn't found for this request. Exception was " + e.getMessage());
             }
-            return sendToErrorPage(response, defaultTaiResult);
+            TAIResult result = sendToErrorPage(response, defaultTaiResult);
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, result);
+            }
+            return result;
         }
-        return handleRequestBasedOnJwtConfig(request, response, clientConfig, defaultTaiResult);
+        TAIResult result = handleRequestBasedOnJwtConfig(request, response, clientConfig, defaultTaiResult);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, result);
+        }
+        return result;
     }
 
     TAIResult handleRequestBasedOnJwtConfig(HttpServletRequest request, HttpServletResponse response, MicroProfileJwtConfig config, TAIResult defaultTaiResult) throws WebTrustAssociationFailedException {
+        String methodName = "handleRequestBasedOnJwtConfig";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, request, response, config, defaultTaiResult);
+        }
         if (config == null) {
             if (tc.isDebugEnabled()) {
                 Tr.debug(tc, "Client config for request could not be found. An error must have occurred initializing this request.");
             }
-            return sendToErrorPage(response, defaultTaiResult);
+            TAIResult result = sendToErrorPage(response, defaultTaiResult);
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, result);
+            }
+            return result;
         }
-        return getAndValidateMicroProfileJwt(request, response, config);
+        TAIResult result = getAndValidateMicroProfileJwt(request, response, config);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, result);
+        }
+        return result;
     }
 
     /** {@inheritDoc} */
@@ -237,17 +277,33 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
     }
 
     TAIResult getAndValidateMicroProfileJwt(HttpServletRequest request, HttpServletResponse response, MicroProfileJwtConfig mpJwtConfig) throws WebTrustAssociationFailedException {
+        String methodName = "getAndValidateMicroProfileJwt";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, request, response, mpJwtConfig);
+        }
 
         String token = taiRequestHelper.getBearerToken(request, mpJwtConfig);
         if (token == null) {
             Tr.error(tc, "JWT_NOT_FOUND_IN_REQUEST");
-            return sendToErrorPage(response, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
+            TAIResult result = sendToErrorPage(response, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, result);
+            }
+            return result;
         }
-        return handleMicroProfileJwtValidation(request, response, mpJwtConfig, token);
+        TAIResult result = handleMicroProfileJwtValidation(request, response, mpJwtConfig, token);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, result);
+        }
+        return result;
     }
 
     @FFDCIgnore({ MpJwtProcessingException.class })
     TAIResult handleMicroProfileJwtValidation(HttpServletRequest req, HttpServletResponse res, MicroProfileJwtConfig clientConfig, String token) throws WebTrustAssociationFailedException {
+        String methodName = "handleMicroProfileJwtValidation";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, req, res, clientConfig, token);
+        }
 
         JwtToken jwtToken = null;
         String decodedPayload = null;
@@ -271,15 +327,26 @@ public class MicroProfileJwtTAI implements TrustAssociationInterceptor {
             Tr.error(tc, "ERROR_CREATING_RESULT", new Object[] { clientConfig.getUniqueId(), e.getLocalizedMessage() });
             return sendToErrorPage(res, TAIResult.create(HttpServletResponse.SC_UNAUTHORIZED));
         }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, authnResult);
+        }
         return authnResult;
     }
 
     TAIResult createResult(HttpServletResponse res, MicroProfileJwtConfig clientConfig, @Sensitive JwtToken jwtToken, @Sensitive String decodedPayload) throws WebTrustAssociationFailedException, MpJwtProcessingException {
+        String methodName = "createResult";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, res, clientConfig, jwtToken, decodedPayload);
+        }
         TAIMappingHelper mappingHelper = new TAIMappingHelper(decodedPayload, clientConfig);
         mappingHelper.createJwtPrincipalAndPopulateCustomProperties(jwtToken);
 
         Subject subject = mappingHelper.createSubjectFromCustomProperties(jwtToken);
-        return TAIResult.create(HttpServletResponse.SC_OK, mappingHelper.getUsername(), subject);
+        TAIResult result = TAIResult.create(HttpServletResponse.SC_OK, mappingHelper.getUsername(), subject);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, result);
+        }
+        return result;
     }
 
     TAIResult sendToErrorPage(HttpServletResponse response, TAIResult taiResult) {

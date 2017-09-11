@@ -46,32 +46,60 @@ public class SslRefInfoImpl implements SslRefInfo {
     AtomicServiceReference<KeyStoreService> keyStoreServiceRef = null;
 
     public SslRefInfoImpl(SSLSupport sslSupport, AtomicServiceReference<KeyStoreService> keyStoreServiceRef, String sslRef, String keyAliasName) {
+        String methodName = "<init>";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, sslSupport, keyStoreServiceRef, sslRef, keyAliasName);
+        }
         this.sslSupport = sslSupport;
         this.sslRef = sslRef;
         this.keyStoreServiceRef = keyStoreServiceRef;
         this.keyAliasName = keyAliasName;
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
     @Override
     public String getTrustStoreName() throws MpJwtProcessingException {
+        String methodName = "getTrustStoreName";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         if (sslTrustStoreName == null) {
             init();
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, sslTrustStoreName);
         }
         return sslTrustStoreName;
     }
 
     @Override
     public String getKeyStoreName() throws MpJwtProcessingException {
+        String methodName = "getKeyStoreName";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         if (sslKeyStoreName == null) {
             init();
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, sslKeyStoreName);
         }
         return sslKeyStoreName;
     }
 
     // init when needed
     void init() throws MpJwtProcessingException {
+        String methodName = "init";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         setUpJsseHelper();
         if (this.jsseHelper == null) {
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName);
+            }
             return;
         }
         Properties sslProps = null;
@@ -83,6 +111,9 @@ public class SslRefInfoImpl implements SslRefInfo {
             throw new MpJwtProcessingException(msg, e);
         }
         setKeystoreAndTruststoreNames(sslProps);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
     void setUpJsseHelper() {
@@ -105,9 +136,17 @@ public class SslRefInfoImpl implements SslRefInfo {
     }
 
     Properties getSslPropertiesFromConnectionInfo() throws SSLException {
+        String methodName = "getSslPropertiesFromConnectionInfo";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         Map<String, Object> connectionInfo = new HashMap<String, Object>();
         connectionInfo.put(Constants.CONNECTION_INFO_DIRECTION, Constants.DIRECTION_INBOUND);
-        return jsseHelper.getProperties(null, connectionInfo, null, true); // default
+        Properties props = jsseHelper.getProperties(null, connectionInfo, null, true);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, props);
+        }
+        return props;
     }
 
     void setKeystoreAndTruststoreNames(Properties sslProps) {
@@ -130,12 +169,19 @@ public class SslRefInfoImpl implements SslRefInfo {
      */
     @Override
     public HashMap<String, PublicKey> getPublicKeys() throws MpJwtProcessingException {
+        String methodName = "getPublicKeys";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         if (this.jsseHelper == null) {
             init();
         }
         // TODO due to dynamic changes on keyStore, we have to load the public keys every time.
         HashMap<String, PublicKey> publicKeys = new HashMap<String, PublicKey>();
         if (this.sslTrustStoreName == null) {
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, publicKeys);
+            }
             return publicKeys;
         }
         try {
@@ -146,6 +192,9 @@ public class SslRefInfoImpl implements SslRefInfo {
             throw new MpJwtProcessingException(msg, e);
         }
 
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, publicKeys);
+        }
         return publicKeys;
     }
 
@@ -186,13 +235,23 @@ public class SslRefInfoImpl implements SslRefInfo {
     }
 
     HashMap<String, PublicKey> getPublicKeysFromAliasNames(KeyStoreService keyStoreService, Collection<String> names) throws MpJwtProcessingException {
+        String methodName = "getPublicKeysFromAliasNames";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         HashMap<String, PublicKey> publicKeys = new HashMap<String, PublicKey>();
         if (names == null) {
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, publicKeys);
+            }
             return publicKeys;
         }
         for (String aliasName : names) {
             PublicKey publicKey = getPublicKeyFromAlias(keyStoreService, aliasName);
             publicKeys.put(aliasName, publicKey);
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, publicKeys);
         }
         return publicKeys;
     }
@@ -211,14 +270,25 @@ public class SslRefInfoImpl implements SslRefInfo {
     @FFDCIgnore({ Exception.class })
     @Override
     public PublicKey getPublicKey() throws MpJwtProcessingException {
+        String methodName = "getPublicKey";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         if (this.jsseHelper == null) {
             init();
         }
         if (sslKeyStoreName == null) {
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, null);
+            }
             return null;
         }
         try {
-            return getKeyFromKeyAliasOrFirstAvailable();
+            PublicKey key = getKeyFromKeyAliasOrFirstAvailable();
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, key);
+            }
+            return key;
         } catch (Exception e) {
             String msg = Tr.formatMessage(tc, "FAILED_TO_LOAD_PUBLIC_KEY", new Object[] { sslKeyStoreName, e.getLocalizedMessage() });
             Tr.error(tc, msg);
@@ -251,6 +321,10 @@ public class SslRefInfoImpl implements SslRefInfo {
     }
 
     PublicKey getFirstAvailableKey() throws MpJwtProcessingException {
+        String methodName = "getFirstAvailableKey";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName);
+        }
         Iterator<Entry<String, PublicKey>> publicKeysIterator = null;
         try {
             // Get first public key
@@ -261,7 +335,14 @@ public class SslRefInfoImpl implements SslRefInfo {
             throw e;
         }
         if (publicKeysIterator.hasNext()) {
-            return publicKeysIterator.next().getValue();
+            PublicKey key = publicKeysIterator.next().getValue();
+            if (tc.isDebugEnabled()) {
+                Tr.exit(tc, methodName, key);
+            }
+            return key;
+        }
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName, null);
         }
         return null;
     }

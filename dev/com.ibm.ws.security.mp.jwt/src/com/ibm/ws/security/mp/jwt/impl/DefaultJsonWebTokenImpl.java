@@ -65,13 +65,21 @@ public class DefaultJsonWebTokenImpl implements JsonWebToken, Serializable {
     private ClaimsUtils claimsUtils = new ClaimsUtils();
 
     public DefaultJsonWebTokenImpl(String jwt, String type, String name) {
+        String methodName = "<init>";
+        if (tc.isDebugEnabled()) {
+            Tr.entry(tc, methodName, jwt, type, name);
+        }
         this.jwt = jwt;
         this.type = type;
         //this.claimsSet = claimsSet;
         principal = name;
         handleClaims(jwt);
+        if (tc.isDebugEnabled()) {
+            Tr.exit(tc, methodName);
+        }
     }
 
+    @Override
     public final JsonWebToken clone() {
         return new DefaultJsonWebTokenImpl(this.jwt, this.type, this.principal);
     }
