@@ -336,7 +336,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
     private boolean is2Phase;
 
     // Indicates whether we lazily enlisted in the current transaction. 
-    boolean wasLazilyEnlisted;
+    boolean wasLazilyEnlistedInGlobalTran;
 
     /** Indicates whether we have detected a fatal Connection error on this MC. */
     private boolean connectionErrorDetected;
@@ -937,21 +937,17 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
         // switch on each distinct case.                                                                
 
         int state = stateMgr.transtate;
+        
+        boolean inGlobalTran = state == WSStateManager.GLOBAL_TRANSACTION_ACTIVE
+                        || state == WSStateManager.RRS_GLOBAL_TRANSACTION_ACTIVE
+                        || (wasLazilyEnlistedInGlobalTran && state == WSStateManager.LOCAL_TRANSACTION_ACTIVE);
 
         if (TraceComponent.isAnyTracingEnabled() && tc.isDebugEnabled()) 
         {
-            Tr.debug(this, tc, "state == WSStateManager.GLOBAL_TRANSACTION_ACTIVE", state == WSStateManager.GLOBAL_TRANSACTION_ACTIVE); 
-            Tr.debug(this, tc, "state == WSStateManager.RRS_GLOBAL_TRANSACTION_ACTIVE", state == WSStateManager.RRS_GLOBAL_TRANSACTION_ACTIVE); 
-            Tr.debug(this, tc, "rrsGlobalTransactionReallyActive is: ", Boolean.valueOf(this.rrsGlobalTransactionReallyActive)); 
-            Tr.debug(this, tc, "(wasLazilyEnlisted && state == WSStateManager.LOCAL_TRANSACTION_ACTIVE)", wasLazilyEnlisted && state == WSStateManager.LOCAL_TRANSACTION_ACTIVE); 
-            Tr.debug(this, tc, "wasLazilyEnlisted", wasLazilyEnlisted); 
-            Tr.debug(this, tc, "state == WSStateManager.LOCAL_TRANSACTION_ACTIVE", state == WSStateManager.LOCAL_TRANSACTION_ACTIVE); 
-
+            Tr.debug(this, tc, "In Global Transaction: " + inGlobalTran + ". Transaction state = " + getTransactionStateAsString() + ", wasLazilyEnlistedInGlobalTran = " + wasLazilyEnlistedInGlobalTran + ", rrsGlobalTransactionReallyActive = " + rrsGlobalTransactionReallyActive);
         }
 
-        return state == WSStateManager.GLOBAL_TRANSACTION_ACTIVE
-               || state == WSStateManager.RRS_GLOBAL_TRANSACTION_ACTIVE
-               || (wasLazilyEnlisted && state == WSStateManager.LOCAL_TRANSACTION_ACTIVE);
+        return inGlobalTran;
     }
 
     /**
@@ -1051,7 +1047,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
         info.append("Thread ID:", threadID);
 
         info.append("Lazily enlisted in the current transaction? :", 
-                    wasLazilyEnlisted ? Boolean.TRUE : Boolean.FALSE);
+                    wasLazilyEnlistedInGlobalTran ? Boolean.TRUE : Boolean.FALSE);
 
         info.append("Underlying Connection Object: " + AdapterUtil.toString(sqlConn),
                     sqlConn);
@@ -1507,7 +1503,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
 
         // Reset the indicator so lazy enlistment will be signaled if we end up in a
         // Global Transaction. 
-        wasLazilyEnlisted = false;
+        wasLazilyEnlistedInGlobalTran = false;
 
         // Replace ConnectionEvent caching with a single reusable instance per
         // ManagedConnection. 
@@ -1600,7 +1596,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
 
         // Reset the indicator so lazy enlistment will be signaled if we end up in a
         // Global Transaction. 
-        wasLazilyEnlisted = false;
+        wasLazilyEnlistedInGlobalTran = false;
 
         // Replace ConnectionEvent caching with a single reusable instance per
         // ManagedConnection. 
@@ -1777,7 +1773,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
      * 
      * @throws ResourceException if an error occurs signaling for lazy enlistement.
      */
-    public void lazyEnlist(LazyEnlistableConnectionManager lazyEnlistableConnectionManager)
+    public void lazyEnlistInGlobalTran(LazyEnlistableConnectionManager lazyEnlistableConnectionManager)
                     throws ResourceException {
         final boolean isTraceOn = TraceComponent.isAnyTracingEnabled();
 
@@ -1811,7 +1807,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
 
         // Signal the ConnectionManager directly to lazily enlist.
 
-        if (wasLazilyEnlisted) // Already enlisted; don't need to do anything.
+        if (wasLazilyEnlistedInGlobalTran) // Already enlisted; don't need to do anything.
         {
             if (isTraceOn && tc.isEntryEnabled())
                 Tr.exit(this, tc, "lazyEnlist", "already enlisted");
@@ -1819,10 +1815,10 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
             lazyEnlistableConnectionManager.lazyEnlist(this);
 
             // Indicate we lazily enlisted in the current transaction, if so.
-            wasLazilyEnlisted |= stateMgr.transtate != WSStateManager.NO_TRANSACTION_ACTIVE;
+            wasLazilyEnlistedInGlobalTran |= stateMgr.transtate != WSStateManager.NO_TRANSACTION_ACTIVE;
 
             if (isTraceOn && tc.isEntryEnabled())
-                Tr.exit(this, tc, "lazyEnlist", wasLazilyEnlisted);
+                Tr.exit(this, tc, "lazyEnlist", wasLazilyEnlistedInGlobalTran);
         }
     }
 
@@ -2984,7 +2980,7 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
 
         // Reset the flag here to be safe, but realize we cannot rely on cleanup being called
         // after every global transaction. 
-        wasLazilyEnlisted = false; 
+        wasLazilyEnlistedInGlobalTran = false; 
     }
 
     /**
@@ -4065,8 +4061,11 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
             }
 
             //  - if currentAutoCommit is false, rollback the connection.
-            if (!currentAutoCommit)
+            if (!currentAutoCommit) {
+                if (isTraceOn && tc.isDebugEnabled()) 
+                    Tr.debug(this, tc, "AutoCommit is false.  Rolling back the connection after validation");
                 sqlConn.rollback();
+            }
 
             // Clean up the connection.
             mcf.helper.doConnectionCleanup(sqlConn);
@@ -4097,6 +4096,8 @@ public class WSRdbManagedConnectionImpl extends WSManagedConnection implements
                 //  - if currentAutoCommit is false, rollback the connection.
                 if (!currentAutoCommit) {
                     try {
+                        if (isTraceOn && tc.isDebugEnabled()) 
+                            Tr.debug(this, tc, "AutoCommit is false.  Rolling back the connection after validation");
                         sqlConn.rollback();
                     } catch (SQLException rollbackEx) {
                         // No FFDC coded needed
