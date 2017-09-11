@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
@@ -1652,6 +1653,107 @@ public class PolicyExecutorServlet extends FATServlet {
             assertFalse("Future #" + i, future.isCancelled());
         }
         assertEquals(15, sum);
+
+        List<Runnable> canceledFromQueue = executor.shutdownNow();
+        assertEquals(0, canceledFromQueue.size());
+    }
+
+    // Test invalid parameters for invokeAll with timeout. This includes a null task list, null as the only element in
+    // the task list, null within a list of otherwise valid tasks, null time unit, and negative timeout.
+    @Test
+    public void testInvokeAllTimedInvalidParameters() throws Exception {
+        PolicyExecutor executor = provider.create("testInvokeAllErrorPaths")
+                        .maxConcurrency(2)
+                        .maxWaitForEnqueue(TimeUnit.NANOSECONDS.toMillis(TIMEOUT_NS))
+                        .queueFullAction(QueueFullAction.Abort);
+
+        // Null list of tasks
+        try {
+            fail("Timed invokeAll with null list of tasks should be rejected. Instead: " +
+                 executor.invokeAll(null, 5, TimeUnit.MINUTES));
+        } catch (NullPointerException x) {
+        } // pass
+
+        // Null first element in list of tasks
+        try {
+            fail("Timed invokeAll with null first task should be rejected. Instead: " +
+                 executor.invokeAll(Collections.<Callable<Object>> singletonList(null), 5, TimeUnit.MINUTES));
+        } catch (NullPointerException x) {
+        } // pass
+
+        // Null element within list of otherwise valid tasks
+        List<SharedIncrementTask> listWithOneNull = new ArrayList<SharedIncrementTask>(5);
+        listWithOneNull.add(new SharedIncrementTask());
+        listWithOneNull.add(new SharedIncrementTask());
+        listWithOneNull.add(new SharedIncrementTask());
+        listWithOneNull.add(null);
+        listWithOneNull.add(new SharedIncrementTask());
+        try {
+            fail("Timed invokeAll with null task in list among non-nulls should be rejected. Instead: " +
+                 executor.invokeAll(listWithOneNull, 5, TimeUnit.MINUTES));
+        } catch (NullPointerException x) {
+        } // pass
+
+        // Make sure we didn't run any
+        for (int i = 0; i < listWithOneNull.size(); i++) {
+            SharedIncrementTask task = listWithOneNull.get(i);
+            if (task != null)
+                assertEquals("Task #" + i, 0, task.count());
+        }
+
+        // Null time unit
+        try {
+            fail("Timed invokeAll with null time unit should be rejected. Instead: " +
+                 executor.invokeAll(Collections.singletonList(new SharedIncrementTask()), 6, null));
+        } catch (NullPointerException x) {
+        } // pass
+
+        // Negative timeout
+        try {
+            fail("Timed invokeAll with negative timeout should be rejected. Instead: " +
+                 executor.invokeAll(Collections.singletonList(new SharedIncrementTask()), -7, TimeUnit.SECONDS));
+        } catch (RejectedExecutionException x) {
+            // TODO check for 'rejected due to timeout' NLS message once we add it
+        }
+
+        List<Runnable> canceledFromQueue = executor.shutdownNow();
+        assertEquals(0, canceledFromQueue.size());
+    }
+
+    // Using timed invokeAll where the timeout is much longer than the maxWaitForEnqueue and maxConcurrency is less
+    // than the number of tasks submitted, submit several tasks that start and block. Should be rejected waiting
+    // for a queue position and all in-progress tasks should cancel before returning from invokeAll.
+    // Rejection should occur even if QueueFullAction is CallerRuns because timed invokeAll disallows having
+    // the caller run tasks such that the timing can be honored.
+    @Test
+    public void testInvokeAllTimedTimeoutWaitForEnqueue() throws Exception {
+        PolicyExecutor executor = provider.create("testInvokeAllTimedTimeoutWaitForEnqueue")
+                        .maxConcurrency(1)
+                        .maxQueueSize(1)
+                        .maxWaitForEnqueue(200)
+                        .queueFullAction(QueueFullAction.CallerRuns);
+
+        List<CountDownTask> blockingTasks = new LinkedList<CountDownTask>();
+        CountDownLatch beginLatch = new CountDownLatch(3);
+        CountDownLatch continueLatch = new CountDownLatch(1);
+        blockingTasks.add(new CountDownTask(beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(5)));
+        blockingTasks.add(new CountDownTask(beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(5)));
+        blockingTasks.add(new CountDownTask(beginLatch, continueLatch, TimeUnit.MINUTES.toNanos(5)));
+
+        long start = System.nanoTime();
+        try {
+            // Note that we allow plenty of time for the tasks to finish. However, with only 1 threads
+            // able to run tasks and one queue slot to hold the waiting tasks, we should timeout
+            // on the attempt to enqueue the third task (or second task if the system is slow).
+            List<Future<Boolean>> futures = executor.invokeAll(blockingTasks, 20, TimeUnit.MINUTES);
+            fail("Should have timed out queuing second or third task for execution. Instead: " + futures);
+        } catch (RejectedExecutionException x) {
+            if (!x.getMessage().startsWith("CWWKE1201E"))
+                throw x;
+        }
+
+        long duration = System.nanoTime() - start;
+        assertTrue("Took " + duration + "ns to timeout, which probably means maxWaitForEnqueue wasn't honored.", duration < TIMEOUT_NS);
 
         List<Runnable> canceledFromQueue = executor.shutdownNow();
         assertEquals(0, canceledFromQueue.size());

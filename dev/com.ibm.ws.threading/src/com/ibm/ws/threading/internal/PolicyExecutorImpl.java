@@ -68,7 +68,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     private final ReduceableSemaphore maxQueueSizeConstraint = new ReduceableSemaphore(0, false);
 
-    private final AtomicLong maxWaitForEnqueue = new AtomicLong();
+    private final AtomicLong maxWaitForEnqueueNS = new AtomicLong();
 
     /**
      * This list is supplied to each instance that is programmatically created by PolicyExecutorProvider
@@ -355,7 +355,9 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         if (providerCreated == null)
             throw new UnsupportedOperationException();
 
-        if (core < 0)
+        if (core == -1)
+            core = Integer.MAX_VALUE;
+        else if (core < 0)
             throw new IllegalArgumentException(Integer.toString(core));
 
         int cca;
@@ -403,7 +405,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     @FFDCIgnore(value = { InterruptedException.class, RejectedExecutionException.class }) // these are raised directly to invoker, who decides how to handle
     private void enqueue(PolicyTaskFuture<?> policyTaskFuture, long wait, boolean canRunLocal) {
         try {
-            if (wait <= 0 ? maxQueueSizeConstraint.tryAcquire() : maxQueueSizeConstraint.tryAcquire(wait, TimeUnit.MILLISECONDS)) {
+            if (wait <= 0 ? maxQueueSizeConstraint.tryAcquire() : maxQueueSizeConstraint.tryAcquire(wait, TimeUnit.NANOSECONDS)) {
                 queue.offer(policyTaskFuture);
                 if (maxConcurrencyConstraint.tryAcquire())
                     if (acquireCoreConcurrency() > 0)
@@ -466,7 +468,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
     @Override
     public void execute(Runnable command) {
-        enqueue(new PolicyTaskFuture<Void>(command, null), maxWaitForEnqueue.get(), true);
+        enqueue(new PolicyTaskFuture<Void>(command, null), maxWaitForEnqueueNS.get(), true);
     }
 
     /**
@@ -511,8 +513,13 @@ public class PolicyExecutorImpl implements PolicyExecutor {
 
         int taskCount = tasks.size();
         long stop = System.nanoTime() + unit.toNanos(timeout);
-        long qWait = TimeUnit.MILLISECONDS.toNanos(maxWaitForEnqueue.get());
+        long qWait = maxWaitForEnqueueNS.get();
         long remaining;
+
+        // Satisfy requirement of JavaDoc:
+        for (Callable<T> task : tasks)
+            if (task == null)
+                throw new NullPointerException();
 
         ArrayList<Future<T>> futures = new ArrayList<Future<T>>(taskCount);
         try {
@@ -666,8 +673,8 @@ public class PolicyExecutorImpl implements PolicyExecutor {
         if (ms < 0)
             throw new IllegalArgumentException(Long.toString(ms));
 
-        for (long current = maxWaitForEnqueue.get(); current != -1; current = maxWaitForEnqueue.get())
-            if (maxWaitForEnqueue.compareAndSet(current, ms))
+        for (long current = maxWaitForEnqueueNS.get(); current != -1; current = maxWaitForEnqueueNS.get())
+            if (maxWaitForEnqueueNS.compareAndSet(current, TimeUnit.MILLISECONDS.toNanos(ms)))
                 return this;
 
         throw new IllegalStateException(Tr.formatMessage(tc, "CWWKE1203.config.update.after.shutdown", "maxWaitForEnqueue", identifier));
@@ -731,7 +738,7 @@ public class PolicyExecutorImpl implements PolicyExecutor {
             if (TraceComponent.isAnyTracingEnabled() && tc.isEventEnabled())
                 Tr.event(this, tc, "state: ACTIVE --> ENQUEUE_STOPPING");
 
-            maxWaitForEnqueue.set(-1); // make attempted task submissions fail immediately
+            maxWaitForEnqueueNS.set(-1); // make attempted task submissions fail immediately
 
             synchronized (configLock) {
                 maxQueueSize = 0;
@@ -805,21 +812,21 @@ public class PolicyExecutorImpl implements PolicyExecutor {
     @Override
     public <T> Future<T> submit(Callable<T> task) {
         PolicyTaskFuture<T> policyTaskFuture = new PolicyTaskFuture<T>(task);
-        enqueue(policyTaskFuture, maxWaitForEnqueue.get(), true);
+        enqueue(policyTaskFuture, maxWaitForEnqueueNS.get(), true);
         return policyTaskFuture;
     }
 
     @Override
     public <T> Future<T> submit(Runnable task, T result) {
         PolicyTaskFuture<T> policyTaskFuture = new PolicyTaskFuture<T>(task, result);
-        enqueue(policyTaskFuture, maxWaitForEnqueue.get(), true);
+        enqueue(policyTaskFuture, maxWaitForEnqueueNS.get(), true);
         return policyTaskFuture;
     }
 
     @Override
     public Future<?> submit(Runnable task) {
         PolicyTaskFuture<?> policyTaskFuture = new PolicyTaskFuture<Void>(task, null);
-        enqueue(policyTaskFuture, maxWaitForEnqueue.get(), true);
+        enqueue(policyTaskFuture, maxWaitForEnqueueNS.get(), true);
         return policyTaskFuture;
     }
 }
