@@ -69,7 +69,9 @@ public class H2ConnectionSettings {
         }
     }
 
-    // The enablepush should be changed to a boolean, will circle back to this later
+    /**
+     * Return the client's enable push setting
+     */
     public int getEnablePush() {
         return this.enablePush;
     }
