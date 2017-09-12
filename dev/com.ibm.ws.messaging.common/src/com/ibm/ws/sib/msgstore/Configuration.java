@@ -1,45 +1,14 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Copyright IBM Corp. 2012
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * 
- *
- * Change activity:
- *
- * Reason           Date     Origin   Description
- * --------------- -------- -------- ------------------------------------------
- *                 08/04/03 kschloss Original
- * f166334         21/05/03 kschloss Removed RDBM attributes (should have be isolated
- *                                   to RdbmConfiguration)
- * 180763.1        23/10/03 pradine  Add support for a database schema name
- * 180763.2        07/10/03 pradine  Refactor MS configuration code
- * 184389          14/01/04 pradine  MS SQL Server support
- * 191800          24/02/04 pradine  Add NLS support to the persistence layer
- * 192168          26/02/04 pradine  No FFDC required in createBasicConfiguration()
- * 184398.1        12/03/04 pradine  DB2 zSeries support (continued)
- * 190379          12/04/04 pradine  Tighten up stopping behaviour
- * 202006          07/05/04 pradine  Prepend SIB to all Message Store tables
- * 230745          10/09/04 pradine  Should not throw an exception during start
- * LIDB3472-0.7    15/07/05 brauneis J2SE Prep
- * SIB0007.ms      21/07/05 pradine  Support for Apache Derby v10.1
- * SIB0008.ms      01/08/05 pradine  Externalise support for multiple item tables
- * SIB0003.ms.14   18/08/05 schofiel File store - admin integration
- * 325983.1        23/11/05 gareth   Seperate object store information
- * 306998.19       09/01/06 gareth   Add new guard condition to trace statements
- * 604938          12/08/09 djvines  Prevent password entering FFDC
- * F1332-52014     28/10/11 balgirid  New DB Locking Mechanism
- * 723170          11/11/11 sankesav  Move the restrictLongDBLock to MessageStoreImpl
- * 723936          20/12/11 balgirid  Feature Review comments
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
+
 package com.ibm.ws.sib.msgstore;
 
 

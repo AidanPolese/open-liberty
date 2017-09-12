@@ -1,17 +1,13 @@
-#  @(#) 1.35.1.7 ws/code/pmi/src/com/ibm/ws/pmi/properties/PMIMessages.nlsprops, WAS.pmi
+###############################################################################
+# Copyright (c) 2001, 2004 IBM Corporation and others.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
 #
-#  ORIGINS: 27         (used for IBM originated files)
-
-# IBM Confidential OCO Source Material
-# 5639-D57 (C) COPYRIGHT International Business Machines Corp. 2001, 2004
-# The source code for this program is not published or otherwise divested
-# of its trade secrets, irrespective of what has been deposited with the
-# U.S. Copyright Office.
-#
-# This file has been modified to follow the WebSphere Message Guidelines.
-# For more information, visit:
-#   http://washome.austin.ibm.com/xwiki/bin/view/InformationDevelopmentTeam/MESSAGES_DISTRIBUTED
-#
+# Contributors:
+#     IBM Corporation - initial API and implementation
+###############################################################################
 # cmvc_en_version_level=1.11,0,02/04/01,10:58:32
 #
 #
@@ -21,8 +17,6 @@
 #ISMESSAGEFILE TRUE
 #NLS_MESSAGEFORMAT_VAR
 # NLS_ENCODING=UNICODE
-
-# -------------------------------------------------------------------------------------------------
 # Warning message when a null path is passed to PMI
 PMI0001W=CWPMI0001W: A null path is passed to PMI: {0}
 PMI0001W.explanation=A path which is null or not valid is passed into Performance Monitoring Infrastructure (PMI). PMI uses the path identifier to arrange counters that are used for tracking application statistics.  PMI starts with a root path and all WebSphere components and applications store their statistics as branches off the root path.  When a null path is passed into PMI, it prevents PMI from fulfilling the request that is made of it, because it cannot locate the item that is being specified.

@@ -1,101 +1,13 @@
-// IBM Confidential OCO Source Material
-// Copyright IBM Corp. 2006, 2015
-//
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
-//
-// Change Activity:
-//
-// Reason    Version   Date     Userid    Change Description
-// --------- --------- -------- --------- -----------------------------------------
-// d392996   EJB3      20060930 leealber : Initial Release
-// d392996.3 EJB3      20060930 leealber : Add default data source system properties
-// d405016   EJB3      20061113 leealber : Clean up System.out.println
-// d405607   EJB3      20061116 leealber : jar-file lookup url correction,
-// d406735   EJB3      20061120 leealber : returns proper <jar-file> URL for "../" prefix
-// d406994.1 EJB3      20061120 leealber : CI: clean up un-used code/add translatable messages for error/info/warning
-// d406994.4 EJB3      20061120 leealber : CI: miscellaneous clean up
-// d408321   EJB3      20061128 leealber : Safe-guarding substring results exception
-// d413031   EJB3      20070104 leealber : re-implement get <jar-file> URL semantics per spec
-// d414494   EJB3      20070112 leealber : Ensure URL is expressed in canonical form, i.e. no "/../"
-// d416151   EJB3      20070129 leealber : Enable customer logging if openjpa.Log is NOT specified
-// d416151.2 EJB3      20070220 leealber : Container managed persistence context part 2
-// d416151.3 EJB3      20070306 leealber : Extend-scoped support
-// d416151.3.5 EJB3    20070501 leealber : Rename JPAService to JPAComponent
-// d416151.3.7 EJB3    20070501 leealber : Add isAnyTraceEnabled() test
-// d416151.3.11 EJB3   20070504 leealber : Code review clean up.
-// d416151.3.3 EJB3    20070506 leealber : Messages/FFDC clean up.
-// d416151.3.8 EJB3    20070510 leealber : Replace StringBuffer with StringBuilder.
-// d416151.3.10 EJB3   20070512 leealber : Code review cleanup.
-// d440322   EJB3      20070510 leealber : Add debug text
-// d443964   EJB3      20070620 leealber : Transformer not register to Web Module CCL if entity is loaded by parent CCL (EJB Module)
-// d454030   EJB3      20070724 leealber : Remove JPALogFactory compile dependency.
-// d455055   EJB3      20070727 leealber : Remove PersistenceUnitTransactionType check in get(Non)JtaDataSource methods
-// d455363   EJB3      20070730 leealber : Safe guard ill-behavior emf on close()
-// d454146   EJB3      20070810 kjlaw    : classloader is now an instanceof CompoundClassLoader instead of JarClassLoader.
-// d429219.1 EJB3      20070817 jckrueg  : support java:comp/env datasources
-// d458689   EJB3      20070831 kjlaw    : cache archive name of jar that contains persistent.xml file.
-// d456716   EJB3      20070906 tkb      : use correct message prefix CWWJP
-// d460065   EJB3      20070907 tkb      : improve messages
-// d463444   EJB3      20070910 jckrueg  : remove java:comp namespace from getDatasource() invocations.
-// d467801.1 EJB3      20070921 jckrueg  : Add ivDataSourceMap
-// d473432.1 EJB3      20071011 leealber : Add provider version/revision information in toString.
-// d473743   EJB3      20071014 tkb      : Use LogFactory only for IBM providers
-// d468064   EJB3      20071016 leealber : Always return JPADataSourceIndirector in
-//                                         getJPADataSource to avoid FFDC at startup.
-// d475613   EJB3      20071017 tkb      : fix AccessControlEx in getProviderVersion
-// PK62950   WAS70     20080407 jckrueg  : support <jar-file> in loose config
-// d510184   WAS70     20080424 tkb      : Create separate EMF for each java:comp
-// d540118   WAS70     20080729 jckrueg  : Change JPA message to CWW
-// d543082   WAS70     20080811 tkb      : Defer errors for missing DS until PU is used
-// F743-954.1 WASX     20090330 leealber : Add additional JPA 2.0 APIs
-// F743-8064 WAS80     20090414 jckrueg  : dump out schema version in toString()
-// PK84376   WAS80     20090421 jckrueg  : ensure archive paths begin with jar:file:
-// F743-8705 WAS80     20090530 leealber : Support caching and validationMode
-// d597764   WASX      20090625 leealber : Update toString with caching/validationMode values
-// d602618   WASX      20090722 leealber : Update to JPA 2.0 API to EA5 level and temporary
-//                                         update to support bean validation container semantics
-// d603827   WASX      20090803 leealber : BV is only effect for JPA v2 schema
-// PK93016   WAS70     20090827 rott     : ClassNotFoundException when running in RESTRICT setting
-// d618559   WASX      20091014 leealber : Update to JPA 2.0 API to EA9 level - Final Draft
-// F743-16027 WAS80    20091029 andymc   : New getContext method and made extendible
-// F1879-16302
-//           WAS80     20091112 tkb      : improved trace
-// F743-18776
-//           WAS80     20100122 bkail    : Use AbstractJPAComponent, not JPAComponentImpl;
-//                                         don't use ExtClassLoader to load local classes
-// d638095   WAS80     20100211 shupert  : Temporary WAS80 Alpha fix - disable entity manager caching by default
-// d638095.2 WAS80     20100217 jckrueg  : Remove d638095 patch.
-// d638095.1 WAS70BE   20100302 jckrueg  : Allow provider to clean up resources before pooling
-// d646413.1 WAS80     20100415 bkail    : Use AbstractJPAComponent.createTempClassLoader
-// F743-12524 WAS80    20100512 tkb      : Make ValidatorFactory available to providers
-// d668895   WAS80     20100903 tkb      : properly handle integration properties
-// d670060   WAS80     20100913 tkb      : HashMap and Properties handle null differently
-// d670604   WAS80     20100924 bkail    : Use CompoundClassLoader.setName(CompoundClassLoader, String)
-// d670060.1 WAS80     20100928 bkail    : Improve createEMFactory error handling
-// d681393   WAS80     20101209 tkb      : remove plugin from parent classloader
-// d681995   WAS80     20101210 bkail    : Fix getMethod arguments in getPrepareForPooling
-// PM27213   WAS80     20101213 bkail    : Set context class loader around createContainerEntityManagerFactory
-// d689596   WAS80     20110204 bkail    : Store archive-based JPAPuId, not module-based
-// F61004.2  WAS85     20120212 bkail    : Don't use SetContextClassLoaderPrivileged
-// F61057    WAS85     20120224 bkail    : Move prepareForPooling logic to JPAEMPoolHelper
-// 734773    WAS855    20120524 daboshe  : Removed the getContext method
-// PM65716   WAS855    20120531 tkb      : Always pass ValidatorFactory proxy
-// d731877   WAS855    20120608 leealber : Enable JPA/JMS connection sharing
-// d739229   WAS855    20120911 tkb      : Improve message for CWWJP0013E
-// F84119    WAS855    20121010 jrbauer  : Moved loggers and logger factories into their own pkg
-// PM77840   WAS855    20121127 bkail    : Use CopyOnWriteArrayList for ivTransformers
-// d743091   WAS855    20130114 bkail    : Improve getEntityManagerFactory exceptions
-// d743325   WAS855    20130121 jrbauer  : pass jpa component reference to em pool
-// RTC107352 WASX      20130805 leealber : enable different loading order of resource ref by other 3rd party providers
-// RTC112112 WASX      20130920 leealber : Add JPA.Transformer trace group to avoid TransformClass entry noise.
-// RTC113511 RWAS90    20131009 bkail    : Move logic to WASJPAPUnitInfo
-// RTC114812 RWAS90    20131022 bkail    : Improve error message for misconfigured data source
-// RTC109631 RWAS90    20140128 rgcurtis : Automatically set eclipselink.target-server
-// RTC124672 RWAS90    20140128 rgcurtis : Add support for EclipseLink logging.
-// d152713   RTC       20150126 jgrassel : Support @PersistenceContext Tx-Sync Feature
-// --------- --------- -------- --------- -----------------------------------------
+/*******************************************************************************
+ * Copyright (c) 2005,2015 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jpa.management;
 
 import static com.ibm.ws.jpa.management.JPAConstants.JNDI_NAMESPACE_JAVA_APP_ENV;

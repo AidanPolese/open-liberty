@@ -1,35 +1,13 @@
-/*
- * IBM Confidential
+/*******************************************************************************
+ * Copyright (c) 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * OCO Source Materials
- *
- * Copyright IBM Corp. 2014
- *
- * The source code for this program is not published or otherwise divested 
- * of its trade secrets, irrespective of what has been deposited with the 
- * U.S. Copyright Office.
- */
-
-/**
- * %Z% %I% %W% %G% %U% [%H% %T%]
- * COMPONENT_NAME: WAS.beanvalidation
- * FILE_NAME:  BVNLSConstants.java
- *
- *
- * IBM Confidential OCO Source Material
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2010
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U. S. Copyright Office.
- *
- * Change History:
- *
- * D|F Name         Date        User id    Description
- * ------------------------------------------------------------------------------------------------------------------------
- * F000743-26323   05/03/2010  westland   initial drop
- * F000743-28638   06/29/2010  westland   update to add messages when processing the validation.xml inputStream
- * D664527         08/18/2010  westland   Update messages for bean validation when parsing the validation.xml file
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package com.ibm.ws.beanvalidation;
 

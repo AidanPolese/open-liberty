@@ -1,13 +1,13 @@
-# IBM Confidential OCO Source Material
-# 5648-C83, 5648-C84 (C) COPYRIGHT International Business Machines Corp. 1997-2001
-# The source code for this program is not published or otherwise divested
-# of its trade secrets, irrespective of what has been deposited with the
-# U.S. Copyright Office.
+###############################################################################
+# Copyright (c) 1997, 2001 IBM Corporation and others.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
 #
-# This file has been modified to follow the WebSphere Message Guidelines.
-# For more information, visit:
-#   http://washome.austin.ibm.com/xwiki/bin/view/InformationDevelopmentTeam/MESSAGES_DISTRIBUTED
-#
+# Contributors:
+#     IBM Corporation - initial API and implementation
+###############################################################################
 # cmvc_en_version_level=
 #
 #CMVCPATHNAME 
@@ -16,7 +16,7 @@
 #ISMESSAGEFILE TRUE
 #NLS_MESSAGEFORMAT_VAR
 #NLS_ENCODING=UNICODE
-# --------------------------------
+
 failed.to.create.httpupgradehandler=SRVE9000E: Failed to create the HttpUpgradeHandler: {0}.  Ensure that it has a default constructor and can be instantiated.
 failed.to.create.httpupgradehandler.explanation=Failed to create the HttpUpgradeHandler.
 failed.to.create.httpupgradehandler.useraction=Check the FFDC logs for more details on the error.

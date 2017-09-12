@@ -1,83 +1,13 @@
-/*
- * @start_prolog@
- * ============================================================================
- * IBM Confidential OCO Source Materials
+/*******************************************************************************
+ * Copyright (c) 2009, 2011 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 Copyright IBM Corp. 2009, 2011
- *
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- * @end_prolog@
- * 
- * Change activity:
- * 
- * Issue       Date        Name        Description
- * ----------- ----------- ----------- ------------------------------------
- * 2640        16-Jul-2009 ricellis@uk created
- * 3004        05-Aug-2009 ricellis@uk clean up closing of resources, loop result file checking
- * 2867        10-Aug-2009 ricellis@uk Catch exceptions to retry getTestLog for FEP, increase retries
- * 3106		   11-Aug-2009 mahrwald@uk Fix status servlet uninstall
- * 3120        21-Aug-2009 emijiang@uk cleanup first before a new test run in order to make debug easier.
- * 3307        03-Sep-2009 mitchet@uk  Add removeServerLogs() and getServerLogs().
- * 3376        18-Sep-2009 not@uk      Minor API updates
- * 3480        17-Sep-2009 timoward@uk Fixes for JPA component tests
- * 3577        21-Sep-2009 mahrwald@uk Spead up JPA component test
- * 3411        21-Sep-2009 emijiang@uk Added executeWsadminCommad() and executeWsadminScript()
- * 3624        23-Sep-2009 emijiang@uk Added getTestDir()
- * 3912        13-Oct-2009 bakowski@uk Allow setting of JVM args
- * 4089        20-Oct-2009 mahrwald@uk Change copyright
- * 3893        14-Oct-2009 timoward@uk Pull web app configuration from WAS config
- * 3739        30-Oct-2009 bakowski@uk Move WAS server log gathering
- * 4296        12-Nov-2009 emijiang@uk Added setTraceOn and setTraceOff
- * 4294        06-Nov-2009 ricellis@uk Move address.url to scripts folder
- * 4537        26-Nov-2009 lewisms@uk  Changes to support use of install and uninstall scripts in blog sample tests
- * 4265        29-Nov-2009 cwilkin@uk  Lifecycle Component Tests
- * 4783        10-Dec-2009 emijiang@uk changed startServer to restartServer to reflect its functionality
- * 4787        09-Dec-2009 cwilkin@uk  ND Framework updates
- * 4724        15-Dec-2009 rjhannah@uk IHS updates
- * 4897        22-Dec-2009 emijiang@uk Interface tidy up - removed two unnecessary overloading methods createDerbyDatabase()
- * 5425        02-Feb-2010 cumminsh@uk Diagnosic message improvement
- * 5219        20-Feb-2010 rjhannah@uk Update to enable Java 2 security
- * 5469        22-Feb-2010 cwilkin@uk  Console tests
- * 5870        05-Mar-2010 emijiang@uk Added clearCache/start/stop/restart bla methods
- * 5975        09-Mar-2010 linsun@us   add getNodeMetadataFile and putNodeMetadataFile methods 
- * 5894        12-Mar-2010 applebyd@uk added getSIBEndpoint and enableServletCaching methods 
- * 6360        26-Mar-2010 applebyd@uk added disableServletCaching and listApps 
- * 6618        08-Apr-2010 rjhannah@uk added updateServerPolicy
- * 6772        14-Apr-2010 applebyd@uk added getCell
- * 6715        26-Apr-2010 ricellis@uk added more get methods for port numbers
- * 7322        12-May-2010 cwilkin@uk  ND Updates
- * 7502        18-May-2010 cwilkin@uk  Add new ND test cases
- * 7347        20-May-2010 emijiang@uk Updated to cope with ND topology.
- * 7215        29-Jun-2010 parkerda@uk AutoWAS compatibility work
- * 8634        02-Jul-2010 parkerda@uk Add installIntoInternalRepository()
- * 8763        12-Jul-2010 parkerda@uk Remove executeWsadminCommandRemote, modify installIntoInternalRepository()
- * 8670        12-Jul-2010 ricellis@uk Update simplicity wsadmin usage
- * 8253        21-Jul-2010 ricellis@uk Simplicity wsadmin refactoring
- * 8970        28-Jul-2010 ricellis@uk Add remoteFileExists()
- * 8877        08-Oct-2010 mahrwald@uk New update admin prototype
- * 10681       18-Nov-2010 ricellis@uk Add extra installIntoInternalRepository with expose flag
- * 11230       22-Nov-2010 ricellis@uk Add doesConfigFileExist() method
- * 11355       22-Nov-2010 timoward@uk Support Hot Extension tests
- * 12306       13-Jan-2011  rbtprkr@uk  Beginning Changes for CTT Component Tests in development stream
- * 12335       14-Jan-2011 applebyd@uk Added getWebServerToUse 
- * 12112       18-Jan-2011 mnuttall@uk Remove -exposeContents from CBA import
- * 11516       02-Feb-2011 mahrwald@uk Correct update synching to v7 servers
- * 11196       02-Feb-2011 emijiang@uk Added clearBundleCache_Repositories
- * 11587       03-Feb-2011 mitchet@uk  Added some new Migration methods
- * 11660       01-Feb-2011 cumminsh@uk Common up sysout scanning
- * 18065       18-May-2011 mahrwald@uk Speed up tests by removing extraneous BLA ops
- * 18898       08-Jun-2011 applebyd@uk Extra methods for z/OS
- * 20814       05-Aug-2011 applebyd@uk Added getRMIPort
- * 21161       19-Aug-2011 mitchet@uk  Added installEar and uninstallEar methods.
- * 22883       20-Sep-2011 emijiang@uk Added setupSystemExternalBundleRepository.
- * 27667       15-Nov-2011 mnuttall@uk Add waits after installing/updating an application to prevent FFDCs from async startup
- * 23981       22-Nov-2011 mitchet@uk  Added matching of existing profile ports in Migration profile creation.
- * 28509       06-Dec-2011 mnuttall@uk Remove the wait introduced under task 27667 
- * 29155       09-Dec-2011 applebyd@uk Added v7jdk functionality for migration setup
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
 package componenttest.aries;
 

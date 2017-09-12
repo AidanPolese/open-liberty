@@ -1,19 +1,13 @@
-# IBM Confidential OCO Source Material
-# 5724-I63, 5724-H88, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 1997, 2008
-# The source code for this program is not published or otherwise divested
-# of its trade secrets, irrespective of what has been deposited with the
-# U.S. Copyright Office.
+###############################################################################
+# Copyright (c) 1997, 2008 IBM Corporation and others.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
 #
-# @(#) 1.34 SERV1/ws/code/security.crypto/src/com/ibm/ws/ssl/resources/ssl.nlsprops, WAS.security.crypto, WASX.SERV1, pp0919.25 3/31/08 12:51:14 [5/15/09 18:04:37]
-#
-# Change History
-# Note that the CWPKIxxxx numbers are used to correlate the user visible messages (e.g. Tr.warning, Tr.error,
-# Tr.audit) with an Explanation & User Response message that is documented in a Message Reference guide.
-# Do not modify the existing CWPKIxxxx numbers.  See http://hany.austin.ibm.com/messages/index.html
-# for info on how to add new messages.
-# From now on, every message you add to this file should also include an Explanation & a User Response.
-#
-# -------------------------------------------------------------------------------------------------
+# Contributors:
+#     IBM Corporation - initial API and implementation
+###############################################################################
 # cmvc_en_version_level=1.42,0,02/04/15,16:52:49
 #
 #CMVCPATHNAME com.ibm.ws.ssl/resources/com/ibm/ws/ssl/resources/ssl.nlsprops

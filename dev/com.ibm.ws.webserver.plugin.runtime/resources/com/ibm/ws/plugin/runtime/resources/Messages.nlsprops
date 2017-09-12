@@ -1,9 +1,13 @@
-# IBM Confidential OCO Source Material
-# 5648-C83, 5648-C84 (C) COPYRIGHT International Business Machines Corp. 2016
-# The source code for this program is not published or otherwise divested
-# of its trade secrets, irrespective of what has been deposited with the
-# U.S. Copyright Office.
+###############################################################################
+# Copyright (c) 2016 IBM Corporation and others.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
 #
+# Contributors:
+#     IBM Corporation - initial API and implementation
+###############################################################################
 # cmvc_en_version_level=
 #
 #CMVCPATHNAME 
@@ -12,8 +16,6 @@
 #ISMESSAGEFILE TRUE
 #NLS_MESSAGEFORMAT_VAR
 #NLS_ENCODING=UNICODE
-#---------- Use message range CWWKU0101-CWWKU0199. See : http://was.pok.ibm.com/xwiki/bin/view/Liberty/NLSMessagePrefixes
-# --------------------------------
 collective.mbean.not.available=CWWKU0101E: A request to generate a webserver plug-in configuration file is not processed for cluster {0} because the required collective controller feature MBean is not found.
 collective.mbean.not.available.explanation=The collective controller feature must be enabled for the server to process the request. 
 collective.mbean.not.available.useraction=Enable the collective controller feature in the target server, or direct the request to a server that has the collective controller feature already enabled.

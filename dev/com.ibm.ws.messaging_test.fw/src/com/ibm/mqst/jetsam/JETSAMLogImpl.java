@@ -1,31 +1,13 @@
-/*
- * 
- * 
- * ============================================================================
- * IBM Confidential OCO Source Materials
- * 
- * Copyright IBM Corp. 2012
- * 
- * The source code for this program is not published or otherwise divested
- * of its trade secrets, irrespective of what has been deposited with the
- * U.S. Copyright Office.
- * ============================================================================
- *  
- * 
- * Change activity:
+/*******************************************************************************
+ * Copyright (c) 2012 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- * Reason            Date   Origin   Description
- * ---------------   ------ -------- ------------------------------------------
- *                          matrober TestCase Original - 25 March 03
- * 168321            040603 matrober ackModes tidyup (sync output)
- * 169473            130603 matrober Log Throwables in LTC
- * 181814            041103 matrober Multi-line comments in file logs
- * 189711            110204 jhumber  Missing FFDC entries reported in ffdclogs dir
- * 199183            210404 matrober javadoc problems
- * LIDB3706-5.263    310105 kingdon  Update serial version UID
- * d464511           011007 djvines  Be slightly more thread-safe
- * ============================================================================
- */
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.mqst.jetsam;
 
 import java.io.*;

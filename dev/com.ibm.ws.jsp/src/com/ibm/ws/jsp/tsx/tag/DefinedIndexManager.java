@@ -1,18 +1,16 @@
-// IBM Confidential OCO Source Material
-// 5630-A36 (C) COPYRIGHT International Business Machines Corp. 1997, 2002
-// The source code for this program is not published or otherwise divested
-// of its trade secrets, irrespective of what has been deposited with the
-// U.S. Copyright Office.
+/*******************************************************************************
+ * Copyright (c) 1995,2002 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 package com.ibm.ws.jsp.tsx.tag;
 
-/*
- * @(#)DefinedIndexManager.java 1.0 04/25/98
- *
- * Copyright (c) 1995-1998 International Business Machines. All Rights Reserved.
- *
- * 4/24/98   Created                                DPJ
- *
- */
+
 
 import java.util.Vector;
 

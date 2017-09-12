@@ -1,18 +1,13 @@
-# ##############################################################################
-# IBM Confidential OCO Source Material
-# 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 COPYRIGHT International Business Machines Corp. 1997, 2013
-# The source code for this program is not published or otherwise divested
-# of its trade secrets, irrespective of what has been deposited with the
-# U.S. Copyright Office.
+###############################################################################
+# Copyright (c) 1997, 2013 IBM Corporation and others.
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
 #
-#   IBM DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
-#   ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-#   PURPOSE. IN NO EVENT SHALL IBM BE LIABLE FOR ANY SPECIAL, INDIRECT OR
-#   CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF
-#   USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-#   OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE
-#   OR PERFORMANCE OF THIS SOFTWARE.
-
+# Contributors:
+#     IBM Corporation - initial API and implementation
+###############################################################################
 # Instructions to translation will precede the line to which it applies
 #
 # DO NOT TRANSLATE "\n" and "\t" characters.  these are for textual formatting.
@@ -46,8 +41,7 @@
 #ISMESSAGEFILE TRUE
 #NLS_MESSAGEFORMAT_VAR
 #NLS_ENCODING=UNICODE
-                            
-# --------------------------------
+
 NULL_MANAGED_CONNECTION_J2CA0015=J2CA0015E: The Connection Pool Manager could not allocate a Managed Connection from resource {0}.
 NULL_MANAGED_CONNECTION_J2CA0015.explanation=The pool manager could not allocate a managed connection. This might be due to the properties associated with the pool manager (such as, maximum connections were exceeded). A NULL managed connection was returned by the pool manager.
 NULL_MANAGED_CONNECTION_J2CA0015.useraction=CMSG0002

@@ -1,34 +1,16 @@
 package com.ibm.ws.jtaextensions;
 
-/*************************************************************************** 
- COMPONENT_NAME: WAS.transactions                                           
+/*******************************************************************************
+ * Copyright (c) 2002, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
- ORIGINS: 27                                                               
-
- IBM Confidential OCO Source Material                                       
- 5724-J08, 5724-I63, 5724-H88, 5724-H89, 5655-N02, 5733-W70 (C) COPYRIGHT International Business Machines Corp. 2002, 2006, 2008 
- The source code for this program is not published or otherwise divested    
- of its trade secrets, irrespective of what has been deposited with the     
- U.S. Copyright Office.                                                     
-
- @(#) 1.10 SERV1/ws/code/was.transaction/src/com/ibm/ws/jtaextensions/ExtendedJTATransactionFactory.java, WAS.transactions, WASX.SERV1 5/22/08 11:01:02 [
-
- DESCRIPTION:                                                              
-
- Change History:                                                           
-
- Date      Programmer    Defect    Description                             
- --------  ----------    ------    -----------                             
- 02-02-14  awilkins      LIDB850   Creation                                
- 27-02-02  beavenj       LIDB1220.151.1 Code instrumented for FFDC work    
- 22-08-02  sykesm        143104    Support 390 transaction management      
- 21/02/03  gareth     LIDB1673.19  Make any unextended code final          
- 23-03-04  mdobbie     LIDB3133-23 Added SPI classification                
- 14-02-06  johawkes      347212    New ras & ffdc                          
- 23-02-06  johawkes      349301    Old ras & ffdc                          
- 22-05-08  johawkes      522569    Perf trace                              
- ************************************************************************** 
- */
 
 import java.util.Hashtable;
 
