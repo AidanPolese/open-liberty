@@ -18,12 +18,14 @@ import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.spi.ConfigProviderResolver;
 import org.eclipse.microprofile.metrics.Counter;
 import org.eclipse.microprofile.metrics.Histogram;
+import org.eclipse.microprofile.metrics.HitCounter;
 import org.eclipse.microprofile.metrics.Metadata;
 import org.eclipse.microprofile.metrics.MetadataBuilder;
 import org.eclipse.microprofile.metrics.Meter;
 import org.eclipse.microprofile.metrics.Metric;
 import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.eclipse.microprofile.metrics.MetricType;
+import org.eclipse.microprofile.metrics.ParallelCounter;
 import org.eclipse.microprofile.metrics.Timer;
 
 import com.ibm.ws.ffdc.annotation.FFDCIgnore;
@@ -87,9 +89,31 @@ public class MetricRegistry2Impl extends MetricRegistryImpl {
         return metric;
     }
 
+    public static MetricType from(Metric in) {
+        MetricType result = MetricRegistryImpl.from(in);
+        if (result != MetricType.INVALID)
+            return result;
+        else if (HitCounter.class.isInstance(in))
+            return MetricType.HIT_COUNTER;
+        else if (ParallelCounter.class.isInstance(in))
+            return MetricType.PARALLEL_COUNTER;
+        else
+            return MetricType.INVALID;
+    }
+
     @Override
     public Counter counter(String name) {
         return this.counter(Metadata.builder().withName(name).withType(MetricType.COUNTER).build());
+    }
+
+    @Override
+    public HitCounter hitCounter(String name) {
+        return this.hitCounter(Metadata.builder().withName(name).withType(MetricType.HIT_COUNTER).build());
+    }
+
+    @Override
+    public ParallelCounter parallelCounter(String name) {
+        return this.parallelCounter(Metadata.builder().withName(name).withType(MetricType.PARALLEL_COUNTER).build());
     }
 
     @Override

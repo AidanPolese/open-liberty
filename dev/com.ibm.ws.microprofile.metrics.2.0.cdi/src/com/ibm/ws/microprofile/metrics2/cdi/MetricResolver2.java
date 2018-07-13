@@ -39,7 +39,9 @@ import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.eclipse.microprofile.metrics.MetricType;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Gauge;
+import org.eclipse.microprofile.metrics.annotation.HitCounted;
 import org.eclipse.microprofile.metrics.annotation.Metered;
+import org.eclipse.microprofile.metrics.annotation.ParallelCounted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 
 import io.astefanutti.metrics.cdi.MetricName;
@@ -57,6 +59,14 @@ public class MetricResolver2 extends MetricResolver {
         this.extension = extension;
         this.metricName = metricName;
         this.registry = registry;
+    }
+
+    public <E extends Member & AnnotatedElement> Of<HitCounted> hitCounted(Class<?> topClass, E element) {
+        return resolverOf(topClass, element, HitCounted.class);
+    }
+
+    public <E extends Member & AnnotatedElement> Of<ParallelCounted> parallelCounted(Class<?> topClass, E element) {
+        return resolverOf(topClass, element, ParallelCounted.class);
     }
 
     @Override
@@ -132,6 +142,10 @@ public class MetricResolver2 extends MetricResolver {
     private String[] getTags(Annotation annotation) {
         if (Counted.class.isInstance(annotation))
             return ((Counted) annotation).tags();
+        else if (HitCounted.class.isInstance(annotation))
+            return ((HitCounted) annotation).tags();
+        else if (ParallelCounted.class.isInstance(annotation))
+            return ((ParallelCounted) annotation).tags();
         else if (Gauge.class.isInstance(annotation))
             return ((Gauge) annotation).tags();
         else if (Metered.class.isInstance(annotation))
@@ -146,6 +160,10 @@ public class MetricResolver2 extends MetricResolver {
     private String getDisplayname(Annotation annotation) {
         if (Counted.class.isInstance(annotation))
             return ((Counted) annotation).displayName();
+        else if (HitCounted.class.isInstance(annotation))
+            return ((HitCounted) annotation).displayName();
+        else if (ParallelCounted.class.isInstance(annotation))
+            return ((ParallelCounted) annotation).displayName();
         else if (Gauge.class.isInstance(annotation))
             return ((Gauge) annotation).displayName();
         else if (Metered.class.isInstance(annotation))
@@ -160,6 +178,10 @@ public class MetricResolver2 extends MetricResolver {
     private String getDescription(Annotation annotation) {
         if (Counted.class.isInstance(annotation))
             return ((Counted) annotation).description();
+        else if (HitCounted.class.isInstance(annotation))
+            return ((HitCounted) annotation).description();
+        else if (ParallelCounted.class.isInstance(annotation))
+            return ((ParallelCounted) annotation).description();
         else if (Gauge.class.isInstance(annotation))
             return ((Gauge) annotation).description();
         else if (Metered.class.isInstance(annotation))
@@ -173,6 +195,10 @@ public class MetricResolver2 extends MetricResolver {
     private MetricType getType(Annotation annotation) {
         if (Counted.class.isInstance(annotation))
             return MetricType.COUNTER;
+        else if (HitCounted.class.isInstance(annotation))
+            return MetricType.HIT_COUNTER;
+        else if (ParallelCounted.class.isInstance(annotation))
+            return MetricType.PARALLEL_COUNTER;
         else if (Gauge.class.isInstance(annotation))
             return MetricType.GAUGE;
         else if (Metered.class.isInstance(annotation))
@@ -186,6 +212,10 @@ public class MetricResolver2 extends MetricResolver {
     private String getUnit(Annotation annotation) {
         if (Counted.class.isInstance(annotation))
             return ((Counted) annotation).unit();
+        else if (HitCounted.class.isInstance(annotation))
+            return ((HitCounted) annotation).unit();
+        else if (ParallelCounted.class.isInstance(annotation))
+            return ((ParallelCounted) annotation).unit();
         else if (Gauge.class.isInstance(annotation))
             return ((Gauge) annotation).unit();
         else if (Metered.class.isInstance(annotation))
@@ -220,6 +250,10 @@ public class MetricResolver2 extends MetricResolver {
     private String metricName(Annotation annotation) {
         if (Counted.class.isInstance(annotation))
             return ((Counted) annotation).name();
+        else if (HitCounted.class.isInstance(annotation))
+            return ((HitCounted) annotation).name();
+        else if (ParallelCounted.class.isInstance(annotation))
+            return ((ParallelCounted) annotation).name();
         else if (Gauge.class.isInstance(annotation))
             return ((Gauge) annotation).name();
         else if (Metered.class.isInstance(annotation))
@@ -236,6 +270,10 @@ public class MetricResolver2 extends MetricResolver {
 
         if (Counted.class.isInstance(annotation))
             return ((Counted) annotation).absolute();
+        else if (HitCounted.class.isInstance(annotation))
+            return ((HitCounted) annotation).absolute();
+        else if (ParallelCounted.class.isInstance(annotation))
+            return ((ParallelCounted) annotation).absolute();
         else if (Gauge.class.isInstance(annotation))
             return ((Gauge) annotation).absolute();
         else if (Metered.class.isInstance(annotation))
@@ -249,6 +287,10 @@ public class MetricResolver2 extends MetricResolver {
     private boolean getReusable(Annotation annotation) {
         if (Counted.class.isInstance(annotation))
             return ((Counted) annotation).reusable();
+        else if (HitCounted.class.isInstance(annotation))
+            return ((HitCounted) annotation).reusable();
+        else if (ParallelCounted.class.isInstance(annotation))
+            return ((ParallelCounted) annotation).reusable();
         else if (Gauge.class.isInstance(annotation))
             return false;
         else if (Metered.class.isInstance(annotation))

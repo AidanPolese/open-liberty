@@ -496,6 +496,9 @@ public class MemorySession implements ISession {
             sb.append(newIsListener).append("} ").append(appNameAndIdString);
             LoggingUtil.SESSION_LOGGER_CORE.entering(methodClassName, methodNames[SET_ATTRIBUTE], sb.toString());
         }
+        
+        System.out.println("DEBUG 0712 : name = " + name + " newIsListener = " + newIsListener + " value = " + value);
+        
         Object oldValue = _attributes.put(name, value);
         Boolean oldIsListener = (Boolean) _attributeNames.put(name, newIsListener);
         _storeCallback.sessionAttributeSet(this, name, oldValue, oldIsListener, value, newIsListener);

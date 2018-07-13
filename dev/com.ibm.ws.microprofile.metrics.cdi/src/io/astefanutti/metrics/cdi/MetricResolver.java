@@ -50,7 +50,7 @@ public class MetricResolver {
     @Inject
     protected MetricName metricName;
 
-    <E extends Member & AnnotatedElement> Of<Counted> counted(Class<?> topClass, E element) {
+    public <E extends Member & AnnotatedElement> Of<Counted> counted(Class<?> topClass, E element) {
         return resolverOf(topClass, element, Counted.class);
     }
 
@@ -66,7 +66,7 @@ public class MetricResolver {
         return resolverOf(bean, element, Timed.class);
     }
 
-    private <E extends Member & AnnotatedElement, T extends Annotation> Of<T> resolverOf(Class<?> bean, E element, Class<T> metric) {
+    protected <E extends Member & AnnotatedElement, T extends Annotation> Of<T> resolverOf(Class<?> bean, E element, Class<T> metric) {
         if (element.isAnnotationPresent(metric))
             return elementResolverOf(element, metric);
         else

@@ -20,4 +20,11 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>bndtools.core.bndnature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>java</name>
+			<type>2</type>
+			<location>C:/Users/AIDANPolese/libertyGit/heikoMetrics/microprofile-metrics/api/src/main/java</location>
+		</link>
+	</linkedResources>
 </projectDescription>
